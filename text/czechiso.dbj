@@ -6,7 +6,7 @@
 
 \preamble
 ----------------------------------------
-*** Styl snaæÌcÌ se b˝t v souladu s normou ISO 690. PomocÌ latex makebst vytvo¯il David Martinek. ***
+*** Styl sna≈æ√≠c√≠ se b√Ωt v souladu s normou ISO 690. Pomoc√≠ latex makebst vytvo≈ôil David Martinek. ***
 
 \endpreamble
 
@@ -554,39 +554,39 @@ End of customized bst file
 %>>EDITION NUMBERS:
 %>>ABBREVIATE WORD `PAGES' (if not using external language file)
 %Reading external language file \cfile=czech.mbs
-    Ëeπtina,%: Ëesk˝ jazyk
+    ƒçe≈°tina,%: ƒçesk√Ω jazyk
 %<<ZKRATKA PRO `STRANA, STRAN'
-%   %: (def) `Stran(a)' (æ·dnÈ zkratky)
-  pp,%: `Stran' zkr·ceno jako s. or str.
-% ppx,%: `Stran' vynech·no 
+%   %: (def) `Stran(a)' (≈æ√°dn√© zkratky)
+  pp,%: `Stran' zkr√°ceno jako s. or str.
+% ppx,%: `Stran' vynech√°no 
 %------\ans=a(==pp)-------
 %>>ZKRATKA PRO `STRANA, STRAN'
 %<<ZKRATKA PRO `EDITOR':
-    %: (def) `Editor(¯i)' (æ·dnÈ zkratky)
-% ed,%: `Editor' zkr·ceno jako ed. nebo edi.
+    %: (def) `Editor(≈ôi)' (≈æ√°dn√© zkratky)
+% ed,%: `Editor' zkr√°ceno jako ed. nebo edi.
 %------\ans=*(==)-------
 %>>ZKRATKA PRO `EDITOR':
-%<<DAL©Õ ZKRATKY:
-    %: (def) Æ·dnÈ zkratky pro dÌl, vyd·nÌ, kapitola, atd.
-% abr,%: PouæÌvat zkratky tÏchto slov
+%<<DAL≈†√ç ZKRATKY:
+    %: (def) ≈Ω√°dn√© zkratky pro d√≠l, vyd√°n√≠, kapitola, atd.
+% abr,%: Pou≈æ√≠vat zkratky tƒõchto slov
 %------\ans=*(==)-------
-%>>DAL©Õ ZKRATKY:
-%<<ZKRATKA PRO `VYD¡NÕ' (if abbreviating words)
-%   %: (def) `Vyd·nÌ' zkr·ceno jako `vyd.' 
-% ednx,%: `Vyd·nÌ' zkr·ceno jako `v.' 
+%>>DAL≈†√ç ZKRATKY:
+%<<ZKRATKA PRO `VYD√ÅN√ç' (if abbreviating words)
+%   %: (def) `Vyd√°n√≠' zkr√°ceno jako `vyd.' 
+% ednx,%: `Vyd√°n√≠' zkr√°ceno jako `v.' 
 %------\ans=*(==)-------
-%<<MÃSÕCE S TE»KAMI:
-%   %: (def) MÏsÌce s teËkami jako Led.
-% mth-bare,%: MÏsÌce bez teËek jako Led B¯e
+%<<MƒöS√çCE S TEƒåKAMI:
+%   %: (def) Mƒõs√≠ce s teƒçkami jako Led.
+% mth-bare,%: Mƒõs√≠ce bez teƒçek jako Led B≈ôe
 %------\ans=*(==)-------
-%>>MÃSÕCE S TE»KAMI:
-%>>ZKRATKA PRO `VYD¡NÕ' (if abbreviating words)
-%<<»ÕSLOV¡NÕ VYD¡NÕ:
-% xedn,%: Jako v BibTeXovÈ datab·zi πet¯Ì mnoæstvÌ pamÏti
-%    %: (def) Vypisovat vyd·nÌ jako prvnÌ, druhÈ, t¯etÌ, atd.
-% ord,%: »Ìslovan· vyd·nÌ jako 1., 2., 3., atd.
+%>>MƒöS√çCE S TEƒåKAMI:
+%>>ZKRATKA PRO `VYD√ÅN√ç' (if abbreviating words)
+%<<ƒå√çSLOV√ÅN√ç VYD√ÅN√ç:
+% xedn,%: Jako v BibTeXov√© datab√°zi ≈°et≈ô√≠ mno≈æstv√≠ pamƒõti
+%    %: (def) Vypisovat vyd√°n√≠ jako prvn√≠, druh√©, t≈ôet√≠, atd.
+% ord,%: ƒå√≠slovan√° vyd√°n√≠ jako 1., 2., 3., atd.
 %------\ans=w(==)-------
-%>>»ÕSLOV¡NÕ VYD¡NÕ:
+%>>ƒå√çSLOV√ÅN√ç VYD√ÅN√ç:
 %<<STORED JOURNAL NAMES:
     %: (def) Full journal names for prestored journals
 % jabr,%: Abbreviated journal names 

@@ -128,40 +128,40 @@
 %    \begin{macrocode}
 %<*options>
 \mes{^^JOptions for Czech}
-\wr{\spsp\spsp èe¹tina,\pc: èeskı jazyk}
+\wr{\spsp\spsp ÄeÅ¡tina,\pc: ÄeskÃ½ jazyk}
 
 \beginoptiongroup{ZKRATKA PRO `STRANA, STRAN'}{}
-\optdef{*}{}{`Stran(a)'}{(¾ádné zkratky)}
-\optdef{a}{pp}{`Stran' zkráceno}{jako s. or str.}
-\optdef{x}{ppx}{`Stran' vynecháno}{}
+\optdef{*}{}{`Stran(a)'}{(Å¾Ã¡dnÃ© zkratky)}
+\optdef{a}{pp}{`Stran' zkrÃ¡ceno}{jako s. or str.}
+\optdef{x}{ppx}{`Stran' vynechÃ¡no}{}
 \getans
 \endoptiongroup
 \beginoptiongroup{ZKRATKA PRO `EDITOR':}{}
-\optdef{*}{}{`Editor(øi)'}{(¾ádné zkratky)}
-\optdef{a}{ed}{`Editor' zkráceno}{jako ed. nebo edt.}
+\optdef{*}{}{`Editor(Å™i)'}{(Å¾Ã¡dnÃ© zkratky)}
+\optdef{a}{ed}{`Editor' zkrÃ¡ceno}{jako ed. nebo edt.}
 \getans
 \endoptiongroup
-\beginoptiongroup{DAL©Í ZKRATKY:}{}
-\optdef{*}{}{®ádné zkratky}{pro díl, vydání, kapitola, atd.}
-\optdef{a}{abr}{Pou¾ívat zkratky}{tìchto slov}
+\beginoptiongroup{DALÅ Ã ZKRATKY:}{}
+\optdef{*}{}{Å½Ã¡dnÃ© zkratky}{pro dÃ­l, vydÃ¡nÃ­, kapitola, atd.}
+\optdef{a}{abr}{PouÅ¾Ã­vat zkratky}{tÄ›chto slov}
 \getans
 \endoptiongroup
-\beginoptiongroup{ZKRATKA PRO `VYDÁNÍ'
+\beginoptiongroup{ZKRATKA PRO `VYDÃNÃ'
  (if abbreviating words)}
  {\if\ans a*\fi}%
-\optdef{*}{}{`Vydání' zkráceno jako `vyd.'}{}
-\optdef{a}{ednx}{`Vydání' zkráceno jako `v.'}{}
+\optdef{*}{}{`VydÃ¡nÃ­' zkrÃ¡ceno jako `vyd.'}{}
+\optdef{a}{ednx}{`VydÃ¡nÃ­' zkrÃ¡ceno jako `v.'}{}
 \getans
-\beginoptiongroup{MÌSÍCE S TEÈKAMI:}{}
-\optdef{*}{}{Mìsíce s teèkami}{jako Led.}
-\optdef{x}{mth-bare}{Mìsíce bez teèek}{jako Led Bøe}
+\beginoptiongroup{MÄšSÃCE S TEÄŒKAMI:}{}
+\optdef{*}{}{MÄ›sÃ­ce s teÄkami}{jako Led.}
+\optdef{x}{mth-bare}{MÄ›sÃ­ce bez teÄek}{jako Led BÅ™e}
 \getans
 \endoptiongroup
 \endoptiongroup
-\beginoptiongroup{ÈÍSLOVÁNÍ VYDÁNÍ:}{}
-\optdef{*}{xedn}{Jako v BibTeXové databázi}{¹etøí mno¾ství pamìti}
-\optdef{w}{}{Vypisovat vydání}{jako první, druhé, tøetí, atd.}
-\optdef{n}{ord}{Èíslovaná vydání}{jako 1., 2., 3., atd.}
+\beginoptiongroup{ÄŒÃSLOVÃNÃ VYDÃNÃ:}{}
+\optdef{*}{xedn}{Jako v BibTeXovÃ© databÃ¡zi}{Å¡etÅ™Ã­ mnoÅ¾stvÃ­ pamÄ›ti}
+\optdef{w}{}{Vypisovat vydÃ¡nÃ­}{jako prvnÃ­, druhÃ©, tÅ™etÃ­, atd.}
+\optdef{n}{ord}{ÄŒÃ­slovanÃ¡ vydÃ¡nÃ­}{jako 1., 2., 3., atd.}
 \getans
 \endoptiongroup
 \endoptions
@@ -181,7 +181,7 @@ FUNCTION {bbl.etal}
 { "aj." }
 
 FUNCTION {bbl.editors}
-%<!ed>{ "editoøi" }
+%<!ed>{ "editoÅ™i" }
 %<ed>{ "edt." }
 
 FUNCTION {bbl.editor}
@@ -192,23 +192,23 @@ FUNCTION {bbl.edby}
 { "editace" }
 
 FUNCTION {bbl.edition}
-%<!abr>{ "vydání" }
+%<!abr>{ "vydÃ¡nÃ­" }
 %<abr&!ednx>{ "v." }
 %<abr&ednx>{ "vyd." }
 
 FUNCTION {bbl.volume}
-%<!abr>{ "roèník" }
-%<abr>{ "roè." }
+%<!abr>{ "roÄnÃ­k" }
+%<abr>{ "roÄ." }
 
 FUNCTION {bbl.of}
 { "" }
 
 FUNCTION {bbl.number}
-%<!abr>{ "èíslo" }
-%<abr>{ "è." }
+%<!abr>{ "ÄÃ­slo" }
+%<abr>{ "Ä." }
 
 FUNCTION {bbl.nr}
-{ "è." }
+{ "Ä." }
 
 FUNCTION {bbl.in}
 { "in" }
@@ -233,34 +233,34 @@ FUNCTION {bbl.chapter}
 %<abr>{ "kap." }
 
 FUNCTION {bbl.techrep}
-%<!abr>{ "Technická Zpráva" }
+%<!abr>{ "TechnickÃ¡ ZprÃ¡va" }
 %<abr>{ "Tech. Zpr." }
 
 FUNCTION {bbl.mthesis}
-{ "Diplomová práce" }
+{ "DiplomovÃ¡ prÃ¡ce" }
 
 FUNCTION {bbl.phdthesis}
-{ "Dizertaèní práce" }
+{ "DizertaÄnÃ­ prÃ¡ce" }
 
 %<*!xedn>
 FUNCTION {bbl.first}
-%<!ord>{ "První" }
+%<!ord>{ "PrvnÃ­" }
 %<ord>{ "1." }
 
 FUNCTION {bbl.second}
-%<!ord>{ "Druhé" }
+%<!ord>{ "DruhÃ©" }
 %<ord>{ "2." }
 
 FUNCTION {bbl.third}
-%<!ord>{ "Tøetí" }
+%<!ord>{ "TÅ™etÃ­" }
 %<ord>{ "3." }
 
 FUNCTION {bbl.fourth}
-%<!ord>{ "Ètvrté" }
+%<!ord>{ "ÄŒtvrtÃ©" }
 %<ord>{ "4." }
 
 FUNCTION {bbl.fifth}
-%<!ord>{ "Páté" }
+%<!ord>{ "PÃ¡tÃ©" }
 %<ord>{ "5." }
 
 FUNCTION {bbl.st}
@@ -282,23 +282,23 @@ FUNCTION {bbl.th}
 %<*!abr>
 MACRO {jan} {"Leden"}
 
-MACRO {feb} {"Únor"}
+MACRO {feb} {"Ãšnor"}
 
-MACRO {mar} {"Bøezen"}
+MACRO {mar} {"BÅ™ezen"}
 
 MACRO {apr} {"Duben"}
 
-MACRO {may} {"Kvìten"}
+MACRO {may} {"KvÄ›ten"}
 
-MACRO {jun} {"Èerven"}
+MACRO {jun} {"ÄŒerven"}
 
-MACRO {jul} {"Èervenec"}
+MACRO {jul} {"ÄŒervenec"}
 
 MACRO {aug} {"Srpen"}
 
-MACRO {sep} {"Záøí"}
+MACRO {sep} {"ZÃ¡Å™Ã­"}
 
-MACRO {oct} {"Øíjen"}
+MACRO {oct} {"Å˜Ã­jen"}
 
 MACRO {nov} {"Listopad"}
 
@@ -308,23 +308,23 @@ MACRO {dec} {"Prosinec"}
 %<*abr>
 MACRO {jan} {"Led."}
 
-MACRO {feb} {"Úno."}
+MACRO {feb} {"Ãšno."}
 
-MACRO {mar} {"Bøe."}
+MACRO {mar} {"BÅ™e."}
 
 MACRO {apr} {"Dub."}
 
-MACRO {may} {"Kvì"}
+MACRO {may} {"KvÄ›"}
 
-MACRO {jun} {"Èer."}
+MACRO {jun} {"ÄŒer."}
 
-MACRO {jul} {"Èec."}
+MACRO {jul} {"ÄŒec."}
 
 MACRO {aug} {"Srp."}
 
-MACRO {sep} {"Záø."}
+MACRO {sep} {"ZÃ¡Å™."}
 
-MACRO {oct} {"Øíj."}
+MACRO {oct} {"Å˜Ã­j."}
 
 MACRO {nov} {"Lis."}
 

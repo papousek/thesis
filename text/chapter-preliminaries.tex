@@ -1,3 +1,94 @@
 \chapter{Pojmy a východiska}
-\section{Modelování pomocí běžných diferenciálních rovnic}
+
+Následující kapitola se věnuje základním pojmům nutným k~pochopení
+algoritmu pro analýzu dynamických systémů uvedeného v kapitole \ref{chapter:algorithm}
+a~kontextu, v jakém byl navržen. Jedná se zejména o popis reprezentace zkou\-ma\-ných
+modelů a požadovaných vlastností.
+
+%\section{Systémová biologie}
+
+\section{Modelování pomocí obyčejných diferenciálních rovnic}
+
+Před popisem samotného modelování pomocí obyčejných diferenciálních rovnic je
+nutné říci, co se od vytvářených modelů zpravidla očekává. Model zpro\-středko\-vá\-vá
+zjednodušený pohled na zkoumaný systém a umožňuje tím systém snáze pochopit a
+případně předpovídat některé jevy. Fakt, že model je jen zjednodušením, znamená,
+že se vždy od reality liší a nabízí pouze jen některé aspekty chování zkoumaného
+systému. [str. 48]
+
+% Priklad modelu mapa, modelujeme problem ne system
+
+Jednoduchým příkladem modelu je mapa. Zřejmě nemůžeme očekávat od mapy, aby obsahovala
+všechny skutečnosti zahrnuté ve skutečném světě. Svým způsobem je mapa již od počátku
+\uv{špatně}, nabízí pouze jistou abstrakci systému a může i zkreslovat náš pohled.
+Přesto nelze popírat její užitečnost. Na mapě si lze také ukázat fakt, že se
+nemodeluje systém, ale problém. Existuje celá řada druhů map od turistických, automap
+až po map podloží a každá z nich má svůj specifický účel. \cite[str. 47 -- 58]{pelanek2012}
+
+Pro tuto práci jsou důležité modely, které lze simulovat. Model definuje pravidla, podle
+kterých se systém chová a simulace umožňuje se podívat na chování systému v čase, ať už
+diskrétním či spojitém. Pro simulace je sa\-mozřej\-mě potřeba znát stav systému, od kterého
+se jeho další chování odvíjí.
+
+% Spojity cas -> diferencialni rovnice
+
+Hojně užívaným způsobem modelování, kde vystupuje spojitý čas, jsou diferenciální rovnice.
+Stav systému se vyjádří pomocí stavových pro\-měn\-ných $\mathbf{X} = (\mathit{x_1}, \mathit{x_2}, \dots \mathit{x_n})$.
+Každé stavové proměnné přísluší diferenciální rovni\-ce prvního řádu, ve které vystupue
+Lipschitzovsky spojitá \cite[str. 149 -- 163]{eriksson2004} funkce
+$f_i: [t, \infty) \times \mathbb{R}^n \rightarrow \mathbb{R}$, která popisuje,
+jak se stavová proměnná mění v čase. Tvar takové rovnice je vidět ve sché\-ma\-tu~\ref{eq:ode}.
+
+\begin{align}\label{eq:ode}
+\frac{d\mathit{x_i}}{dt} = f_i(t, \mathbf{X})
+\end{align}
+
+Pro účely simulce není nutné znát úplné řešení této soustavy rovnic, ale postačuje pouze znalost
+vývoje systému od počatečního času $t_0$, kterému odpovídá počáteční stav $\mathbf{X}(t_0)$.
+V praxi se setkáváme s tím, že neznáme ani tento přesný vývoj, nýbrž pouze jeho aproximaci,
+kterou poskytují metody pro řešení problému výchozích podmínek~\cite{iserles1996}.
+
+\begin{figure}[h!]
+\begin{center}
+\subfigure[vývoj systému v čase]{
+	\includegraphics[width=.48\textwidth]{../images/lotkav-timeserie.png}
+}
+\subfigure[stavy, kterými systém prochází]{
+	\includegraphics[width=.48\textwidth]{../images/lotkav-oscil.png}
+}
+\end{center}
+\caption{Model systému obsahující predátora a kořist.}
+\end{figure}
+
+Tyto metody hledají aproximaci v diskrétním čase a chyba, s níž se vy\-po\-čí\-ta\-ná
+aproximace liší od skutečného řešení, je shora ohraničená uživatelem danou hodnotou.
+Fakt, že si může uživatel takto nadefinovat toleranci chyby, je je jednou z nejdůležitějších
+vlastností těchto metod. Nastavení chyby může samozřejmě v případě nízké tolerance
+a některých systémů vyústit ve výkonostní problémy. Jestliže tedy zvolíme časový
+krok $h \in \mathbb{R}$, pak výstupem těchto metod je sekvence bodů $\mathbf{X_0}, \mathbf{X_1}$, \ldots,
+pro kterou platí vztah \ref{eq:ode:aprox}.
+
+\begin{align}\label{eq:ode:aprox}
+\mathbf{X}_i \sim \mathbf{X}(t_i) \textrm{ kde } t_i = t_0 + i \cdot h, i \in \mathbb{N}
+\end{align}
+
+Známým modelem využívající soustavy diferenciálních rovnic popisuje vztah predátora
+a kořisti \cite{lotka1925}.
+
+\begin{align}\label{eq:lotkav}
+\begin{array}{ll}
+\frac{dx}{dt} &= x\cdot(\alpha - \beta \cdot y)			\\
+\frac{dy}{dt} &= -y \cdot (\gamma - \delta \cdot x)
+\end{array}
+\end{align}
+
+% Priklady modelu ve spojitem case
+
+% Moznost prevodu chemickych rovnic do diferencialnich rovnic
+
+% Celkem by to melo byt na 3 - 4 stranky
+
+
 \section{Temporální logika signálů}
+
+% Celkem 3 - 4 stranky
