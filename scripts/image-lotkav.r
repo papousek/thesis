@@ -13,19 +13,21 @@ lotkav <- function (time, state, pars) {
  
 pars <- c(alpha = 2, beta = .5, gamma = .2, delta = .6)
 state <- c(x = 10, y = 10)
-time <- seq(0, 100, by = 0.05)
+time <- seq(0, 100, by = 0.1)
  
-outDense <- as.data.frame(ode(func = lotkav, y = state, parms = pars, times = time))
-out <- outDense[seq(1, 2000, 100),]
+out <- as.data.frame(ode(func = lotkav, y = state, parms = pars, times = time))
+mar <- c(0, 4.1, 1, 0)
 
 
-png("../images/lotkav-timeserie.png", bg = "transparent", width=300, height=300)
-matplot(out[,-1], type = "o", pch=c(23, 17), col = c("blue", "red"), xlab = "Čas", ylab = "Populace")
-legend("topright", c("Kořist", "Predátor"), lty = c(1,2), col = c("blue", "red"), pch=c(23, 17))
+png("../images/lotkav-timeserie.png", bg = "transparent", width=300, height=250)
+par(mar = mar)
+matplot(out[,-1], type = "l", col = c("blue", "red"), xlab = "Čas", ylab = "Populace", ylim=c(0, 35))
+legend("topright", c("Kořist", "Predátor"), lty = c(1,2), col = c("blue", "red"))
 #title("Vývoj systému Predátor a kořist v čase")
 dev.off()
 
-png("../images/lotkav-oscil.png", bg = "transparent", width=300, height=300)
-plot(outDense$x, outDense$y, pch = "o", xlab = "Kořist", ylab = "Predátor")
+png("../images/lotkav-oscil.png", bg = "transparent", width=300, height=250)
+par(mar = mar)
+plot(out$x, out$y, pch = "o", xlab = "Kořist", ylab = "Predátor", ylim=c(0, 35))
 #title("Oscilace systému Predátor a kořist")
 dev.off()

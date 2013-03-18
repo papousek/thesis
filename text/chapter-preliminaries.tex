@@ -7,7 +7,7 @@ modelů a požadovaných vlastností.
 
 %\section{Systémová biologie}
 
-\section{Modelování pomocí obyčejných diferenciálních rovnic}
+\section{Modelování}
 
 Před popisem samotného modelování pomocí obyčejných diferenciálních rovnic je
 nutné říci, co se od vytvářených modelů zpravidla očekává. Model zpro\-středko\-vá\-vá
@@ -30,7 +30,7 @@ kterých se systém chová a simulace umožňuje se podívat na chování systé
 diskrétním či spojitém. Pro simulace je sa\-mozřej\-mě potřeba znát stav systému, od kterého
 se jeho další chování odvíjí.
 
-% Spojity cas -> diferencialni rovnice
+\subsection{Modelování pomocí obyčejných diferenciálních rovnic}
 
 Hojně užívaným způsobem modelování, kde vystupuje spojitý čas, jsou diferenciální rovnice.
 Stav systému se vyjádří pomocí stavových pro\-měn\-ných $\mathbf{X} = (\mathit{x_1}, \mathit{x_2}, \dots \mathit{x_n})$.
@@ -48,18 +48,6 @@ vývoje systému od počatečního času $t_0$, kterému odpovídá počátečn�
 V praxi se setkáváme s tím, že neznáme ani tento přesný vývoj, nýbrž pouze jeho aproximaci,
 kterou poskytují metody pro řešení problému výchozích podmínek~\cite{iserles1996}.
 
-\begin{figure}[h!]
-\begin{center}
-\subfigure[vývoj systému v čase]{
-	\includegraphics[width=.48\textwidth]{../images/lotkav-timeserie.png}
-}
-\subfigure[stavy, kterými systém prochází]{
-	\includegraphics[width=.48\textwidth]{../images/lotkav-oscil.png}
-}
-\end{center}
-\caption{Model systému obsahující predátora a kořist.}
-\end{figure}
-
 Tyto metody hledají aproximaci v diskrétním čase a chyba, s níž se vy\-po\-čí\-ta\-ná
 aproximace liší od skutečného řešení, je shora ohraničená uživatelem danou hodnotou.
 Fakt, že si může uživatel takto nadefinovat toleranci chyby, je je jednou z nejdůležitějších
@@ -72,8 +60,15 @@ pro kterou platí vztah \ref{eq:ode:aprox}.
 \mathbf{X}_i \sim \mathbf{X}(t_i) \textrm{ kde } t_i = t_0 + i \cdot h, i \in \mathbb{N}
 \end{align}
 
+% Priklad modelu ve spojitem case
+
+\subsection{Příklad modelu}\label{section:lotkav}
+
 Známým modelem využívající soustavy diferenciálních rovnic popisuje vztah predátora
-a kořisti \cite{lotka1925}.
+a kořisti \cite{lotka1925} definovaný rovnicemi \ref{eq:lotkav}. Obsahuje stavové pro\-měn\-né
+pro množství kořisti ($x$) a počet predátorů ($y$), dále parametry pro přirozený
+přírůstek kořisti ($\alpha$), \uv{žravost} predátorů ($\beta$), přirozený úbytek
+predátorů ($\gamma$) a schopnost reprodukce predátorů ($\delta$).
 
 \begin{align}\label{eq:lotkav}
 \begin{array}{ll}
@@ -82,13 +77,100 @@ a kořisti \cite{lotka1925}.
 \end{array}
 \end{align}
 
-% Priklady modelu ve spojitem case
+Model je samozřejmě zjednodušením reality. V systému se nacházejí pouze dva druhy
+zvířat, bíložravá kořist a masožravý predátor. U kořisti se předpokládá bezproblémový
+přístup k potravě, a proto přirozeně příbívá. Naproti tomu reprodukce predátora je
+závislá na přísunu masité potravy, tzn. množství kořisti v systému.
 
-% Moznost prevodu chemickych rovnic do diferencialnich rovnic
+I na tomto modelu je však možné pozorovat netriviální chování, o čemž se lze přesvědčit
+při pohledu na grafy  \ref{fig:lotkav:timeserie} a \ref{fig:lotkav:oscil}. Systém má
+tendenci oscilovat. Periodicky dochází k nárustu populace predátora, to vyústí v pokles
+populace kořisti, následně u predátorů v důsledku nedostatku potravy převáží úmrtnost nad reprodukcí,
+množství kořisti opět naroste a tento cyklus se znovu opakuje.
 
-% Celkem by to melo byt na 3 - 4 stranky
+\begin{figure}[h!]
+\begin{center}
+\subfigure[vývoj systému v čase]{
+	\includegraphics[width=.48\textwidth]{../images/lotkav-timeserie.png}\label{fig:lotkav:timeserie}
+}
+\subfigure[stavy, kterými systém prochází]{
+	\includegraphics[width=.48\textwidth]{../images/lotkav-oscil.png}\label{fig:lotkav:oscil}
+}
+\end{center}
+\caption{Model systému obsahující predátora a kořist s ohodnocením parametrů $\alpha = 2$,  $\beta = 0.5$, $\gamma = 0.2$ a $\delta = 0.6$.}
+\end{figure}
 
+Síla modelů a simulace se ukazuje být v tom, že tento druh informace získáme, aniž bychom prováděli
+experiment například se skutečnými liš\-ka\-mi a zajíci. Samozřejmě se na závěr neobejdeme
+bez validace výsledků simulace se skutečným systémem, ale tomu může předcházet velké množství
+experementů \textit{in silico}, které by nás jinak stáli mnoho prostředků nebo by ani 
+nebyly uskutečnitelné. Za zmínku stojí například model popisující šíření nákazy
+populací~\cite{kermack1927}, což je téma, u něhož si opravdu lze jen těžko představit
+experimenty na reálném systému.
+
+\subsection{Modelování chemických reakcí}
+
+Modelování pomocí obyčejných diferenciálních rovnic je natolik obecný a účinný nástroj,
+že jej lze použít pro popis jevů z mnoha oblastí. Jednou z typických oblastí, kde
+se rovnice používají, jsou chemické reakce. Pro systém elementárních chemických reakcí
+lze za jistých předpokladů \cite{TODO} automatizovaně zkonstruovat systém diferenciálních rovnic,
+kde stavovými proměnnými jsou koncentrace jednotlivých látek. Elementárními che\-mic\-ký\-mi
+reakcemi se mají na mysli ty chemické reakce, u nichž dochází k přímé přeměně reaktantů
+v produkty bez reakčních mezikroků nebo je možné tyto mezikroky zanedbat \cite{TODO}.
+Schémata \ref{eq:chemeq} ukazují, jak tento převod konkrétně vypadá pro jednotlivé
+elementární chemické reakce a specifickou kinetickou konstantu $k$. Koncentraci látky
+$\textrm{X}$ značíme $[\textrm{X}]$.
+
+\begin{align}\label{eq:chemeq}
+\begin{array}{ll}
+\xrightarrow{k} A			&\leadsto \frac{d[\textrm{A}]}{dt} = k						\\
+A \xrightarrow{k} 			&\leadsto \frac{d[\textrm{A}]}{dt} = - k \cdot [\textrm{A}]	\\
+A \xrightarrow{k} B			&\leadsto \frac{d[\textrm{A}]}{dt} = - k \cdot [\textrm{A}], \frac{d[\textrm{B}]}{dt} = k \cdot [\textrm{A}] \\
+AB \xrightarrow{k} A + B	&\leadsto \frac{d[\textrm{AB}]}{dt} = - k \cdot [\textrm{AB}], \frac{d[\textrm{A}]}{dt} = \frac{d[\textrm{B}]}{dt} = k \cdot [\textrm{A}] \\
+A + B \xrightarrow{k} AB	&\leadsto \frac{d[\textrm{A}]}{dt} = \frac{d[\textrm{B}]}{dt} = - k \cdot [\textrm{A}] \cdot [\textrm{B}], \frac{d[\textrm{AB}]}{dt} = k \cdot [\textrm{A}] \cdot [\textrm{B}] \\
+A + B \xrightarrow{k} AB	&\leadsto \frac{d[\textrm{A}]}{dt} = - 2k \cdot [\textrm{A}]^2, \frac{d[\textrm{AB}]}{dt} = k \cdot [\textrm{A}]^2 \\
+\end{array}
+\end{align}
+
+Pro obecné reakce abstrahující určitou kaskádu elementárních reakcí univerzální
+převod neexistuje. Zde je již nutné přihlédnout k typu reakce. Tím, že se
+zanedbají mezireakce s meziprodukty, může výsledný systém diferenciálních rovnic obsahovat
+méně proměnných a je tak snazší jej simulovat.
 
 \section{Temporální logika signálů}
 
-% Celkem 3 - 4 stranky
+Aby bylo možné modely automatizovaně analyzovat, je nutné vyjadřovat se o jejich
+vlastnostech exatně. Jazyk, který je k tomuto účely potřeba, musí být schopen se
+vyjadřovat o chování systému. V kontextu obyčejných a diferenciálních rovnic je
+chováním trajektorie, v případě simulace sekvence bodů v čase. Například u modelu
+popsaného v sekci \ref{section:lotkav} je vhodné popsat oscilaci populace kořisti
+nebo predátora. To lze například tak, že budeme požadovat, aby množství jedinců
+daného druhu přesáhlo opakovaně pře\-sáh\-lo maximální a minimální mez. Jak konkrétně
+tento požadavek zformulovat, je ukázáno dále.
+
+K vyjádření vlastností nad lineárními běhy systémů se nejčastěji používá lieární
+temporální logika~\cite{strejcek2007}, případě logiky z ní odvozené. Pro použití této logiky je nejprve
+nutné definovat tzv. atomické propozice, což jsou vlastnosti, které lze přisoudit jednotlivým stavům,
+například \uv{množství kořisti je větší než 100} nebo \uv{množství kořisti je menší než 10}.
+V případě modelů založených na diferenciálních rovnicích jsou atomické propozice tvaru $g(\mathbf{X})~\rho~k$,
+kde $\mathbf{X} = (x_1, x_2, \ldots, x_n)$ je vektor stavových proměnných,
+$g: \mathbb{R}^n \rightarrow \mathbb{R}$ funkce,
+$k\in\mathbb{R}$ konstanta a $\rho \in \{\leq, =, \geq\}$. Vzhledem k tomu,
+že simulace podléhá určité chybě, není vhodné používat rovnost, a proto se v~této
+práci omezíme na $\rho \in \{\leq, \geq\}$.
+
+Lineární temporalní logika u\-mož\-ňu\-je se zjednodušeně vyjadřovat o sta\-vech
+systému v čase formulacemi typu \uv{v budoucnu nastane \ldots}, \uv{vždy platí \ldots} apod.
+Tato logika se definuje nad nekonečnými běhy, a proto je v~této práci použita temporální logika
+signálů~\cite{maler2004}, která se od lineární temporální logiky liší pouze přidáním
+časových intervalů k některým ope\-rá\-to\-rům, tím temporální logika signálů umožňuje
+formulovat výroky, které jsou částečně závislé na čase jako je například \uv{za hodinu až dvě nastane \ldots} 
+\uv{za třicet minut bude celé čtyři hodiny platit \ldots}.	
+
+\subsection{Definice temporální logiky signálů}
+
+
+
+\subsection{Příklady vlastností}
+
+\subsection{Ověření platnosti}
