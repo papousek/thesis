@@ -137,39 +137,152 @@ převod neexistuje. Zde je již nutné přihlédnout k typu reakce. Tím, že se
 zanedbají mezireakce s meziprodukty, může výsledný systém diferenciálních rovnic obsahovat
 méně proměnných a je tak snazší jej simulovat.
 
-\section{Temporální logika signálů}
+\section{Vlastnosti modelovaných systémů}
 
 Aby bylo možné modely automatizovaně analyzovat, je nutné vyjadřovat se o jejich
-vlastnostech exatně. Jazyk, který je k tomuto účely potřeba, musí být schopen se
-vyjadřovat o chování systému. V kontextu obyčejných a diferenciálních rovnic je
-chováním trajektorie, v případě simulace sekvence bodů v čase. Například u modelu
+vlastnostech exatně. Jazyk, který je k tomuto účely potřeba, musí být schopen 
+popsat chování systému. V kontextu obyčejných a di\-fe\-ren\-ci\-ál\-ních rovnic je
+chováním trajektorie, v případě simulace sekvence bodů v~čase. Například u modelu
 popsaného v sekci \ref{section:lotkav} je vhodné popsat oscilaci populace kořisti
 nebo predátora. To lze například tak, že budeme požadovat, aby množství jedinců
 daného druhu přesáhlo opakovaně pře\-sáh\-lo maximální a minimální mez. Jak konkrétně
 tento požadavek zformulovat, je ukázáno dále.
 
-K vyjádření vlastností nad lineárními běhy systémů se nejčastěji používá lieární
-temporální logika~\cite{strejcek2007}, případě logiky z ní odvozené. Pro použití této logiky je nejprve
-nutné definovat tzv. atomické propozice, což jsou vlastnosti, které lze přisoudit jednotlivým stavům,
-například \uv{množství kořisti je větší než 100} nebo \uv{množství kořisti je menší než 10}.
-V případě modelů založených na diferenciálních rovnicích jsou atomické propozice tvaru $g(\mathbf{X})~\rho~k$,
-kde $\mathbf{X} = (x_1, x_2, \ldots, x_n)$ je vektor stavových proměnných,
-$g: \mathbb{R}^n \rightarrow \mathbb{R}$ funkce,
-$k\in\mathbb{R}$ konstanta a $\rho \in \{\leq, =, \geq\}$. Vzhledem k tomu,
-že simulace podléhá určité chybě, není vhodné používat rovnost, a proto se v~této
-práci omezíme na $\rho \in \{\leq, \geq\}$.
+%Pro použití této logiky je nejprve
+%nutné definovat tzv. atomické propozice, což jsou vlastnosti, které lze přisoudit jednotlivým stavům,
+%například \uv{množství kořisti je větší než 100} nebo \uv{množství kořisti je menší než 10}.
+%V případě modelů založených na diferenciálních rovnicích jsou atomické propozice tvaru $g(\mathbf{X})~\rho~k$,
+%kde $\mathbf{X} = (x_1, x_2, \ldots, x_n)$ je vektor stavových proměnných,
+%$g: \mathbb{R}^n \rightarrow \mathbb{R}$ funkce,
+%$k\in\mathbb{R}$ konstanta a $\rho \in \{\leq, =, \geq\}$. Vzhledem k tomu,
+%že simulace podléhá určité chybě, není vhodné používat rovnost, a proto se v~této
+%práci omezíme na $\rho \in \{\leq, \geq\}$.
 
-Lineární temporalní logika u\-mož\-ňu\-je se zjednodušeně vyjadřovat o sta\-vech
+K vyjádření vlastností nad lineárními běhy systémů se nejčastěji používá lieární
+temporální logika~\cite{strejcek2007}, případě logiky z ní odvozené.
+Lineární temporální logika u\-mož\-ňu\-je se zjednodušeně vyjadřovat o sta\-vech
 systému v čase formulacemi typu \uv{v budoucnu nastane \ldots}, \uv{vždy platí \ldots} apod.
 Tato logika se definuje nad nekonečnými běhy, a proto je v~této práci použita temporální logika
-signálů~\cite{maler2004}, která se od lineární temporální logiky liší pouze přidáním
-časových intervalů k některým ope\-rá\-to\-rům, tím temporální logika signálů umožňuje
-formulovat výroky, které jsou částečně závislé na čase jako je například \uv{za hodinu až dvě nastane \ldots} 
-\uv{za třicet minut bude celé čtyři hodiny platit \ldots}.	
+signálů~\cite{maler2004} založená na temporální logice metrických intervalů~\cite{alur1996},
+která se od lineární temporální logiky liší pouze přidáním ča\-so\-vých intervalů. Tím temporální
+logika signálů u\-mož\-ňu\-je formulovat výroky, které jsou částečně závislé na čase jako
+je například \uv{za hodinu až dvě nastane \ldots} \uv{za třicet minut bude celé
+čtyři hodiny platit \ldots}.
 
-\subsection{Definice temporální logiky signálů}
+\subsection{Signál}
 
+Zvolme si časovou doménu $\mathbb{T} = \mathbb{R}_{\geq 0}$ a signál konečné délky
+nad libovolnou doménou $\mathbb{D}$ jako parciální zobrazení $s: \mathbb{T} \rightarrow \mathbb{D}$.
+Definičním oborem tohoto zobrazení nechť je interval $l = [0, r)$, kde $r \in \mathbb{Q}_{\geq0}$ nazáváme
+délkou signálu a značíme ji $|s| = r$. Pro všechna $t \geq r$ položíme $s[t] = \bot$.
 
+Tyto signály lze sdružovat pomocí párovací funkce $||$.
+
+\begin{align}\label{eq:signals:pairing}
+\begin{array}{ll}
+s_1: \mathbb{T} \rightarrow \mathbb{D}_1, s_2: \mathbb{T} \rightarrow \mathbb{D}_2	\\
+s_1 || s_2: \mathbb{T} \rightarrow \mathbb{D}_1 \times\mathbb{D}_2		\\
+s_1 || s_2= s_{12}\textrm{, kde }\forall t\in\mathbb{T}. s_{12}[t] = (s_1[t] \times s_2[t])
+\end{array}
+\end{align}
+
+Standardní cestou lze na těchto sdružených signálech definovat projekční funkce.
+
+\begin{align}\label{eq:signals:pairing}
+\begin{array}{ll}
+s_1 = \pi_1(s_{12})		& s_2 = \pi_2(s_{12})
+\end{array}
+\end{align}
+
+Pro případ, že se délky skládaných signálů liší, definujeme výslednou délku
+složeného signálu jako $|s_{12}| = min(|s_1|, |s_2|)$ a při aplikaci libovolé
+funkce $f: \mathbb{D}_1 \times \mathbb{D}_2 \rightarrow \mathbb{D}_3$
+položíme $f(s_1, s_2) = f(s_1[t], s_2[t]$ pro všechna $t \in \mathbb{T}$ a
+$f(x_1, \bot) = f(\bot, x_2) = \bot$.
+
+Je dobré si povšimnou, že definice signálu je konzistentní s tím, jak chápeme chování modelu,
+tedy jako trajektorii v $\mathbb{R}^n$, kde $n$ je počet sta\-vo\-vých proménných. Zároveň
+je třeba si však uvědomit, že výstupem numerické simulace není spojitá trajektorie, nýbrž pouze
+sekvence bodů s~časovým razítkem.
+
+\subsection{Temporální logika signálů}
+Důležitým aspektem zde použité logiky jsou uzavřené časové intervaly $I = [a, b]$, kde $a, b \in \mathbb{Q}_{\geq0}$,
+jimiž jsou omezeny všechny temporální operátory. Konečnost intervalů je jedním z rozdílů
+oproti klasické temporální logice metrických intervalů. Toto omezení je plně v souladu s tím,
+že modely porovnáváme s reálnými systémy, které pozorujeme konečný čas, a značně tento předpoklad
+zjedno\-du\-ší další analýzu.
+
+Nechť $U = \{\mu_1, \mu_2, \mu_3, \ldots, \mu_k\}$ je množina efektivně vyčíslitelných funkcí
+$\mu_i: \mathbb{R}^n \rightarrow \{T, F\}$, které zpravidla odpovídají predikátům tvaru
+$f(\mathbf{X})~\geq~k$ nebo $f(\mathbf{X})~\leq~k$. Všimněme si, že nemá smysl v predikátech
+používat samotnou rovnost, protože numerická simulace vrací data s~určitou chybou.
+K těmto atomickým propozicím přísluší signály $s = \mu_1(x)|| \ldots|| \mu_k(x)$.
+
+Gramatiku temporální logiky signálů definujeme podle předpisu \ref{eq:stl:grammar},
+ve kterém $p$ značí atomickou propozici.
+
+\begin{align}\label{eq:stl:grammar}
+\varphi := T~|~p~|~\neg\varphi~|~\varphi_1 \wedge \varphi_2~|~\varphi_1\mathcal{U}_{[a,b]}\varphi_2
+\end{align}
+
+Ze základních formulí lze odvodit další standardně používané výrokové a temporální operátory.
+Nejpožívanějšími jsou výrokový operátor $\vee$ a temporální operátory $\mathcal{F}$ a $\mathcal{G}$,
+které intuitivně odpovídají už zmíněným výrokům \uv{v budoucnu nastane \ldots} a \uv{vždy platí \ldots}.
+
+\begin{align}\label{eq:stl:other}
+\begin{array}{ll}
+\varphi_1\vee\varphi_2 		&\equiv \neg\varphi_1 \wedge \neg\varphi_2		\\
+\mathcal{F}_{[a,b]}\varphi 	&\equiv T\mathcal{U}_{[a,b]}\varphi				\\
+\mathcal{G}_{[a,b]}\varphi 	&\equiv \neg\mathcal{F}_{[a,b]}\neg\varphi		\\
+\end{array}
+\end{align}
+
+Re\-la\-ce $(s, t) \models \varphi$ značí, že daný signál $s$ splňuje formuli $\varphi$
+počínaje pozicí v čase $t$, a je definována induktivně předpisem \ref{eq:stl:semantics}.
+$P(s, t)$ představuje množinu atomických propozic platných v čase $t$ na signálu $s$.
+Signál $s$ splňuje formuli $\varphi$ právě tehdy, když $(s, 0) \models \varphi$.
+
+\begin{align}\label{eq:stl:semantics}
+\begin{array}{ll}
+(s, t) \models p				&\longleftrightarrow \pi_p(s)[t] = T			\\
+(s, t) \models \neg \varphi		&\longleftrightarrow (s, t) \not\models \varphi	\\
+(s, t) \models \varphi_1 \wedge \varphi_2	&\longleftrightarrow (s, t) \models \varphi_1 \textrm{ a současně } (s, t) \models \varphi_2	\\
+(s, t) \models \varphi_1 \mathcal{U}_{[a,b]} \varphi_2 	&\longleftrightarrow \exists t' \in [t+a, t+b] . (s, t') \models \varphi_2			\\														
+&~~~~~~~~\textrm{ a současně } \forall t'' \in [t, t'] . (s, t'') \models \varphi_1
+\end{array}
+\end{align}
+
+Stojí za zmínku, že operátor $\mathcal{U}$ je zde definován s trochu jinou sémantikou
+než je běžné. Požaduje se zde silnější podmínka, tj. aby existoval stav (čas),
+pro který platí obě vlastnosti $\varphi_1$ a $\varphi_2$, tedy aby existoval
+čas $t' \in [t + a, t + b]$ takový, že $(s, t') \models \varphi_1$
+a současně $(s, t') \models \varphi_2$. To však nemění sémantiku ostatních známých
+temporálních operátorů $\mathcal{F}$ a $\mathcal{G}$.
+
+\begin{align}\label{eq:stl:semantics}
+\begin{array}{ll}
+(s, t) \models \mathcal{F}_{[a,b]}\varphi &\longleftrightarrow	\exists t'\in[t+a, t+b].(s,t') \models \varphi		\\
+(s, t) \models \mathcal{G}_{[a,b]}\varphi &\longleftrightarrow	\forall t'\in[t+a, t+b].(s,t') \models \varphi
+\end{array}
+\end{align}
+
+Standardní sémantika temporálních logik obecně neumožňuje ověření platnosti temporálních operátorů
+na konečných signálech kromě některých případů, jako je splněnost $\mathcal{F}\varphi$
+nebo nesplněnost $\mathcal{G}\varphi$, jejichž platnost může být ověřena v konečném čase.
+Tento problém naštěstí odpadá zavedením časových intervalů. I přesto však existují
+formule a signály, u kterých o platnosti rozhodnot nelze. Příkladem může být formule $F_{[a, b]}\varphi$
+a signál o délce kratší než $b$.
+
+Z tohoto důvodu se definuje délka nezbytná k ověření platnosti dané formule nad daným signálem.
+
+\begin{align}\label{eq:stl:min:length}
+\begin{array}{ll}
+||p||									&= 0									\\
+||\neg\varphi||							&= ||\varphi||							\\
+||\phi_1 \wedge \phi_2||				&= max(||\varphi_2||,||\varphi_2||) 	\\
+||\phi_1 \mathcal{U}_{[a,b]} \phi_2||	&= max(||\varphi_2||,||\varphi_2||) + b	\\
+\end{array}
+\end{align}
 
 \subsection{Příklady vlastností}
 
