@@ -273,7 +273,8 @@ Tento problém naštěstí odpadá zavedením časových intervalů. I přesto v
 formule a signály, u kterých o platnosti rozhodnot nelze. Příkladem může být formule $F_{[a, b]}\varphi$
 a signál o délce kratší než $b$.
 
-Z tohoto důvodu se definuje délka nezbytná k ověření platnosti dané formule nad daným signálem.
+Z tohoto důvodu se definuje délka nezbytná k ověření platnosti dané formule nad daným signálem,
+opět induktivně.
 
 \begin{align}\label{eq:stl:min:length}
 \begin{array}{ll}
@@ -284,6 +285,58 @@ Z tohoto důvodu se definuje délka nezbytná k ověření platnosti dané formu
 \end{array}
 \end{align}
 
-\subsection{Příklady vlastností}
+\subsection{Příklad vlastností}
 
-\subsection{Ověření platnosti}
+Temporální logika signálů nám umožňuje formulovat celou řadu vlastností. Mezi ty
+nejznámnější a nejčastěji používané patří oscilace. Je dobré si u\-vě\-do\-mit, že oscilaci
+lze chápat mnoha různými způsoby. V~praxi se nevyplatí klást přísná omezení na přesnost
+periody, velikost amplitudy či přesnost stavu, kterým systém periodicky prochází. 
+
+\begin{figure}[h!]
+\begin{center}
+\subfigure[$x \geq k$]{
+	\includegraphics[width=.48\textwidth]{../images/stl-example-geq-limit.png}\label{fig:stl:example:geq:limit}
+}
+\subfigure[$x \leq k$]{
+	\includegraphics[width=.48\textwidth]{../images/stl-example-leq-limit.png}\label{fig:stl:example:leq:limit}
+}
+\caption{Pravdivostní hodnota atomických propozic v čase.}
+\end{center}
+\end{figure}
+
+Představme s systém o jedné stavové proměnné $x$, ve které se vzrůstající intenzitou
+osciluje. Perioda oscilace je konstantní, avšak její amplituda ne. V~této práci
+použité logice se lze vyjadřovat o hodnotách proměnné $x$, tudíž oscilaci budeme
+chápat jako periodické překračování dolní a horní meze. Atomickými propozicemi jsou tedy
+predikáty $x \geq k$ a $x \leq -k$, jejichž platnost lze vidět na obrázcích
+\ref{fig:stl:example:geq:limit} a \ref{fig:stl:example:leq:limit}. Jeden cyklus, lze
+popsat tak, že se hodnota sledované proměnné nachází nad horní mezí a zároveň někdy
+v budoucnu klesne pod dolní mez, tedy $x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k$.
+Přidání operátoru $\mathcal{F}$ zajistí, že se v daném času do určité doby provede jeden oscilační cyklus,
+viz obrázek \ref{fig:stl:example:future:geq:limit:future:leq:limit}. To, že systém
+osciluje znamená, že toto platí pro každý časový okamžik, což vyjádříme operátorem $\mathcal{G}$.
+
+\begin{figure}[h!]
+\begin{center}
+\subfigure[$x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k$]{
+	\includegraphics[width=.48\textwidth]{../images/stl-example-geq-limit-future-leq-limit.png}\label{fig:stl:example:geq:limit:future:leq:limit}
+}
+\subfigure[$\mathcal{F}_{0, \frac{1}{2}}(x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k)$]{
+	\includegraphics[width=.48\textwidth]{../images/stl-example-future-geq-limit-future-leq-limit.png}\label{fig:stl:example:future:geq:limit:future:leq:limit}
+}
+\end{center}
+\caption{Pravdivostní hodnota složených výroků v čase.}
+\end{figure}
+
+Ve zde uvedeném příkladu systém neosciluje s požadovanou amplitudou již od začátku,
+tudíž je potřeba do formule přidat ještě nějaké čekání v~podobě operátoru $\mathcal{F}$.
+Výsledná formule tedy vypadá následovně:
+
+\begin{align}\label{eq:stl:semantics}
+\mathcal{F}_{[0, \textrm{čekání}]}\mathcal{G}_{[0, \textrm{doba oscilace}]}\mathcal{F}_{0, \textrm{perioda}}(x \geq k \wedge \mathcal{F}_{[0, \textrm{perioda}]}x \leq -k)
+\end{align}
+
+Z uvedeného příkladu je zřejmě, že platnost formule nad daným signálem
+lze ověřit algoritmem, jehož průběh bude kopírovat strukturu formule. Jak
+přesně ověřovací algoritmus vypadá, ukáže sekce \ref{section:robustness},
+která navíc lehce rozšíří vnímání pravdivosti jako takové.

@@ -16,7 +16,7 @@ state <- c(x = 10, y = 10)
 time <- seq(0, 100, by = 0.1)
  
 out <- as.data.frame(ode(func = lotkav, y = state, parms = pars, times = time))
-mar <- c(0, 4.1, 1, 0)
+mar <- c(4, 4, 1, 1)
 
 
 png("../images/lotkav-timeserie.png", bg = "transparent", width=300, height=250)
