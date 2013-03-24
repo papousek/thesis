@@ -89,28 +89,56 @@ se ověří platnost formule. Výsledkem je určité množství bodů, u kterýc
 zda z nich simulované chování splňuje či nesplňuje danou vlastnost. Tyto body nastíní
 hranice regionů platnosti a neplatnosti se zvolenou přes\-nos\-tí~$\delta$.
 
-%\begin{algorithm}
-%\caption{Analýza prostoru inicálních podmínek}
-%\begin{algorithmic}
-%\REQUIRE 	$\mathcal{DS} = (\mathbf{X}, f), \mathcal{I}, \varphi$
-%\ENSURE 	$\mathcal{F} = \{([\mathbf{F}_0]_0, s_1), \ldots ([\mathbf{F}_k]_0, s_k)\}$ -- body a platnosti formule $\varphi$
-%\STATE
-%\STATE		$main_{new} 	\gets $ počáteční zahuštění $\mathcal{I}$
-%\WHILE{$main_{new} \neq \emptyset$}
-%	\STATE	$neigh 	\gets $ vedlejší body pro body z $P$
-%	\STATE 	$MAIN 	\gets $ nasimuluj všechny body z $main_{new}$
-%	\STATE	$NEIGH	\gets $ nasimuluj všechny body z $neigh$
-%	\STATE	$
-%\ENDWHILE
-%\STATE 		
-%
-%\STATE		
-%\end{algorithmic}
-%\end{algorithm}
+\begin{algorithm}
+\caption{Analýza prostoru inicálních podmínek}
+\begin{algorithmic}
+\REQUIRE 	$\mathcal{DS} = (\mathbf{X}, f), \mathcal{I}, \varphi, \Delta t, \delta, \varepsilon$
+\ENSURE 	$\textsc{Result} = \{([\mathbf{F}_0]_0, s_1), \ldots ([\mathbf{F}_k]_0, s_k)\}$ -- body a splněnost $\varphi$
+\STATE		$\textsc{Main}_{new} 	\gets $ počáteční zahuštění $\mathcal{I}$
+\STATE		$\textsc{Result} \gets \emptyset$
+\WHILE{$\textsc{Main}_{new} \neq \emptyset$}
+	\STATE $\textsc{Main}_{new} \gets \emptyset$
+	\STATE $\textsc{Main}_{old} \gets MAIN_{new}$
+	\FOR{$([\mathbf{X}_{main}]_0, [\mathbf{P}_{main}]) \in \textsc{Main}_{old}$}
+		\STATE $\textsc{Trajectory}_{main} \gets \mathcal{M}^{||\varphi||}_\varepsilon(f_{\mathbf{P} \gets [\mathbf{P}_{main}]}, [\mathbf{X}_{main}]_0, \Delta t)$
+		\STATE $\textsc{Satisfied}_{main} \gets $ splněnost $\varphi$ nad $\textsc{Trajectory}_{main}$
+		\STATE $\textsc{Result} \gets \textsc{Result} \cup \{(\textsc{Satisfied}_{main}, [\mathbf{X}_{main}]_0, [\mathbf{P}_{main}])\}$
+		\STATE $\textsc{Neigh} \gets $ body sousedící s bodem $([\mathbf{X}]_0, [\mathbf{P}])$
+		\FOR{$([\mathbf{X}_{neigh}]_0, [\textbf{P}_{neigh}]) \in \textsc{Neigh}$}
+			\STATE $\textsc{Trajectory}_{neigh} \gets \mathcal{M}^{||\varphi||}_\varepsilon(f_{\mathbf{P} \gets [\mathbf{P}_{neigh}]}, [\mathbf{X}_{neigh}]_0, \Delta t)$
+			\STATE $\textsc{Satisfied}_{neigh} \gets $ splněnost $\varphi$ nad $\textsc{Trajectory}_{neigh}$
+			\STATE $\textsc{Result} \gets \textsc{Result} \cup \{(\textsc{Satisfied}_{main}, [\mathbf{X}_{main}]_0, [\mathbf{P}_{main}])\}$
+			\STATE $\textsc{Distance} \gets $ vzdálenost $\textsc{Trajectory}_{main}$ a $\textsc{Trajectory}_{neigh}$
+			\IF{$\textsc{Distance} > \delta$}
+				\STATE	$\textsc{Main}_{new} \gets \textsc{Main}_{new} \cup \{(\frac{[\mathbf{X}_{main}]_0 + [\mathbf{X}_{neigh}]_0}{2}, \frac{[\mathbf{P}_{main}] + [\mathbf{P}_{neigh}]}{2})\}$
+			\ENDIF
+		\ENDFOR
+	\ENDFOR
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
 
-Je samozřejme otázkou, jakým způsobem se ověří, zda si jsou trajektorie bližší než
-dané $\delta$. Tomuto tématu se podrobně zabývá \cite{drazan2011}. Tato
-práce se spíše zaměřovat na otázku, jakou zvolit hodnotu $\delta$.
+Je samozřejme otázkou, jakým způsobem konkrétně probíhá počáteční zahuštění prostoru
+iniciálních podmínek, co přesně znamená obsahuje mno\-žina sousedů daného bodu a jak
+se se změří vzdálenost dvou chování. Poslední zmíněné otázce se podrobně zabývá \cite{drazan2011}.
+Zbytek bude ještě rozveden v sekci \ref{section:algorithm:updated} společně s tím,
+jak zvolit hodnotu $\delta$.
 
 \section{Robustnost}\label{section:robustness}
-\section{Upravený algoritmus}
+
+Platnost formule lze chápat trochu šířeji než prosté \uv{platí}/\uv{neplatí}.
+Nemusíme se pouze ptát, zda dané chování splňuje danou formuli, otázku lze posunout dál.
+ak moc dané chování splňuje danou formuli? Jak moc je vlastnost nesplňena? Pro účely
+této práce tyto otázky zcela postačují, ale samozřejmě je možné požadovat ještě víc.
+Jak moc je daný systém robustní vůči změně podmínek, změnám teplot nebo koncentrací
+chemických látek?
+
+% Kitano - globalni robustnost
+
+% STL - lokalni robustnost
+
+% Priklad
+
+% Vypocet robustnosti
+
+\section{Upravený algoritmus}\label{section:algorithm:updated}
