@@ -91,10 +91,10 @@ množství kořisti opět naroste a tento cyklus se znovu opakuje.
 \begin{figure}[h!]
 \begin{center}
 \subfigure[vývoj systému v čase]{
-	\includegraphics[width=.48\textwidth]{../images/lotkav-timeserie.png}\label{fig:lotkav:timeserie}
+	\includegraphics[width=.48\textwidth]{../images/lotkav-timeserie.pdf}\label{fig:lotkav:timeserie}
 }
 \subfigure[stavy, kterými systém prochází]{
-	\includegraphics[width=.48\textwidth]{../images/lotkav-oscil.png}\label{fig:lotkav:oscil}
+	\includegraphics[width=.48\textwidth]{../images/lotkav-oscil.pdf}\label{fig:lotkav:oscil}
 }
 \end{center}
 \caption{Model systému obsahující predátora a kořist s ohodnocením parametrů $\alpha = 2$,  $\beta = 0.5$, $\gamma = 0.2$ a $\delta = 0.6$.}
@@ -148,16 +148,6 @@ nebo predátora. To lze například tak, že budeme požadovat, aby množství j
 daného druhu přesáhlo opakovaně pře\-sáh\-lo maximální a minimální mez. Jak konkrétně
 tento požadavek zformulovat, je ukázáno dále.
 
-%Pro použití této logiky je nejprve
-%nutné definovat tzv. atomické propozice, což jsou vlastnosti, které lze přisoudit jednotlivým stavům,
-%například \uv{množství kořisti je větší než 100} nebo \uv{množství kořisti je menší než 10}.
-%V případě modelů založených na diferenciálních rovnicích jsou atomické propozice tvaru $g(\mathbf{X})~\rho~k$,
-%kde $\mathbf{X} = (x_1, x_2, \ldots, x_n)$ je vektor stavových proměnných,
-%$g: \mathbb{R}^n \rightarrow \mathbb{R}$ funkce,
-%$k\in\mathbb{R}$ konstanta a $\rho \in \{\leq, =, \geq\}$. Vzhledem k tomu,
-%že simulace podléhá určité chybě, není vhodné používat rovnost, a proto se v~této
-%práci omezíme na $\rho \in \{\leq, \geq\}$.
-
 K vyjádření vlastností nad lineárními běhy systémů se nejčastěji používá lieární
 temporální logika~\cite{strejcek2007}, případě logiky z ní odvozené.
 Lineární temporální logika u\-mož\-ňu\-je se zjednodušeně vyjadřovat o sta\-vech
@@ -203,7 +193,20 @@ $f(x_1, \bot) = f(\bot, x_2) = \bot$.
 Je dobré si povšimnou, že definice signálu je konzistentní s tím, jak chápeme chování modelu,
 tedy jako trajektorii v $\mathbb{R}^n$, kde $n$ je počet sta\-vo\-vých proménných. Zároveň
 je třeba si však uvědomit, že výstupem numerické simulace není spojitá trajektorie, nýbrž pouze
-sekvence bodů s~časovým razítkem.
+sekvence bodů s~časovým razítkem. Z praktických důvodu je dále v této kapitole tato sekvence
+chápání jako po částech konstantní funkce.
+
+\begin{figure}[h!]
+\begin{center}
+\subfigure[nasimulovaná data]{
+	\includegraphics[width=.48\textwidth]{../images/piecewise-constant-a.pdf}
+}
+\subfigure[po částech konstantní funkce]{
+	\includegraphics[width=.48\textwidth]{../images/piecewise-constant-b.pdf}
+}
+\end{center}
+\caption{Příklad převodu na po částech konstantní funkci.}
+\end{figure}
 
 \subsection{Temporální logika signálů}
 Důležitým aspektem zde použité logiky jsou uzavřené časové intervaly $I = [a, b]$, kde $a, b \in \mathbb{Q}_{\geq0}$,
@@ -285,48 +288,43 @@ opět induktivně.
 \end{array}
 \end{align}
 
-\subsection{Příklad vlastností}
+\subsection{Příklad vlastnosti}
 
 Temporální logika signálů nám umožňuje formulovat celou řadu vlastností. Mezi ty
 nejznámnější a nejčastěji používané patří oscilace. Je dobré si u\-vě\-do\-mit, že oscilaci
 lze chápat mnoha různými způsoby. V~praxi se nevyplatí klást přísná omezení na přesnost
 periody, velikost amplitudy či přesnost stavu, kterým systém periodicky prochází. 
 
-\begin{figure}[h!]
-\begin{center}
-\subfigure[$x \geq k$]{
-	\includegraphics[width=.48\textwidth]{../images/stl-example-geq-limit.png}\label{fig:stl:example:geq:limit}
-}
-\subfigure[$x \leq k$]{
-	\includegraphics[width=.48\textwidth]{../images/stl-example-leq-limit.png}\label{fig:stl:example:leq:limit}
-}
-\caption{Pravdivostní hodnota atomických propozic v čase.}
-\end{center}
-\end{figure}
-
 Představme s systém o jedné stavové proměnné $x$, ve které se vzrůstající intenzitou
 osciluje. Perioda oscilace je konstantní, avšak její amplituda ne. V~této práci
 použité logice se lze vyjadřovat o hodnotách proměnné $x$, tudíž oscilaci budeme
 chápat jako periodické překračování dolní a horní meze. Atomickými propozicemi jsou tedy
 predikáty $x \geq k$ a $x \leq -k$, jejichž platnost lze vidět na obrázcích
-\ref{fig:stl:example:geq:limit} a \ref{fig:stl:example:leq:limit}. Jeden cyklus, lze
-popsat tak, že se hodnota sledované proměnné nachází nad horní mezí a zároveň někdy
+\ref{fig:stl:example:geq:limit} a \ref{fig:stl:example:leq:limit}.
+
+\begin{figure}[h!]
+\begin{center}
+\subfigure[$x \geq k$]{
+	\includegraphics[width=.48\textwidth]{../images/stl-example-geq-limit.pdf}\label{fig:stl:example:geq:limit}
+}
+\subfigure[$x \leq k$]{
+	\includegraphics[width=.48\textwidth]{../images/stl-example-leq-limit.pdf}\label{fig:stl:example:leq:limit}
+}
+\subfigure[$x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k$]{
+	\includegraphics[width=.48\textwidth]{../images/stl-example-geq-limit-future-leq-limit.pdf}\label{fig:stl:example:geq:limit:future:leq:limit}
+}
+\subfigure[$\mathcal{F}_{0, \frac{1}{2}}(x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k)$]{
+	\includegraphics[width=.48\textwidth]{../images/stl-example-future-geq-limit-future-leq-limit.pdf}\label{fig:stl:example:future:geq:limit:future:leq:limit}
+}
+\caption{Pravdivostní hodnota atomických propozic v čase.}
+\end{center}
+\end{figure}
+
+Jeden cyklus, lze popsat tak, že se hodnota sledované proměnné nachází nad horní mezí a zároveň někdy
 v budoucnu klesne pod dolní mez, tedy $x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k$.
 Přidání operátoru $\mathcal{F}$ zajistí, že se v daném času do určité doby provede jeden oscilační cyklus,
 viz obrázek \ref{fig:stl:example:future:geq:limit:future:leq:limit}. To, že systém
 osciluje znamená, že toto platí pro každý časový okamžik, což vyjádříme operátorem $\mathcal{G}$.
-
-\begin{figure}[h!]
-\begin{center}
-\subfigure[$x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k$]{
-	\includegraphics[width=.48\textwidth]{../images/stl-example-geq-limit-future-leq-limit.png}\label{fig:stl:example:geq:limit:future:leq:limit}
-}
-\subfigure[$\mathcal{F}_{0, \frac{1}{2}}(x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k)$]{
-	\includegraphics[width=.48\textwidth]{../images/stl-example-future-geq-limit-future-leq-limit.png}\label{fig:stl:example:future:geq:limit:future:leq:limit}
-}
-\end{center}
-\caption{Pravdivostní hodnota složených výroků v čase.}
-\end{figure}
 
 Ve zde uvedeném příkladu systém neosciluje s požadovanou amplitudou již od začátku,
 tudíž je potřeba do formule přidat ještě nějaké čekání v~podobě operátoru $\mathcal{F}$.

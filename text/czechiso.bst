@@ -10,7 +10,7 @@
 %% ----------------------------------------
 %% *** Styl snažící se být v souladu s normou ISO 690. Pomocí latex makebst vytvořil David Martinek. ***
 %% 
-%% Copyright 1994-2004 Patrick W Daly
+%% Copyright 1994-2007 Patrick W Daly
  % ===============================================================
  % IMPORTANT NOTICE:
  % This bibliographic style (bst) file has been generated from one or
@@ -22,7 +22,7 @@
  % version 1 of the License, or any later version.
  % ===============================================================
  % Name and version information of the main mbs file:
- % \ProvidesFile{merlin.mbs}[2004/02/09 4.13 (PWD, AO, DPC)]
+ % \ProvidesFile{merlin.mbs}[2007/04/24 4.20 (PWD, AO, DPC)]
  %   For use with BibTeX version 0.99a or later
  %-------------------------------------------------------------------
  % This bibliography style file is intended for texts in
@@ -328,7 +328,7 @@ MACRO {nov} {"Listopad"}
 MACRO {dec} {"Prosinec"}
 
  % End module: czech.mbs
-%% Copyright 1994-2004 Patrick W Daly
+%% Copyright 1994-2007 Patrick W Daly
 MACRO {acmcs} {"ACM Computing Surveys"}
 
 MACRO {acta} {"Acta Informatica"}
@@ -424,8 +424,10 @@ FUNCTION {write.url}
   if$
 }
 
-STRINGS  { bibinfo}
 INTEGERS { nameptr namesleft numnames }
+
+
+STRINGS  { bibinfo}
 
 FUNCTION {format.names}
 { 'bibinfo :=
@@ -454,11 +456,11 @@ FUNCTION {format.names}
           namesleft #1 >
             { "; " * t * }
             {
-              ";" *
               s nameptr "{ll}" format.name$ duplicate$ "others" =
                 { 't := }
                 { pop$ }
               if$
+              ";" *
               t "others" =
                 {
                   " " * bbl.etal *
@@ -496,11 +498,11 @@ FUNCTION {format.names.ed}
           namesleft #1 >
             { "; " * t * }
             {
-              ";" *
               s nameptr "{ll}" format.name$ duplicate$ "others" =
                 { 't := }
                 { pop$ }
               if$
+              ";" *
               t "others" =
                 {
 
@@ -1343,7 +1345,6 @@ FUNCTION {proceedings}
   format.number.series output
   editor empty$
     { publisher empty$
-        'skip$
         {
           format.publisher.address output
         }
