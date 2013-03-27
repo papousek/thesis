@@ -16,7 +16,7 @@ poměrně přesný model, který využijeme k analýze v~podmínkách, které ne
 navodit u reálného systému. Typickým příkladem může být živý organismus v~toxickém
 prostředí nebo extrémně vysoká nákaza šířící se ce\-lo\-svě\-to\-vou populací.
 
-\section{Definice problému}
+\section{Definice problému}\label{section:initial:condtion:problem:definition}
 
 Nechť je dynamický systém $\mathcal{DS} = (\mathbf{X}, f)$, kde $\mathbf{X} = (x_1, \ldots, x_n)$
 je vektor stavových proměnných a dynamiku systému popisují obyčejné diferenciální rovnice $\frac{dx_i}{dt} = f_i(\mathbf{X})$.
@@ -92,29 +92,28 @@ hranice regionů platnosti a neplatnosti se zvolenou přes\-nos\-tí~$\delta$.
 \begin{algorithm}
 \caption{Analýza prostoru inicálních podmínek}
 \begin{algorithmic}
-\REQUIRE 	$\mathcal{DS} = (\mathbf{X}, f), \mathcal{I}, \varphi, \Delta t, \delta, \varepsilon$
-\ENSURE 	$\textsc{Result} = \{([\mathbf{F}_0]_0, s_1), \ldots ([\mathbf{F}_k]_0, s_k)\}$ -- body a splněnost $\varphi$
-\STATE		$\textsc{Main}_{new} 	\gets $ počáteční zahuštění $\mathcal{I}$
-\STATE		$\textsc{Result} \gets \emptyset$
-\WHILE{$\textsc{Main}_{new} \neq \emptyset$}
-	\STATE $\textsc{Main}_{new} \gets \emptyset$
-	\STATE $\textsc{Main}_{old} \gets MAIN_{new}$
-	\FOR{$([\mathbf{X}_{main}]_0, [\mathbf{P}_{main}]) \in \textsc{Main}_{old}$}
-		\STATE $\textsc{Trajectory}_{main} \gets \mathcal{M}^{||\varphi||}_\varepsilon(f_{\mathbf{P} \gets [\mathbf{P}_{main}]}, [\mathbf{X}_{main}]_0, \Delta t)$
-		\STATE $\textsc{Satisfied}_{main} \gets $ splněnost $\varphi$ nad $\textsc{Trajectory}_{main}$
-		\STATE $\textsc{Result} \gets \textsc{Result} \cup \{(\textsc{Satisfied}_{main}, [\mathbf{X}_{main}]_0, [\mathbf{P}_{main}])\}$
-		\STATE $\textsc{Neigh} \gets $ body sousedící s bodem $([\mathbf{X}]_0, [\mathbf{P}])$
-		\FOR{$([\mathbf{X}_{neigh}]_0, [\textbf{P}_{neigh}]) \in \textsc{Neigh}$}
-			\STATE $\textsc{Trajectory}_{neigh} \gets \mathcal{M}^{||\varphi||}_\varepsilon(f_{\mathbf{P} \gets [\mathbf{P}_{neigh}]}, [\mathbf{X}_{neigh}]_0, \Delta t)$
-			\STATE $\textsc{Satisfied}_{neigh} \gets $ splněnost $\varphi$ nad $\textsc{Trajectory}_{neigh}$
-			\STATE $\textsc{Result} \gets \textsc{Result} \cup \{(\textsc{Satisfied}_{main}, [\mathbf{X}_{main}]_0, [\mathbf{P}_{main}])\}$
-			\STATE $\textsc{Distance} \gets $ vzdálenost $\textsc{Trajectory}_{main}$ a $\textsc{Trajectory}_{neigh}$
-			\IF{$\textsc{Distance} > \delta$}
-				\STATE	$\textsc{Main}_{new} \gets \textsc{Main}_{new} \cup \{(\frac{[\mathbf{X}_{main}]_0 + [\mathbf{X}_{neigh}]_0}{2}, \frac{[\mathbf{P}_{main}] + [\mathbf{P}_{neigh}]}{2})\}$
-			\ENDIF
-		\ENDFOR
-	\ENDFOR
-\ENDWHILE
+\Require 	$\mathcal{DS} = (\mathbf{X}, f), \mathcal{I}, \varphi, \Delta t, \delta, \varepsilon$
+\Ensure 	$\textsc{Result} = \{([\mathbf{F}_0]_0, s_1), \ldots ([\mathbf{F}_k]_0, s_k)\}$ -- body a splněnost $\varphi$
+\State		$\textsc{M}_{new} 	\gets $ počáteční zahuštění $\mathcal{I}$
+\State		$\textsc{Result} \gets \emptyset$
+\While{$\textsc{M}_{new} \neq \emptyset$}
+	\State $\textsc{M}_{old} \gets \textsc{M}_{new}, \textsc{M}_{new} \gets \emptyset$
+	\For{$([\mathbf{X}_{main}]_0, [\mathbf{P}_{main}]) \in \textsc{M}_{old}$}
+		\State $\textsc{Trajectory}_{main} \gets \mathcal{M}^{||\varphi||}_\varepsilon(f_{\mathbf{P} \gets [\mathbf{P}_{main}]}, [\mathbf{X}_{main}]_0, \Delta t)$
+		\State $\textsc{Satisfied}_{main} \gets $ splněnost $\varphi$ nad $\textsc{Trajectory}_{main}$
+		\State $\textsc{Result} \gets \textsc{Result} \cup \{(\textsc{Satisfied}_{main}, [\mathbf{X}_{main}]_0, [\mathbf{P}_{main}])\}$
+		\State $\textsc{Neigh} \gets $ body sousedící s bodem $([\mathbf{X}]_0, [\mathbf{P}])$
+		\For{$([\mathbf{X}_{neigh}]_0, [\textbf{P}_{neigh}]) \in \textsc{Neigh}$}
+			\State $\textsc{Trajectory}_{neigh} \gets \mathcal{M}^{||\varphi||}_\varepsilon(f_{\mathbf{P} \gets [\mathbf{P}_{neigh}]}, [\mathbf{X}_{neigh}]_0, \Delta t)$
+			\State $\textsc{Satisfied}_{neigh} \gets $ splněnost $\varphi$ nad $\textsc{Trajectory}_{neigh}$
+			\State $\textsc{Result} \gets \textsc{Result} \cup \{(\textsc{Satisfied}_{main}, [\mathbf{X}_{main}]_0, [\mathbf{P}_{main}])\}$
+			\State $\textsc{Distance} \gets $ vzdálenost $\textsc{Trajectory}_{main}$ a $\textsc{Trajectory}_{neigh}$
+			\If{$\textsc{Distance} > \delta$}
+				\State	$\textsc{M}_{new} \gets \textsc{M}_{new} \cup \{(\frac{[\mathbf{X}_{main}]_0 + [\mathbf{X}_{neigh}]_0}{2}, \frac{[\mathbf{P}_{main}] + [\mathbf{P}_{neigh}]}{2})\}$
+			\EndIf
+		\EndFor
+	\EndFor
+\EndWhile
 \end{algorithmic}
 \end{algorithm}
 
@@ -128,10 +127,147 @@ jak zvolit hodnotu $\delta$.
 
 Platnost formule lze chápat trochu šířeji než prosté \uv{platí}/\uv{neplatí}.
 Nemusíme se pouze ptát, zda dané chování splňuje danou formuli, otázku lze posunout dál.
-ak moc dané chování splňuje danou formuli? Jak moc je vlastnost nesplňena? Pro účely
+Jak moc dané chování splňuje danou formuli? Jak moc je vlastnost nesplňena? Pro účely
 této práce tyto otázky zcela postačují, ale samozřejmě je možné požadovat ještě víc.
 Jak moc je daný systém robustní vůči změně podmínek, změnám teplot nebo koncentrací
 chemických látek?
+
+V této sekci zavedeme pojem \textit{lokální a globální robustnosti}. Lokální robustnosti
+rozumíme míru, do jaké je daná vlastnost splněna na jednom chování. Globální robustnost
+na druhé straně vztáhneme na celý systém, tzn. že zahrnuje míru platnosti dané vlastnosti
+nad větším množství chování, která vzniknou tzv. \textit{perturbacemi}. Existuje jedno
+referenční chování za ideálních podmínek, a pak mnoho perturbovaných chování za podmínek
+ne tak i\-deál\-ních. Perturbace lze chápat různě, v této práci odpovídají prostoru i\-ni\-ciál\-ních
+podmínek definovaného v sekci \ref{section:initial:condtion:problem:definition}. 
+
+Jednou z věcí, které je třeba předem zmínit, je, že pro účely vylepšení algoritmu pro
+analýzu dynamických systémů, se na robustnost díváme z pohledu chování systému \cite{donze2011}.
+To znamená, že se při výpočtu lokální robustnosti snažíme ohraničit prostor okolo jednoho chování,
+ve kterém má daná vlastnost stejnou platnost. Podobně lze k problému přistoupit z opačné strany \cite{rizk2009}.
+Ve formuli identifikovat parametry, napočítat podprostor parametrického prostoru, ve kterém je formule
+pro dané chování splněna splněna a určit vzdálenost již konkrétní formule s dosazenými parametry
+od tohoto podprostoru.
+
+\subsection{Lokální robustnost}
+
+Nechť $s_1$, $s_2$ jsou signály nad doménou $\mathbb{D}$ a $d: \mathbb{D}^n \rightarrow \mathbb{R}^{+}$
+funkce určující vzdálenost dvou bodů v prostoru $\mathbb{R}^n$. 
+Vzdálenost dvou signálů zavedeme předpisem \ref{eq:signal:distance}.
+
+\begin{align}\label{eq:signal:distance}
+\sigma(s_1, s_2) = {\displaystyle \sup_{t \in \mathbb{R}^{+}}} \{d(s_1(t), s_1(t))\}
+\end{align}
+
+Od robustnosti $\rho$ budeme požadovat konzistentní chování s již zavedenou dvouhodnotovou platností
+formule. 
+
+\begin{align}\label{eq:signal:distance}
+\rho(\varphi, s) = \left\{\begin{array}{r@{\quad}c}
+\inf\{\sigma(s, s') | \forall s'. s' \not\models \varphi \}	& \textrm{pokud } s \models \varphi	\\
+- \inf\{\sigma(s, s') | \forall s'. s' \models \varphi \}	& \textrm{pokud } s \not\models \varphi
+\end{array} \right.
+\end{align}
+
+Oborem hodnot funkcí $\mu_i$ odpovídajících atomickým prozicím tentokrát není množina $\{T, F\}$,
+nýbrž množina reálných čísel $\mathbb{R}$. Toto chápání je spíše technického charakteru a převod
+ze starého chápání je přímočarý.
+
+\begin{align}\label{eq:stl:semantics}
+\begin{array}{ll}
+\mu_i = f(\mathbf{X}) \geq k		\leadsto \mu_i = f(\mathbf{X}) - k							\\
+\mu_i = f(\mathbf{X}) \leq k		\leadsto \mu_i = k - f(\mathbf{X})
+\end{array}
+\end{align}
+
+Obdobně jako při výpočtu dvouhodnotové platnosti formule i u robustnosti je potřeba se odkazovat
+na robustnost v určitém čase $\rho(\varphi, s, t)$, která se definuje induktivně ke struktuře
+formule. Výslednou robustnost dostaneme položením $\rho(\varphi, s) = \rho(\varphi, s, 0)$.
+
+\begin{align}\label{eq:stl:semantics}
+\begin{array}{ll}
+\rho(p, s, t)											&= \pi_p(s)[t]											\\
+\rho(\neg\varphi, s, t)									&= - \rho(\varphi, s, t)								\\
+\rho(\varphi_1 \wedge \varphi_2, s, t)					&= \min\Big(\rho(\varphi_1, s, t), \rho(\varphi_1, s, t)\Big)	\\
+\rho(\varphi_1 \mathcal{U}_{[a, b]} \varphi_2, s, t)	&= {\displaystyle \max_{t' \in [t + a, t + b]}} min\Big(\rho(\varphi_2, s, t'), {\displaystyle\min_{t'' \in [t, t']}}\rho(\varphi_1, s, t'')\Big)
+\end{array}
+\end{align}
+
+Pro odvozené temporální operátory $\mathcal{F}$ a $\mathcal{G}$ lze definovat robustnost
+samostatně, což umožňuje naimplementovat její výpočet efektivněji.
+
+% Priklad vlas
+
+\begin{align}\label{eq:stl:semantics}
+\begin{array}{ll}
+\rho(\mathcal{F}_{[a, b]}\varphi)		&= {\displaystyle \max_{t' \in [t + a, t + b]}} \Big(\rho(\varphi, s, t')\Big)		\\
+\rho(\mathcal{G}_{[a, b]}\varphi)		&= {\displaystyle \min_{t' \in [t + a, t + b]}} \Big(\rho(\varphi, s, t')\Big)		
+\end{array}
+\end{align}
+
+Za zmínku stojí způsob, jakým lze výpočet robustnosti naimplementovat. Pro každou podformuli
+se vypočítá sekundární signál $s_\varphi$, kde $s_\varphi[t] = \rho(\varphi, s, t)$.
+Není překvapením, že sekundární signál pro základní predikátové operátory
+$\neg$ a $\wedge$ lze spočítat v lineárním čase.
+
+Pro hledání maxima, respektive minima pro všechny podsekvence dané sekvence
+prvků existuje algoritmus s lineární časovou složitostí~\cite{lemire2006}. Díky tomu lze
+výpočet sekundárního signálu i odvozených operátorů $\mathcal{F}$ a $\mathcal{G}$ pro\-vést
+v lineárním čase. Použitím pomocné funkce, jejíž struktura je popsaná v algoritmu \ref{algorithm:unary:signal},
+položíme:
+\begin{align}\label{eq:stl:semantics}
+\begin{array}{ll}
+s_{\mathcal{F}_{[a,b]}\varphi} = \textsc{Signal}([a,b], \varphi, >)				\\
+s_{\mathcal{G}_{[a,b]}\varphi} = \textsc{Signal}([a,b], \varphi, <)
+\end{array}
+\end{align}
+
+
+\begin{algorithm}
+\caption{datová struktura \textsc{Lemire-Queue}}
+\begin{algorithmic}
+\Require 	$\prec \subseteq \mathbb{R}^2$ \Comment{ostré uspořádání}
+\State $deque$ \Comment{fronta s přístupem k oběma koncům}
+\Function{Lemire-Queue.offer}{$time, value$}
+	\While{$\neg deque.\textsc{isEmpty()} \wedge value \prec \textsc{Dequeue.getLast()}.value$}
+		\State $deque$.\textsc{removeLast()}
+	\EndWhile
+	\State $deque$.\textsc{offer(}$time, value$\textsc{)}
+\EndFunction
+\Function{Lemire-Queue.peek}{~}
+	\State\Return $deque$.\textsc{getFirst()}
+\EndFunction
+\Function{Lemire-Queue.Poll}{~}
+	\State\Return $deque$.\textsc{removeFirst()}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}\label{algorithm:unary:signal}
+\caption{pomocná funkce pro sekundárního signálu}
+\begin{algorithmic}
+\Function{Signal}{$[a, b]$, $s_\varphi$, $\prec$}
+	\State	$queue \gets $ nová \textsc{Lemire-Queue} s uspořádáním $\prec$
+	\State	$monitor \gets ()$
+	\State	$t' \gets t_0$
+	\While{$t'\leq t_0 + b - \Delta t$}
+		\State $queue$.\textsc{Offer}($s_\varphi[t']$)
+		\State $t' \gets t' + \Delta t$
+	\EndWhile
+	\State	$t' \gets t_0$
+	\While{$t' \leq |s|$}
+		\State	$qeue$.\textsc{offer}($s_\varphi[t']$)
+		\State	$monitor[t'] \gets queue$.\textsc{peek()}
+		\If{$queue$.\textsc{peek()}.$time = t'$}
+			\State	$queue$.\textsc{poll()}
+		\EndIf
+		\State	$t' \gets t' + \Delta t$
+	\EndWhile
+	\State\Return $monitor$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Globální robustnost}
 
 % Kitano - globalni robustnost
 
