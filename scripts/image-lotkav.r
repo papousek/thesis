@@ -22,14 +22,14 @@ out <- as.data.frame(ode(func = lotkav, y = state, parms = pars, times = time))
 mar <- c(4, 4, 1, 1)
 
 
-pdf("../images/lotkav-timeserie.pdf", width=width, height=height)
+pdf("../images/generated/lotkav-timeserie.pdf", width=width, height=height)
 par(mar = mar)
 matplot(out[,-1], type = "l", col = c("blue", "red"), xlab = "Time", ylab = "Population", ylim=c(0, 35))
 legend("topright", c("Prey", "Predator"), lty = c(1,2), col = c("blue", "red"))
 #title("Vývoj systému Predátor a kořist v čase")
 dev.off()
 
-pdf("../images/lotkav-oscil.pdf", width=width, height=height)
+pdf("../images/generated/lotkav-oscil.pdf", width=width, height=height)
 par(mar = mar)
 plot(out$x, out$y, pch = "o", xlab = "Prey", ylab = "Predator", ylim=c(0, 35))
 #title("Oscilace systému Predátor a kořist")

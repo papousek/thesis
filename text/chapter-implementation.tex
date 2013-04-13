@@ -1,4 +1,148 @@
 \chapter{Implementace}
-\section{Stav prototypu}
-\section{Modulární systém}
+Následující kapitola se věnuje aplikaci Parasim \cite{TODO}, která implementuje algoritmus pro
+analýzu dynamických systémů zmíněný v sekci \ref{section:algorithm:updated}. Aplikace Parasim
+vznikla na základě prototypu dostupného v \cite{drazan2011}. Cílem prototypu je názorně
+zobrazit průběh výpočtu původního algoritmu. Uživateli se ukazuje, jakým způsobem
+se počítá vzdálenost mezi trajektoriemi chování, kde je nutné zahušťovat a jak dopadlo
+ověření platnosti. Vzhledem k tomu, že prototyp například používá pouze jednoduchou metodu
+numerické simulace k nalezení trajektorií chování, není vhodné jej použít k analýze složitějších modelů.
+
+V nové implementaci bylo oproti prototypu třeba zahrnout následující:
+
+\begin{enumerate}
+	\item	úprava algoritmu dle sekce \ref{section:algorithm:updated},
+	\item	paralelní výpočet ve sdílené nebo distribuované paměti,
+	\item	rozšiřitelnost, modularita a otevřenost k rozdílné implementaci již naimplementovaných částí,\label{item:features:extensibility}
+	\item	zobrazení výsledků analýzy pro vícedimenzionální prostory ini\-ciál\-ních podmínek.\label{item:features:visualisation}
+\end{enumerate}
+
+Tato práce se zabývá všemi zmíněnými body kromě bodu \ref{item:features:visualisation},
+který je však v Parasimu již také vyřešen. Vzhledem k monolitické implementaci prototypu
+nedošlo k jeho úpravám a rozšíření, ale vytvořila se zcela od základu nová aplikace Parasim.
+Bod \ref{item:features:extensibility} je důležitý z několika důvodů. Pro různé části algoritmu
+existuje více způsobů, jak je naimplementovat. Existuje mnoho nástrojů umožňující
+numerickou simulací na základě systému diferenciálních rovnic získat trajektorii chování.
+Mnoho věcí zmíněných dříve se vyvíjí. V případě výpočtu robustnosti se nemusíme omezit
+pouze na temporální logiku signálů, ale můžeme zavést logiku novou, expresivněj\-ší.
+
+\section{Architektura}
+
+Parasim je aplikace napsaná v Javě 7 složená z většího množství artefaktů pro
+sestavovací nástroj Maven. Zdrojové kódy jsou pod licencí GNU GPL verze 3~\cite{gpl} k dispozici
+v Git \cite{chacon2009} repozitáři \url{https://github.com/sybila/parasim}. Artefakty sestavené
+z poslední verze těchto zdrojových jsou publikovány do Maven repozitáře
+\url{http://repository-sybila.forge.cloudbees.com/snapshot/}, o což se stará veřejná
+instance nástroje Jenkins \cite{jenkins} \url{http://www.cloudbees.com/}. Artefakty
+vydaných verzí jsou k nalezení v Maven repozitáři \url{http://repository-sybila.forge.cloudbees.com/release}.
+Hlavní aplikaci Parasimu představuje artefakt \texttt{org.sybila.parasim.application:parasim}.
+Pou\-ži\-tí aplikace je popsáno v příloze \ref{appendix:usage}
+
+Jádro Parasimu tvoří artefakt \texttt{org.sybila.parasim:core}, který řídí ži\-vot\-ní
+cyklus všech modulů a zajišťuje základní funkcionalitu. To zajišťuje kontejner,
+jehož instance je vytvořena a spuštěn v rámci aplikace. Kontejner je velkou mírou inspi\-ro\-ván
+konceptem \textit{Context and Dependency Injection} zavedeným v~Java~EE~6~\cite{jendrock2010} specifikací
+JSR-299 \cite{jsr299}. V žádném případě se nejedná o~implementaci tohoto standardu,
+nýbrž jen o volnou inspiraci některými zá\-klad\-ní\-mi myšlenkami.
+
+Existují zde kontexty, které mají různou délku a je možné je za\-no\-řo\-vat.
+Rozšíření pro jednotlivé kontexty nabízejí služby a aplikace definuje na různých
+místech v kódu závislosti na těchto službách. Kontejner se stará o to,
+aby v případě požadavku na nějakou službu bylo zavoláno příslušné rozříření,
+které ji poskytuje, aby vytvořilo objekt služby, a v případě vy\-pr\-še\-ní kontextu,
+aby objekt služby vhodným způsobem zničilo.
+
+Za vytvoření a zničení objektu služby je zodpovědný autor rozšíření, který také definuje rozhraní
+služby. Aplikace není téměř žádným způsobem závislá na implementaci rozhraní,
+a jednotlivé implementace lze tak jednoduše zaměňovat bez toho, aniž bychom
+v~aplikačním kódu cokoliv měnili.
+
+
+\subsection{Životní cyklus}
+
+\begin{figure}[h!]
+\begin{center}
+\resizebox{\textwidth}{!}{
+\begin{tikzpicture}  	[node distance=.5cm,start chain=going below]
+\tikzset{>=stealth',
+	event/.style={
+    	rectangle, 
+    	rounded corners, 
+    	fill=green!20,
+    	draw=black, very thick,
+    	text width=9em, 
+    	minimum height=3em, 
+    	text centered, 
+    	on chain},
+  	line/.style={draw, thick, <-},
+	class/.style={
+    	rectangle, 
+    	rounded corners, 
+    	fill=black!10,
+    	draw=black, very thick,
+    	text width=8em, 
+    	minimum height=3em, 
+    	text centered,
+		on chain},
+	package/.style={
+		rectangle,
+		draw=black!50, dashed,
+		rounded corners,
+		inner sep=0.3cm,
+		on chain},
+  	every join/.style={->, thick,shorten >=1pt}, 	
+ 	scope/.style={decorate},
+	code/.style={
+		rectangle,
+		draw=black!50, dashed,
+		rounded corners,
+		text width=15em,
+    	minimum height=3em, 
+    	text centered,
+		node distance=7cm}
+}
+	\node[event, join] (processing) {PROCESSING};
+	\node[code, left of=processing] (code-create) {Manager m = Manager.create()};
+	\node[package] (processing-package) {
+		\begin{tikzpicture}
+		\begin{scope}[solid, start branch=venstre, every join/.style={->, thick, shorten <=1pt}]
+			\node[class] (enrichment) {obohacování};
+			\node[class, on chain=going left] (configuration) {konfigurace};
+			\node[class, on chain=going below] (lifecycle) {životní cyklus};
+			\node[class, on chain=going right] (extension-loader) {načtení rozšíření};
+			\node[class, on chain=going right] (remote) {vzdálená správa};
+			\node[class, on chain=going above] (logging) {logování};
+		\end{scope}
+		\end{tikzpicture}
+	};
+	\node[event, join] (before-app-context) {BEFORE\\kontext aplikace};
+	\node[code, left of=before-app-context] (code-start) {m.start()};
+	\node[event, join] (started) {STARTED};
+	\node[package, join, inner sep=0.5cm, text width=15em, text centered] (other-extensions) {interakce s načtenými rozšířeními};
+	\node[package, join, inner sep=0.5cm, text width=15em, text centered] (main-app) {hlavní kód aplikace};
+	\node[event, join] (stopping) {STOPPING};
+	\node[event, join] (after-app-context) {AFTER\\kontext aplikace};
+	\node[code, left of=stopping] (code-shutdown) {m.shutdown()};
+
+	\begin{scope}[->, thick, shorten <=1pt] 
+		\draw	(processing)	-> (processing-package);
+	\end{scope}
+
+	\begin{scope}[->, dashed, shorten <=1pt] 
+		\draw	(code-create)	-> (processing);
+		\draw	(code-start)	-> (before-app-context);
+		\draw	(code-shutdown)	-> (stopping);
+	\end{scope}
+
+%	\draw[scope, decoration={brace}] let \p1=(before-app-context.north), \p2=(after-app-context.south) in
+%		($(2, \y1)$) -- ($(2, \y2)$) node[scopenode] {application scope};
+\end{tikzpicture}}
+\end{center}
+\end{figure}
+
+\subsection{Konfigurace}
+
+\subsection{Rozšíření}
+
+\subsection{Vzdálená přístup}
+
 \section{Výpočetní model}

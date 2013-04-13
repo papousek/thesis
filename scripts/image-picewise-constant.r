@@ -7,13 +7,13 @@ width <- 5
 height <- 4
 paper <- "special"
 
-pdf("../images/piecewise-constant-a.pdf", width = width, height = height)
+pdf("../images/generated/piecewise-constant-a.pdf", width = width, height = height)
 par(mar = mar)
 plot(x, y, xlab = "Time", ylab = "Signal")
 dev.off()
 
 
-pdf("../images/piecewise-constant-b.pdf", width = width, height = height)
+pdf("../images/generated/piecewise-constant-b.pdf", width = width, height = height)
 par(mar = mar)
 plot(x, y, pch = ".", xlab = "Time", ylab = "Signal")
 for (i in 1:len) {

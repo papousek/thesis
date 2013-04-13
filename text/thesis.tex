@@ -6,13 +6,14 @@
 \usepackage[czech]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[usenames,dvipsnames]{color}
-\usepackage{hyperref}
 \usepackage{url}
 \usepackage{tikz}
 \usepackage{amsthm}
 \usepackage{float}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{listings}
 \usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
     decorations.pathreplacing,decorations.pathmorphing,shapes,%
     matrix,shapes.symbols, decorations.markings}
@@ -28,8 +29,7 @@
 \newtheorem{defn}[thm]{Definice} % definition numbers are dependent on theorem numbers
 \newtheorem{exmp}[thm]{Example} % same for example numbers
 
-\DeclareUrlCommand\url{\def\UrlLeft{<}\def\UrlRight{>} \urlstyle{tt}}
-
+\definecolor{src-bck}{RGB}{240, 240, 240}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
     unicode=true,           % non-Latin characters in Acrobat bookmarks
@@ -105,6 +105,9 @@ Jan Papoušek
 
 \bibliographystyle{czechiso}
 \bibliography{literature}
+
+\appendix
+\include{appendix-usage}
 
 \end{document}
 

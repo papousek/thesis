@@ -8,7 +8,7 @@ width <- 5
 height <- 4
 len <- length(x)
 
-pdf("../images/robustness-example-leq-limit.pdf", width = width, height = height)
+pdf("../images/generated/robustness-example-leq-limit.pdf", width = width, height = height)
 limitrob <- -limit - y
 par(mar = mar)
 plot(x, y, pch = ".", ylim = c(-ylim, ylim), xlab = "Time", ylab = "Signal")
@@ -24,7 +24,7 @@ for (i in 1:(len-50)) {
 	futurerob <- c(futurerob, max(limitrob[i:(i+50)]))
 }
 
-pdf("../images/robustness-example-future.pdf", width = width, height = height)
+pdf("../images/generated/robustness-example-future.pdf", width = width, height = height)
 par(mar = mar)
 plot(x, y, pch = ".", ylim = c(-ylim, ylim), xlab = "Time", ylab = "Signal")
 abline(h = -limit, col="blue", lty=2)
