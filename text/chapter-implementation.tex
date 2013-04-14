@@ -54,12 +54,21 @@ aby objekt služby vhodným způsobem zničilo.
 Za vytvoření a zničení objektu služby je zodpovědný autor rozšíření, který také definuje rozhraní
 služby. Aplikace není téměř žádným způsobem závislá na implementaci rozhraní,
 a jednotlivé implementace lze tak jednoduše zaměňovat bez toho, aniž bychom
-v~aplikačním kódu cokoliv měnili.
-
+v~aplikačním kódu cokoliv mě\-ni\-li. Kontejner obsahuje i některé základní služby,
+mezi které patří například jednotný přístup ke konfiguraci nebo způsob, jak injektovat
+služby do atributů daných objektů.
 
 \subsection{Životní cyklus}
 
+Aby bylo možné jádro Parasimu používat, je nutné nastartovat jeho životní cyklus pomocí třídy
+\href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/impl/ManagerImpl.java}{\texttt{ManagerImpl}}.
+Tato třída představuje vstupní bod pro použití všech dále popsaných služeb.
+Životní cyklus řízený vytvořením, nastartováním a zničením manažera je
+znázorněn diagramem \ref{figure:parasim:lifecycle}. Jakmile je manažer vytvořen,
+jsou načtena zá\-klad\-ní rozšíření, kterým je oznámena událost \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/event/ManagerProcessing.java}{\texttt{ManagerProcessing}}.
+
 \begin{figure}[h!]
+\label{figure:parasim:lifecycle}
 \begin{center}
 \resizebox{\textwidth}{!}{
 \begin{tikzpicture}  	[node distance=.5cm,start chain=going below]
@@ -100,8 +109,9 @@ v~aplikačním kódu cokoliv měnili.
     	text centered,
 		node distance=7cm}
 }
+	\node[event, join] (before-app-context) {BEFORE\\kontext aplikace};
 	\node[event, join] (processing) {PROCESSING};
-	\node[code, left of=processing] (code-create) {Manager m = Manager.create()};
+	\node[code, left of=before-app-context] (code-create) {Manager m = Manager.create()};
 	\node[package] (processing-package) {
 		\begin{tikzpicture}
 		\begin{scope}[solid, start branch=venstre, every join/.style={->, thick, shorten <=1pt}]
@@ -114,34 +124,124 @@ v~aplikačním kódu cokoliv měnili.
 		\end{scope}
 		\end{tikzpicture}
 	};
-	\node[event, join] (before-app-context) {BEFORE\\kontext aplikace};
-	\node[code, left of=before-app-context] (code-start) {m.start()};
 	\node[event, join] (started) {STARTED};
+	\node[code, left of=started] (code-start) {m.start()};
 	\node[package, join, inner sep=0.5cm, text width=15em, text centered] (other-extensions) {interakce s načtenými rozšířeními};
 	\node[package, join, inner sep=0.5cm, text width=15em, text centered] (main-app) {hlavní kód aplikace};
 	\node[event, join] (stopping) {STOPPING};
 	\node[event, join] (after-app-context) {AFTER\\kontext aplikace};
-	\node[code, left of=stopping] (code-shutdown) {m.shutdown()};
+	\node[code, left of=stopping] (code-shutdown) {m.destroy()};
 
 	\begin{scope}[->, thick, shorten <=1pt] 
 		\draw	(processing)	-> (processing-package);
 	\end{scope}
 
 	\begin{scope}[->, dashed, shorten <=1pt] 
-		\draw	(code-create)	-> (processing);
-		\draw	(code-start)	-> (before-app-context);
+		\draw	(code-create)	-> (before-app-context);
+		\draw	(code-start)	-> (started);
 		\draw	(code-shutdown)	-> (stopping);
 	\end{scope}
-
-%	\draw[scope, decoration={brace}] let \p1=(before-app-context.north), \p2=(after-app-context.south) in
-%		($(2, \y1)$) -- ($(2, \y2)$) node[scopenode] {application scope};
 \end{tikzpicture}}
 \end{center}
+\caption{Životní cyklus Parasimu. Zelené obdelníky představují události, které se propagují napříč rozšířeními.
+Šedými obdelníkymi je znázorněna základní funkcionalita. Čerchovaně ohraničeně jsou vyznačeny části Java kódu.}
 \end{figure}
+
+Poté je možné manažera nastartovat, což vyústí ve vytvoření aplikačního kontextu.
+S vytvořením každého kontextu je spojena událost \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/event/Before.java}{\texttt{Before}}, která je propagovaná
+do všech rozšíření náležejícím tomuto kontextu a v případě jiného než
+aplikačního kontextu i do rozšíření kontextu rodičovského.
+Po vytvoření aplikačního kontextu následuje událost \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/event/ManagerStarted.java}{\texttt{ManagerStarting}},
+na kterou mohou reagovat rozšíření definovaná mimo jádro Parasimu. Jakmile aplikace skončí,
+je nutné manažera zničit. Následuje vyvolání poslední u\-dá\-los\-ti, na kterou mohou reagovat načtená rozšíření, \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/event/ManagerStopping.java}{\texttt{ManagerStopping}}
+a zničení aplikačního konextu spojené s událostí \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/event/After.java}{After}, případně všech další dosud nezničených kontextů.
+
+\subsection{Kontexty}
+
+Manažer a objekty kontextů umožňují vytvářet nové kontexty skrze rozhraní \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/api/ContextFactory.java}{ContextFactory}.
+Aby mohl Parasim od se\-be rozlišit jednotlivé kontexty, používá speciální anotace
+rozsahů. Deklarace takové anotace je samotná označená anotace \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/annotation/Scope.java}{\texttt{Scope}},
+jak je ukázáno ve zdrojovém kódu \ref{code:scope}.
+
+\begin{lstlisting}[label={code:scope}, caption={Anotace rozsahu}]
+@Scope
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Application {}
+\end{lstlisting}
+
+Když je k dispozici anotace rozsahu rozlišující kontext, je možné nový kontext vytvořit
+nový, jak je ukázáno v ukázce kódu \ref{code:context}. Vývojář je zodpovědný za to,
+aby kontext zničil, když už jej nebude potřebovat, aby roz\-ší\-ře\-ním umožnil uvolnit zdroje.
+
+\begin{lstlisting}[label={code:context}, caption={Vytvoření kontextu}]
+// vytvori kontext Scope1
+// s rodicovskym kontextem Application
+Context context1 = manager.context(Scope1.class); 
+// vytvori kontext Scope2
+// s rodicovskym kontextem Scope1
+Context context2 = context1.context(Scope2.class);
+...
+context2.destroy();
+context1.destroy();
+\end{lstlisting}
+
+\subsection{Služby}
+
+Základní funkcionalitou jádra Parasimu je poskytovat instance služeb, které jsou
+vytvořeny pomocí rozšíření. Služby se definují pomocí rozhraní a může pro ně existovat
+více implementací. Aby byl Parasim schopen od sebe rozlišit jednotlivé implementace
+různých vlastností používá kvalifikátory. Kva\-li\-fi\-ká\-tor je anotace, v jejíž deklaraci byla použita anotace
+\href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/annotation/Qualifier.java}{\texttt{Qualifier}}.
+
+Pokud na daném místě aplikace není důležité, jakou typ implementace služby požadovat,
+případě není známo, jaké kvalifikátory jsou vůbec k dispozici, je možné použít kvalifikátor
+\href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/annotation/Default.java}{\texttt{Default}}
+pro výchozí implementaci. Je na autorovi rozšíření, aby poskytl smysluplnou výchozí implementaci
+poskytované služby.
+
+Příkladem vhodného použití kvalifikátorů je rozšíření poskytující
+vý\-počet robustnosti pro danou formuli nad danou trajektorii chování. Zde je možné zavést
+různé kvalikátory pro různé temporální logiky. Výchozí implementace takové služby
+by měla být schopna spočítat robustnost pro všechny podporované typy temporálních logik,
+Avšak je možné, že se v takovéto implementaci bude nacházet méně efektivní algoritmus,
+případě nějaká analýza předložené formule, což zbrzdí výpočet.
+
+\begin{lstlisting}[label={code:qualifier}, caption={Kvalikátor}]
+@Qualifier
+@Target({
+	ElementType.FIELD,
+	ElementType.METHOD,
+	ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Default {}
+\end{lstlisting}
+
+Manažer i kontexty implementují rozhraní \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/api/Resolver.java}{\texttt{Resolver}},
+které umožňuje na základě rozhraní a kvalifikátoru získat instance dané služby.
+Pokud se v daném kontextu nenachází žádné rozšíření poskytující danou službu,
+je zavolán rodičovský kontext. 
+
+\begin{lstlisting}[label={code:resolve}, caption={Získání instance služby}]
+Manager manager = ...
+Enrichment enrichment = manager.resolve(
+		Enrichment.class,
+		Default.class);
+\end{lstlisting}
+
+Parasim používá ještě jeden jednodušší typ služeb. Tyto služby jsou dostupné pouze
+pomocí manažera a nelze je od sebe odlišit pomocí kvalifikátoru. Manežer poskytuje
+všechny dostupné implementace daného rozhraní v jedné kolekci. Tento typ služeb
+primárně  slouží k ovlivňování cho\-vání rozšíření. Lze pomocí nich například
+poslouchat událostem z logování.
+
+\subsection{Rozšíření}
 
 \subsection{Konfigurace}
 
-\subsection{Rozšíření}
+\subsection{Obohacování}
 
 \subsection{Vzdálená přístup}
 

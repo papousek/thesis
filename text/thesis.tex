@@ -21,6 +21,7 @@
 \floatname{algorithm}{Algoritmus}
 \renewcommand{\algorithmicrequire}{\textbf{Vstup:}}
 \renewcommand{\algorithmicensure}{\textbf{Výstup:}}
+\renewcommand{\lstlistingname}{Zdrojový kód}
 
 \theoremstyle{plain}
 \newtheorem{thm}{Theorem}[chapter] % reset theorem numbering for each chapter
@@ -62,6 +63,30 @@
 \thesisadvisor{RNDr. David Šafránek, Ph.D.}
 
 \setcounter{tocdepth}{2}
+
+
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+\definecolor{sourcebackground}{RGB}{250, 250, 250} % javadoc
+
+\lstset{
+	language=Java,
+	basicstyle=\ttfamily,
+	keywordstyle=\color{javapurple}\bfseries,
+	stringstyle=\color{javared},
+	commentstyle=\color{javagreen},
+	morecomment=[s][\color{javadocblue}]{/**}{*/},
+	numbers=left,
+	frame=leftline,
+	backgroundcolor=\color{sourcebackground},
+	numberstyle=\tiny\color{black},
+	stepnumber=1,
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false
+}
 
 \begin{document}
 
