@@ -239,10 +239,143 @@ poslouchat událostem z logování.
 
 \subsection{Rozšíření}
 
+Parasim je schopen načíst rozšíření, která jsou v době vytvoření manažera na \texttt{Java class path}.
+Všechna zatím použitá rozšíření byla přibalena do souboru JAR aplikace pomocí sestavovacího
+nástroje Maven, a proto jsou k dispozici bez dalšího nastavování. Rozšíření musí obsahovat
+následující části:
+
+\begin{itemize}
+	\item	alespoń jednu třidu, která implementuje rozhraní \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/spi/LoadableExtension.java}{LoadableExtension},
+	\item	soubor \texttt{META-INF/services/org.sybila.parasim.core.spi.\\LoadableExtension} obsahující plné názvy všech tříd z daného roz\-ší\-ření implementující \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/spi/LoadableExtension.java}{LoadableExtension}, jeden název na jednom řád\-ku. 
+\end{itemize}
+
+Rozhraní \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/spi/LoadableExtension.java}{LoadableExtension}
+obsahuje jedinou metodu, ve které je pře\-dán objekt pro registraci tříd rozšíření. Je možné
+registrovat služby ne\-zá\-vi\-slé na kontextu a tzv. pozorovatele, což jsou třídy poskytující
+služby a naslouchající událostem. Podrobnější příklad toho, jak rozšíření může vypadat,
+se nachází v příloze \ref{appendix:extension}. Tato sekce obsahuje pouze vysvětlení
+nej\-dů\-le\-ži\-těj\-ších konceptů.
+
+Již zmínění pozorovatelé jsou schopni pomocí metod označených anotací \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/annotation/Provide.java}{\texttt{Provide}}
+poskytovat instance služeb. V deklaraci metody se mohou na\-chá\-zet parametry,
+které je manažer jádra Parasimu schopen vyhodnotit a injektovat. Tyto parametry
+lze označovat kvalifikátory. V případě, že není žádný kvalifikátor k dispozici,
+je pro vyhodonocení hodnoty parametru použit kvalifikátor \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/annotation/Default.java}{\texttt{Default}}.
+
+\begin{lstlisting}[label={code:provide:required}, caption={První metoda poskytující službu \texttt{Functionality}}]
+/**
+ * selze, pokud neni v aktualnim kontextu k dispozici 
+ * retezec pro dosazeni za parametr metody
+ */
+@Provide
+public Functionality provideFunctionality(
+		String required) {
+
+	return new FunctionalityImpl(required);
+}
+\end{lstlisting}
+
+V případě, že je manažer požádán, aby poskytl instanci služby, metoda poskytující danou službu je zavolána,
+poskytnutý objekt propagován jako událost do všech dostupných rozšíření, a poté uložen pro případ,
+že by byla služba požadována znovu. Výjimku tvoří poskytující metody, pro jejichž
+návratový typ nelze vytvořit proxy\footnote{Typickým příkladem typů, pro které nelze vytvořit proxy, jsou finální třídy.}.
+Takové poskytující metody jsou zavolány již během načítání rozšíření. Pokud v čase volání
+poskytující metody nelze najít hodnoty pro všechny její parametry, dojde k vyhození výjimky a
+pravděpodobně k pádu aplikace.
+
+\begin{lstlisting}[label={code:provide:optional}, caption={Druhá metoda poskytující službu \texttt{Functionality}}]
+/**
+ * pokud neni v aktualnim kontextu k dispozici 
+ * retezec pro dosazeni za parametr metody,
+ * bude pouzita hodnota null
+ */
+@Provide
+public Functionality provideFunctionality(
+		@Inject(required=false) String optional) {
+
+	return new FunctionalityImpl(optional);
+}
+\end{lstlisting}
+
+Jestliže chce autor rozšíření záviset na jiných službách pouze volně, lze použít 
+u parametrů poskytujících metod anotace \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/annotation/Inject.java}{\texttt{Inject}} způsobem u\-ká\-za\-ným ve zdrojovém
+kódu \ref{code:provide:optional}.
+
+Druhým typem metod v pozorovatelských třídách jsou metody na\-slou\-cha\-jí\-cí událostem.
+Aby bylo možné tyto metody rozlišit, je první parametr těchto metod je označen anotací \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/annotation/Observes.java}{\texttt{Observes}}
+a typ tohoto parametru určuje typ naslouchané události. Pro další parametry těchto metod platí
+stejná pravidla jako pro parametry poskytujících metod. Pro vytvoření vlastních událostí
+je k dispozici služba \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/api/EventDispatcher.java}{\texttt{EventDispatcher}}.
+
 \subsection{Konfigurace}
+
+Jádro Parasimu nabízí jednoduchý způsob konfigurace jednotný pro všech\-na rozšíření
+a tím vybízí autory rozšíření, aby ve svých rozšířeních umožnili konfigurací změnit
+co nejvíce věcí. Zároveň je však kladen důraz na to, aby rozšíření bylo funkční 
+samo o sobě bez toho, aby jej uživatel musel konfigurovat.
+
+Pro autory rozšíření je k dispozici služba \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/api/configuration/ParasimDescriptor.java}{\texttt{ParasimDescriptor}},
+která je schopná na základě názvu rozšíření vrátit hodnoty konfiguračních pro\-měn\-ných
+ve formě řetězců, dále služba \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/api/configuration/ExtensionDescriptorMapper.java}{\texttt{ExtensionDescriptorMapper}} schopná namapovat hodnoty konfiguračních pro\-měn\-ných
+namapovat do atributů u objektu v Javě. Mapování umí automaticky převést řetězce
+do nejpoužívanějších datových typů.
+
+Autor rozšíření tedy vytvoří konfigurační třídu s atributy, jejíchž názvy se shodují
+s požadovanými názvy konfiguračních proměnných Výchozí hodnoty těchto atributů jsou
+zároveň výchozími hodnotami pro konfiguraci rozšíření. Ukázka toho, jak může vypadat
+zpřístupnění konfigurace v rozšíření je k dispozici v~příloze \ref{appendix:configuration}.
+
+Při užívání aplikace lze konfiguraci lze změnit dvěma způsoby:
+
+\begin{itemize}
+	\item	Pomocí systémové proměnné \texttt{parasim.config.file} v Javě je mož\-né nastavit cestu k XML souboru.
+			Výchozí cesta k tomuto souboru je nastavena na \uv{parasim.xml}. Tento soubor
+			obsahuje pojmenované sekce a v těchto sekcích nastavení pro jednotlivé konfigurační
+			pro\-měn\-né. Názvy proměnných se shodují s názvy atributů konfiguračních objektů.
+
+	\item	Pro každou konfigurační proměnnou lze přepsat její hodnotu pomocí systémové
+			proměnné v Javě, jejíž název je \texttt{parasim.<název roz\-ší\-ření>.<název konfugurační proměnné>}.
+			Název rozšíření i konfigurační promměné se zde uvádí v tečkové notaci, například pro atribut \texttt{timeUnit}
+			a rozšíření \texttt{example} se bude systémová proměnná nazývat \texttt{parasim.example.time.unit}.
+\end{itemize}
+
+Pokud je nutné nějakou část konfigurace zpřístupnit
+změnám nejen při startu aplikace, ale i při jejím běhu skrze systémové proměnné, je potřeba mít na paměti
+okamžik, ve kterém se vytváří konfigurační objekt. Jakmile je totiž konfigurační objekt vytvořen,
+již nelze hodnoty konfigurace jemu náležící změnit. Po změně systémové proměnné,
+je možné si znovunačtení konfiguračního objektu vynutit zničením příslušnoho kontextu
+a vy\-tvo\-ře\-ním nového. Na to však není vhodný aplikační kontext, protože jeho
+zničení prakticky znamená vypnutí aplikace.
 
 \subsection{Obohacování}
 
-\subsection{Vzdálená přístup}
+Aby nebylo nutné si na všech místech předávat instanci manežera, případně instance všech
+potřebných služeb, nabízí Parasim rozšiřitelný mechanismus obohacování objektů.
+To je umožněno pomocí služby \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/api/enrichment/Enrichment.java}{\texttt{Enrichment}}.
+Tato služba spouští objety na kontextu nezávislých služeb \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/spi/enrichment/Enricher.java}{\texttt{Enricher}}
+na dané instanci, které ji dokáží různým způsobem vylepšit. 
+
+Jádro Parasimu obsahuje dvě implementace rozhraní \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/spi/enrichment/Enricher.java}{\texttt{Enricher}},
+které umožní zpřístupnit poskytující metody a atributy podobně jako u rozšíření 
+a které injektují služby do atributů. Za tímto účelem se používají již zmíněné anotace \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/annotation/Provide.java}{\texttt{Provide}} a \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/annotation/Inject.java}{\texttt{Inject}}.
+Tyto anotace lze použít ve dvou nastaveních, v jednom nastavení bude při obohoacování
+vyhozena výjimka, pokud poskytovaný případně injektovaný objekt není k dispozici.
+Pokud je anotace použita s přiřazením \texttt{required=false}, výjimka se nevyhodí.
+
+\subsection{Vzdálený přístup}
+
+\begin{lstlisting}[label={code:remote}, caption={Spuštění serveru}]
+manager.resolve(Loader.class, Default.class)
+	   .load(Loader.class, Default.class);
+\end{lstlisting}
+
+\begin{lstlisting}[label={code:remote}, caption={Přístup ke vzdálenému serveru}]
+HostControl control = new HostControlImpl(
+		new URI("localhost"))
+RemoteServis servis = control
+		.lookup(RemoteServis.class, Default.class);
+\end{lstlisting}
 
 \section{Výpočetní model}
+
+\section{Dostupná rozšíření}

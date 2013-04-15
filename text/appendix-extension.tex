@@ -1,0 +1,83 @@
+\chapter{Ukázka rozšíření pro Parasim}\label{appendix:extension}
+
+\begin{lstlisting}[caption={META-INF/services/org.sybila.parasim.core.spi.\\LoadableExtension}]
+org.sybila.parasim.myextension.MyExtension
+\end{lstlisting}
+
+
+\begin{lstlisting}[caption={org/sybila/parasim/myextension/MyExtension.java}]
+public class MyExtension implements LoadableExtension {
+    public void register(ExtensionBuilder builder) {
+        builder.extension(FunctionalityRegistrar.class);
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={org/sybila/parasim/myextension/\\FunctionalityRegistrar.java}]
+@ApplicationScope
+public class FunctionalityRegistrar {
+
+	private Context context;
+	
+	/**
+     * Poksytni sluzbu Functionality pod kvalifikatorem
+     * @Default
+     */
+	@Default
+	@Provide
+    public Functionality provideFunctionality(...) {
+        return new FunctionalityImpl();
+    }
+
+	/**
+     * Pokud je vytvoren kontext, oznam ostatnim
+     * pozorovatelum udalost 'Hello World!'.
+     */
+	public void hello(
+			@Observes Before event,
+			EventDispatcher eventDispatcher) {
+	
+		if (before.getLoad().equals(OwnScope.class)) {
+			eventDispatcher.fire("Hello World!");
+		}
+	}
+
+	/**
+     * Kontext je vytvoren v momente,
+     * kdy je poskutnuta sluzna Functionality
+	 */
+	public void startOwnContext(
+			@Observes Functionality event,
+			ContextFactory contextFactory) {
+		
+		context = contextFactory
+				.context(OwnScope.class);
+	}
+
+	/**
+     * Manazer se vypina, a proto je potreba
+     * vytvoreny kontext znicit.
+     */
+	public void stopOwnContext(
+			@Observes ManagerStopping event) {
+
+		if (context != null) {
+			context.destroy();
+		}
+	}
+
+	public interface Functiononality {
+	}
+
+	public static class FunctiononalityImpl
+			implements Functiononality {
+	}
+
+	@Scope
+	@Documented
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.TYPE)
+	public @interface OwnScope {
+	}
+}
+\end{lstlisting}
