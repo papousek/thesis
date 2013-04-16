@@ -364,18 +364,222 @@ Pokud je anotace použita s přiřazením \texttt{required=false}, výjimka se n
 
 \subsection{Vzdálený přístup}
 
+Další části práce ukážou, jak je možné Parasim použít k distribovanému počítání.
+To je umožněno pomocí rozšíření pro vzdálený přístup, které u\-mož\-ňu\-je získat
+některé služby nacházející se v aplikačním kontextu nějaké vzdáleného stroje.
+Na tomto stroji je nejprve nutné tuto funkcionalitu aktivovat skrze rozhraní \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/api/remote/Loader.java}{\texttt{Loader.java}},
+jak je ukázáno ve zdrojovém kódu \ref{code:remote}. Ukázaný kód nastartuje server
+pro práci s \textit{Remote Method Invocation}~\cite{grosso2001} a na tento server vystaví \href{https://github.com/sybila/parasim/blob/master/core/src/main/java/org/sybila/parasim/core/api/remote/Loader.java}{\texttt{Loader.java}}.
+
 \begin{lstlisting}[label={code:remote}, caption={Spuštění serveru}]
 manager.resolve(Loader.class, Default.class)
 	   .load(Loader.class, Default.class);
 \end{lstlisting}
+Ostatní stroje jsou pak schopny vynutit si vystavení služeb z aplikačního kontextu
+tohoto stroje na tento server. Aby bylo možné službu vystavit, je nutné, aby implementovala
+rozhraní \texttt{java.rmi.Remote}. Jakmile je server na vzdáleném stroji aktivován,
+je možné s ním komunikovat podobně jako ve zdrojovém kódu \ref{code:host:control}.
 
-\begin{lstlisting}[label={code:remote}, caption={Přístup ke vzdálenému serveru}]
+\begin{lstlisting}[label={code:host:control}, caption={Přístup ke vzdálenému serveru}]
 HostControl control = new HostControlImpl(
 		new URI("localhost"))
+if (!control.isRunning(true)) {
+	throw new IllegalStateException();
+}
 RemoteServis servis = control
 		.lookup(RemoteServis.class, Default.class);
 \end{lstlisting}
 
+Jakákoliv interakce s takto získanými službami vyvolá síťovou komunikaci a veškerá logika
+služby se vyhodnocuje na straně vzdáleného stroje.
+
 \section{Výpočetní model}
+
+Parasim obsahuje rozšíření pro snadnější provádění jistého výpočtu vý\-poč\-tu.
+Základní jednotku výpočtu zde představuje instance. Během průběhu po\-čí\-tá\-ní lze
+tuto instance rozdělit na více dalších a ty počítat nezávisle na sobě. Jednotlivé instance
+se mohou dále dělit a vrací mezivýsledky, které je možné slučovat pomocí asociativní
+a komutativní operace. Jak přesně se výpočetní instance dělí a jak jsou mezivýsledky
+slučovány, určuje ten, kdo implementuje algoritmus.
+
+Důležitým aspektem však je, že se vývojář implementující algoritmus nemusí starat
+o způsob, jakým konkrétně budou výpočetní instance provedeny. Parasim tím nabízí
+jednotné rozhraní pro výpočty ve sdílené a~dístribuované paměti.
+
+\subsection{Reprezentace výsledku}
+
+Třída reprezentující výsledek pro daný výpočet musí implementovat rozhraní \href{https://github.com/sybila/parasim/blob/master/model/core/src/main/java/org/sybila/parasim/model/Mergeable.java}{\texttt{Mergeable}}. Toto rozhraní si vynucuje krom uchování dat také definci komutativní
+a asociativní operaci pro slučování mezivýsledků. Zároveň je nezbytné, aby třída
+byla schopna serializace. Serializace je nezbytná pro výpočet v distribuované paměti,
+kde se data po skončení mezivýpočtu po\-sí\-la\-jí mezi počítači po síti.
+
+Z formálního hlediska již není kladen na datový typ výsledku žádný požadavek, nicméně
+je třeba mít na paměti, že ...
+
+\subsection{Reprezentace výpočtu}
+
+\subsection{Výpočet ve sdílené paměti}
+
+\subsection{Výpočet v distribované paměti}
+
+\subsection{Možná nastavení výpočtu}
+
+
+\begin{figure}[h!]
+\label{figure:computation:shared:memory}
+\begin{center}
+\resizebox{0.9\textwidth}{!}{
+\begin{tikzpicture}  	[node distance=1.8cm,start chain=going below]
+\tikzset{>=stealth',
+	event/.style={
+    	rectangle, 
+    	rounded corners, 
+    	fill=green!20,
+    	draw=black, very thick,
+    	text width=9em, 
+    	minimum height=3em, 
+    	text centered},
+	class/.style={
+    	rectangle, 
+    	rounded corners, 
+    	fill=black!10,
+    	draw=black, very thick,
+    	text width=10em, 
+    	minimum height=3em, 
+    	text centered},
+	package/.style={
+		rectangle,
+		draw=black!50, dashed,
+		rounded corners,
+		inner sep=0.3cm},
+ 	scope/.style={decorate},
+	code/.style={
+		rectangle,
+		draw=black!50, dashed,
+		rounded corners,
+    	minimum height=3em, 
+    	text centered}
+}
+	\node[class] (computation) {Computation comp\\výpočet};
+	\node[code, below of=computation] (compute) {ComputationContainer.compute(comp)};
+	\node[code, below of=compute] (execute) {Executor.submit(comp)};
+	\node[event, below of=execute] (before-computation) {BEFORE\\kontext výpočtu};
+	\node[event, below of=before-computation] (before-computation-instance-1) {BEFORE\\kontext\\instance výpočtu};
+	\node[class, below of=before-computation-instance-1] (computation-copy-1) {kopie\\instance výpočtu};
+	\node[code, below of=computation-copy-1] (computation-enrichment-1) {obohacení instance výpočtu};
+	\node[code, below of=computation-enrichment-1] (thread-pool-executor-execute-1) {spuštění instance výpočtu};
+	\node[class, below of=thread-pool-executor-execute-1] (result-partial-1) {mezivýsledek};
+	\node[code, below of=result-partial-1] (computation-instance-destroy-1) {zničení instance výpočtu};
+	\node[event, below of=computation-instance-destroy-1] (after-computation-instance-1) {AFTER\\kontext\\instance výpočtu};
+	\node[event, below of=after-computation-instance-1] (after-computation) {AFTER\\kontext výpočtu};
+	\node[class, below of=after-computation] (result) {výsledek};
+
+	\node[event, left of=before-computation-instance-1, node distance=5cm] (before-computation-instance-2) {BEFORE\\kontext\\instance výpočtu};
+	\node[class, below of=before-computation-instance-2] (computation-copy-2) {kopie\\instance výpočtu};
+	\node[code, below of=computation-copy-2] (computation-enrichment-2) {obohacení instance výpočtu};
+	\node[code, below of=computation-enrichment-2] (thread-pool-executor-execute-2) {spuštění instance výpočtu};
+	\node[class, below of=thread-pool-executor-execute-2] (result-partial-2) {mezivýsledek};
+	\node[code, below of=result-partial-2] (computation-instance-destroy-2) {zničení instance výpočtu};
+	\node[event, below of=computation-instance-destroy-2] (after-computation-instance-2) {AFTER\\kontext\\instance výpočtu};
+
+	\node[event, right of=before-computation-instance-1, node distance=5cm] (before-computation-instance-3) {BEFORE\\kontext\\instance výpočtu};
+	\node[class, below of=before-computation-instance-3] (computation-copy-3) {kopie\\instance výpočtu};
+	\node[code, below of=computation-copy-3] (computation-enrichment-3) {obohacení instance výpočtu};
+	\node[code, below of=computation-enrichment-3] (thread-pool-executor-execute-3) {spuštění instance výpočtu};
+	\node[class, below of=thread-pool-executor-execute-3] (result-partial-3) {mezivýsledek};
+	\node[code, below of=result-partial-3] (computation-instance-destroy-3) {zničení instance výpočtu};
+	\node[event, below of=computation-instance-destroy-3] (after-computation-instance-3) {AFTER\\kontext\\instance výpočtu};
+
+
+	\begin{scope}[->, thick]
+		\draw (computation) -> (compute);
+		\draw (compute) -> (execute);
+		\draw (execute) -> (before-computation);
+		\draw (after-computation) -> (result);
+
+		\draw (before-computation) -> (before-computation-instance-1);
+		\draw (before-computation) -> (before-computation-instance-2);
+		\draw (before-computation) -> (before-computation-instance-3);
+
+		\draw (before-computation-instance-1) -> (computation-copy-1);
+		\draw (before-computation-instance-2) -> (computation-copy-2);
+		\draw (before-computation-instance-3) -> (computation-copy-3);
+
+		\draw (computation-copy-1) -> (computation-enrichment-1);
+		\draw (computation-copy-2) -> (computation-enrichment-2);
+		\draw (computation-copy-3) -> (computation-enrichment-3);
+
+		\draw (computation-enrichment-1) -> (thread-pool-executor-execute-1);
+		\draw (computation-enrichment-2) -> (thread-pool-executor-execute-2);
+		\draw (computation-enrichment-3) -> (thread-pool-executor-execute-3);
+
+		\draw (thread-pool-executor-execute-1) -> (result-partial-1);
+		\draw (thread-pool-executor-execute-2) -> (result-partial-2);
+		\draw (thread-pool-executor-execute-3) -> (result-partial-3);
+
+		\draw (result-partial-1) -> (computation-instance-destroy-1);
+		\draw (result-partial-2) -> (computation-instance-destroy-2);
+		\draw (result-partial-3) -> (computation-instance-destroy-3);
+
+		\draw (computation-instance-destroy-1) -> (after-computation-instance-1);
+		\draw (computation-instance-destroy-2) -> (after-computation-instance-2);
+		\draw (computation-instance-destroy-3) -> (after-computation-instance-3);
+
+		\draw (after-computation-instance-1) -> (after-computation);
+		\draw (after-computation-instance-2) -> (after-computation);
+		\draw (after-computation-instance-3) -> (after-computation);
+	\end{scope}
+\end{tikzpicture}}
+\end{center}
+\caption{Schéma průběhu výpočtu ve sdílené paměti. Zelené obdelníky představují události,
+šedými obdelníkymi objekty a čerchovaně ohraničené jsou části Java kódu.}
+\end{figure}
+
+\begin{figure}[h!]
+\label{figure:computation:events}
+\begin{center}
+\resizebox{0.9\textwidth}{!}{
+\begin{tikzpicture}  	[node distance=1.8cm,start chain=going below]
+\tikzset{>=stealth',
+	event/.style={
+    	rectangle, 
+    	rounded corners, 
+    	fill=green!20,
+    	draw=black, very thick,
+    	text width=9em, 
+    	minimum height=3em, 
+    	text centered},
+	class/.style={
+    	rectangle, 
+    	rounded corners, 
+    	fill=black!10,
+    	draw=black, very thick,
+    	text width=8em, 
+    	minimum height=3em, 
+    	text centered},
+	package/.style={
+		rectangle,
+		draw=black!50, dashed,
+		rounded corners,
+		inner sep=0.3cm},
+ 	scope/.style={decorate},
+	code/.style={
+		rectangle,
+		draw=black!50, dashed,
+		rounded corners,
+    	minimum height=3em, 
+    	text centered}
+}
+	\node[class] (computation-instance) {instance výpočtu};
+	\node[event, right of=computation-instance, node distance=5cm] (mucker) {Mucker};
+	\node[event, above of=mucker, node distance=5cm] (computing) {Future};
+
+	\begin{scope}[->, thick]
+		\path (computation-instance) edge node[below] {emitted} (mucker);
+	\end{scope}
+\end{tikzpicture}}
+\end{center}
+\caption{jsdhkjfshd fskjdhf skjd hfsldfkj }
+\end{figure}
 
 \section{Dostupná rozšíření}
