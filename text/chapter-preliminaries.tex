@@ -12,45 +12,45 @@ modelů a požadovaných vlastností.
 Před popisem samotného modelování pomocí obyčejných diferenciálních rovnic je
 nutné říci, co se od vytvářených modelů zpravidla očekává. Model zpro\-středko\-vá\-vá
 zjednodušený pohled na zkoumaný systém a umožňuje tím systém snáze pochopit a
-případně předpovídat některé jevy. Fakt, že model je jen zjednodušením, znamená,
+případně předpovídat některá jeho chování. Fakt, že model je jen zjednodušením, znamená,
 že se vždy od reality liší a nabízí pouze jen některé aspekty chování zkoumaného
 systému. [str. 48]
 
 % Priklad modelu mapa, modelujeme problem ne system
 
 Jednoduchým příkladem modelu je mapa. Zřejmě nemůžeme očekávat od mapy, aby obsahovala
-všechny skutečnosti zahrnuté ve skutečném světě. Svým způsobem je mapa již od počátku
+všechny aspekty zahrnuté ve skutečném světě. Svým způsobem je mapa již od počátku
 \uv{špatně}, nabízí pouze jistou abstrakci systému a může i zkreslovat náš pohled.
-Přesto nelze popírat její užitečnost. Na mapě si lze také ukázat fakt, že se
+Přesto nelze popírat její užitečnost. Na příkladu mapy si lze také ukázat pohled, že se
 nemodeluje systém, ale problém. Existuje celá řada druhů map od turistických, automap
 až po map podloží a každá z nich má svůj specifický účel. \cite[str. 47 -- 58]{pelanek2012}
 
 Pro tuto práci jsou důležité modely, které lze simulovat. Model definuje pravidla, podle
 kterých se systém chová a simulace umožňuje se podívat na chování systému v čase, ať už
-diskrétním či spojitém. Pro simulace je sa\-mozřej\-mě potřeba znát stav systému, od kterého
-se jeho další chování odvíjí.
+diskrétním či spojitém. Pro simulaci je sa\-mozřej\-mě potřeba znát stav systému v~počátečním
+čase, od kterého se jeho další chování odvíjí.
 
 \subsection{Modelování pomocí obyčejných diferenciálních rovnic}
 
-Hojně užívaným způsobem modelování, kde vystupuje spojitý čas, jsou diferenciální rovnice.
+Hojně užívaným způsobem modelování, kde vystupuje spojitý čas, jsou obyčejné diferenciální rovnice.
 Stav systému se vyjádří pomocí stavových pro\-měn\-ných $\mathbf{X} = (\mathit{x_1}, \mathit{x_2}, \dots \mathit{x_n})$.
 Každé stavové proměnné přísluší diferenciální rovni\-ce prvního řádu, ve které vystupue
 Lipschitzovsky spojitá \cite[str. 149 -- 163]{eriksson2004} funkce
 $f_i: [t, \infty) \times \mathbb{R}^n \rightarrow \mathbb{R}$, která popisuje,
-jak se stavová proměnná mění v čase. Tvar takové rovnice je vidět ve sché\-ma\-tu~\ref{eq:ode}.
+jak se hodnota stavové proměnné mění v čase. Tvar takové rovnice je vidět ve sché\-ma\-tu~\ref{eq:ode}.
 
 \begin{align}\label{eq:ode}
 \frac{d\mathit{x_i}}{dt} = f_i(t, \mathbf{X})
 \end{align}
 
-Pro účely simulce není nutné znát úplné řešení této soustavy rovnic, ale postačuje pouze znalost
+Pro účely simulace není nutné znát úplné řešení této soustavy rovnic, ale postačuje pouze znalost
 vývoje systému od počatečního času $t_0$, kterému odpovídá počáteční stav $\mathbf{X}(t_0)$.
 V praxi se setkáváme s tím, že neznáme ani tento přesný vývoj, nýbrž pouze jeho aproximaci,
 kterou poskytují metody pro řešení problému výchozích podmínek~\cite{iserles1996}.
 
 Tyto metody hledají aproximaci v diskrétním čase a chyba, s níž se vy\-po\-čí\-ta\-ná
 aproximace liší od skutečného řešení, je shora ohraničená uživatelem danou hodnotou.
-Fakt, že si může uživatel takto nadefinovat toleranci chyby, je je jednou z nejdůležitějších
+Fakt, že si může uživatel takto zvolit toleranci chy~by, je je jednou z nejdůležitějších
 vlastností těchto metod. Nastavení chyby může samozřejmě v případě nízké tolerance
 a některých systémů vyústit ve výkonostní problémy. Jestliže tedy zvolíme časový
 krok $h \in \mathbb{R}$, pak výstupem těchto metod je sekvence bodů $\mathbf{X_0}, \mathbf{X_1}$, \ldots,
@@ -64,7 +64,7 @@ pro kterou platí vztah \ref{eq:ode:aprox}.
 
 \subsection{Příklad modelu}\label{section:lotkav}
 
-Známým modelem využívající soustavy diferenciálních rovnic popisuje vztah predátora
+Známým příkladem modelu využívajícího soustavy diferenciálních rovnic je model popisující vztah predátora
 a kořisti \cite{lotka1925} definovaný rovnicemi \ref{eq:lotkav}. Obsahuje stavové pro\-měn\-né
 pro množství kořisti ($x$) a počet predátorů ($y$), dále parametry pro přirozený
 přírůstek kořisti ($\alpha$), \uv{žravost} predátorů ($\beta$), přirozený úbytek
@@ -82,7 +82,7 @@ zvířat, bíložravá kořist a masožravý predátor. U kořisti se předpokl�
 přístup k potravě, a proto přirozeně příbívá. Naproti tomu reprodukce predátora je
 závislá na přísunu masité potravy, tzn. množství kořisti v systému.
 
-I na tomto modelu je však možné pozorovat netriviální chování, o čemž se lze přesvědčit
+I na tomto jednoduchém modelu je však možné pozorovat netriviální chování, o čemž se lze přesvědčit
 při pohledu na grafy  \ref{fig:lotkav:timeserie} a \ref{fig:lotkav:oscil}. Systém má
 tendenci oscilovat. Periodicky dochází k nárustu populace predátora, to vyústí v pokles
 populace kořisti, následně u predátorů v důsledku nedostatku potravy převáží úmrtnost nad reprodukcí,
@@ -101,9 +101,9 @@ množství kořisti opět naroste a tento cyklus se znovu opakuje.
 \end{figure}
 
 Síla modelů a simulace se ukazuje být v tom, že tento druh informace získáme, aniž bychom prováděli
-experiment například se skutečnými liš\-ka\-mi a zajíci. Samozřejmě se na závěr neobejdeme
-bez validace výsledků simulace se skutečným systémem, ale tomu může předcházet velké množství
-experementů \textit{in silico}, které by nás jinak stáli mnoho prostředků nebo by ani 
+experiment se skutečným systémem se  skutečnými liš\-ka\-mi a zajíci. Samozřejmě se na závěr neobejdeme
+bez validace výsledků simulace oproti realitě, ale tomu může předcházet velké množství
+experementů \textit{in silico}, které by jinak stály mnoho prostředků nebo by ani 
 nebyly uskutečnitelné. Za zmínku stojí například model popisující šíření nákazy
 populací~\cite{kermack1927}, což je téma, u něhož si opravdu lze jen těžko představit
 experimenty na reálném systému.
@@ -140,13 +140,13 @@ méně proměnných a je tak snazší jej simulovat.
 \section{Vlastnosti modelovaných systémů}
 
 Aby bylo možné modely automatizovaně analyzovat, je nutné vyjadřovat se o jejich
-vlastnostech exatně. Jazyk, který je k tomuto účely potřeba, musí být schopen 
-popsat chování systému. V kontextu obyčejných a di\-fe\-ren\-ci\-ál\-ních rovnic je
-chováním trajektorie, v případě simulace sekvence bodů v~čase. Například u modelu
+vlastnostech exatně. Jazyk, který je k tomuto účely nutné použít, musí být schopen 
+popsat chování systému v čase. V kontextu obyčejných a di\-fe\-ren\-ci\-ál\-ních rovnic je
+chováním trajektorie, v případě simulace sekvence bodů s~časovým razítkem. Například u modelu
 popsaného v sekci \ref{section:lotkav} je vhodné popsat oscilaci populace kořisti
-nebo predátora. To lze například tak, že budeme požadovat, aby množství jedinců
-daného druhu přesáhlo opakovaně pře\-sáh\-lo maximální a minimální mez. Jak konkrétně
-tento požadavek zformulovat, je ukázáno dále.
+nebo predátora. To lze provést tak, že budeme požadovat, aby množství jedinců
+daného druhu opakovaně pře\-sáh\-lo maximální a minimální mez. Jak konkrétně
+tento po\-ža\-da\-vek zformulovat, je ukázáno v následující části této kapitoly.
 
 K vyjádření vlastností nad lineárními běhy systémů se nejčastěji používá lieární
 temporální logika~\cite{strejcek2007}, případě logiky z ní odvozené.
@@ -154,8 +154,8 @@ Lineární temporální logika u\-mož\-ňu\-je se zjednodušeně vyjadřovat o 
 systému v čase formulacemi typu \uv{v budoucnu nastane \ldots}, \uv{vždy platí \ldots} apod.
 Tato logika se definuje nad nekonečnými běhy, a proto je v~této práci použita temporální logika
 signálů~\cite{maler2004} založená na temporální logice metrických intervalů~\cite{alur1996},
-která se od lineární temporální logiky liší pouze přidáním ča\-so\-vých intervalů. Tím temporální
-logika signálů u\-mož\-ňu\-je formulovat výroky, které jsou částečně závislé na čase jako
+která se od lineární temporální logiky liší pouze přidáním ča\-so\-vých intervalů u temporálních operátorů. Tím temporální
+logika signálů u\-mož\-ňu\-je formulovat výroky, které jsou částečně závislé na čase, jako
 je například \uv{za hodinu až dvě nastane \ldots} \uv{za třicet minut bude celé
 čtyři hodiny platit \ldots}.
 
@@ -193,8 +193,8 @@ $f(x_1, \bot) = f(\bot, x_2) = \bot$.
 Je dobré si povšimnou, že definice signálu je konzistentní s tím, jak chápeme chování modelu,
 tedy jako trajektorii v $\mathbb{R}^n$, kde $n$ je počet sta\-vo\-vých proménných. Zároveň
 je třeba si však uvědomit, že výstupem numerické simulace není spojitá trajektorie, nýbrž pouze
-sekvence bodů s~časovým razítkem. Z praktických důvodu je dále v této kapitole tato sekvence
-chápání jako po částech konstantní funkce.
+sekvence bodů s~ča\-so\-vým razítkem. Z praktických důvodu je dále v této kapitole tato sekvence
+chá\-pá\-ní jako po částech konstantní funkce.
 
 \begin{figure}[h!]
 \begin{center}
@@ -205,7 +205,7 @@ chápání jako po částech konstantní funkce.
 	\includegraphics[width=.48\textwidth]{../images/generated/piecewise-constant-b.pdf}
 }
 \end{center}
-\caption{Příklad převodu na po částech konstantní funkci.}
+\caption{Příklad převodu sekvence bodů na po částech konstantní funkci.}
 \end{figure}
 
 \subsection{Temporální logika signálů}
@@ -242,7 +242,6 @@ které intuitivně odpovídají už zmíněným výrokům \uv{v budoucnu nastane
 
 Re\-la\-ce $(s, t) \models \varphi$ značí, že daný signál $s$ splňuje formuli $\varphi$
 počínaje pozicí v čase $t$, a je definována induktivně předpisem \ref{eq:stl:semantics}.
-$P(s, t)$ představuje množinu atomických propozic platných v čase $t$ na signálu $s$.
 Signál $s$ splňuje formuli $\varphi$ právě tehdy, když $(s, 0) \models \varphi$.
 
 \begin{align}\label{eq:stl:semantics}
@@ -255,8 +254,8 @@ Signál $s$ splňuje formuli $\varphi$ právě tehdy, když $(s, 0) \models \var
 \end{array}
 \end{align}
 
-Stojí za zmínku, že operátor $\mathcal{U}$ je zde definován s trochu jinou sémantikou
-než je běžné. Požaduje se zde silnější podmínka, tj. aby existoval stav (čas),
+Stojí za zmínku, že operátor $\mathcal{U}$ je zde definován s trochu jinou sé\-man\-ti\-kou
+než je běžné. Požaduje se zde silnější podmínka -- aby existoval stav (čas),
 pro který platí obě vlastnosti $\varphi_1$ a $\varphi_2$, tedy aby existoval
 čas $t' \in [t + a, t + b]$ takový, že $(s, t') \models \varphi_1$
 a současně $(s, t') \models \varphi_2$. To však nemění sémantiku ostatních známých
@@ -295,25 +294,25 @@ nejznámnější a nejčastěji používané patří oscilace. Je dobré si u\-v
 lze chápat mnoha různými způsoby. V~praxi se nevyplatí klást přísná omezení na přesnost
 periody, velikost amplitudy či přesnost stavu, kterým systém periodicky prochází. 
 
-Představme s systém o jedné stavové proměnné $x$, ve které se vzrůstající intenzitou
-osciluje. Perioda oscilace je konstantní, avšak její amplituda ne. V~této práci
-použité logice se lze vyjadřovat o hodnotách proměnné $x$, tudíž oscilaci budeme
-chápat jako periodické překračování dolní a horní meze. Atomickými propozicemi jsou tedy
-predikáty $x \geq k$ a $x \leq -k$, jejichž platnost lze vidět na obrázcích
+Představme si systém o jedné stavové proměnné $x$, ve které se vzrů\-sta\-jí\-cí intenzitou
+osciluje hodnota této proměnné. Perioda oscilace je konstantní, avšak její amplituda ne. V~této práci
+použitá logika se vyjadřuje o hodnotách proměnné $x$, tudíž oscilaci budeme
+chápat jako periodické pře\-kra\-čo\-vá\-ní dolní a horní meze. Atomickými propozicemi jsou tedy
+predikáty $[x] \geq k$ a $[x] \leq -k$, jejichž platnost lze vidět na obrázcích
 \ref{fig:stl:example:geq:limit} a \ref{fig:stl:example:leq:limit}.
 
 \begin{figure}[h!]
 \begin{center}
-\subfigure[$x \geq k$]{
+\subfigure[{$[x] \geq k$}]{
 	\includegraphics[width=.48\textwidth]{../images/generated/stl-example-geq-limit.pdf}\label{fig:stl:example:geq:limit}
 }
-\subfigure[$x \leq -k$]{
+\subfigure[{$[x] \leq -k$}]{
 	\includegraphics[width=.48\textwidth]{../images/generated/stl-example-leq-limit.pdf}\label{fig:stl:example:leq:limit}
 }
-\subfigure[$x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k$]{
+\subfigure[{$[x] \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}[x] \leq -k$}]{
 	\includegraphics[width=.48\textwidth]{../images/generated/stl-example-geq-limit-future-leq-limit.pdf}\label{fig:stl:example:geq:limit:future:leq:limit}
 }
-\subfigure[$\mathcal{F}_{0, \frac{1}{2}}(x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k)$]{
+\subfigure[{$\mathcal{F}_{0, \frac{1}{2}}([x] \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}[x] \leq -k)$}]{
 	\includegraphics[width=.48\textwidth]{../images/generated/stl-example-future-geq-limit-future-leq-limit.pdf}\label{fig:stl:example:future:geq:limit:future:leq:limit}
 }
 \caption{Pravdivostní hodnota atomických propozic v čase.}
@@ -321,7 +320,7 @@ predikáty $x \geq k$ a $x \leq -k$, jejichž platnost lze vidět na obrázcích
 \end{figure}
 
 Jeden cyklus, lze popsat tak, že se hodnota sledované proměnné nachází nad horní mezí a zároveň někdy
-v budoucnu klesne pod dolní mez, tedy $x \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}x \leq -k$.
+v budoucnu klesne pod dolní mez, tedy $[x] \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}[x] \leq -k$.
 Přidání operátoru $\mathcal{F}$ zajistí, že se v daném času do určité doby provede jeden oscilační cyklus,
 viz obrázek \ref{fig:stl:example:future:geq:limit:future:leq:limit}. To, že systém
 osciluje znamená, že toto platí pro každý časový okamžik, což vyjádříme operátorem $\mathcal{G}$.
@@ -331,10 +330,10 @@ tudíž je potřeba do formule přidat ještě nějaké čekání v~podobě oper
 Výsledná formule tedy vypadá následovně:
 
 \begin{align}\label{eq:stl:semantics}
-\mathcal{F}_{[0, \textrm{čekání}]}\mathcal{G}_{[0, \textrm{doba oscilace}]}\mathcal{F}_{0, \textrm{perioda}}(x \geq k \wedge \mathcal{F}_{[0, \textrm{perioda}]}x \leq -k)
+\mathcal{F}_{[0, \textrm{čekání}]}\mathcal{G}_{[0, \textrm{doba oscilace}]}\mathcal{F}_{[0, \textrm{perioda}]}([x] \geq k \wedge \mathcal{F}_{[0, \textrm{perioda}]}[x] \leq -k)
 \end{align}
 
-Z uvedeného příkladu je zřejmě, že platnost formule nad daným signálem
+Z uvedeného příkladu je zřejmě, že platnost formule nad daným signá\-lem
 lze ověřit algoritmem, jehož průběh bude kopírovat strukturu formule. Jak
 přesně ověřovací algoritmus vypadá, ukáže sekce \ref{section:robustness},
 která navíc lehce rozšíří vnímání pravdivosti jako takové.
