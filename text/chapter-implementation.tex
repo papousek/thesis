@@ -241,7 +241,7 @@ poslouchat událostem z logování.
 
 Parasim je schopen načíst rozšíření, která jsou v době vytvoření manažera na \texttt{Java class path}.
 Všechna zatím použitá rozšíření byla přibalena do souboru JAR aplikace pomocí sestavovacího
-nástroje Maven, a proto jsou k dispozici bez dalšího nastavování. Rozšíření musí obsahovat
+nástroje Maven, a proto jsou k dispozici bez dalšího nasta\-vo\-vá\-ní. Rozšíření musí obsahovat
 následující části:
 
 \begin{itemize}
@@ -347,7 +347,7 @@ je možné si znovunačtení konfiguračního objektu vynutit zničením přísl
 a vy\-tvo\-ře\-ním nového. Na to však není vhodný aplikační kontext, protože jeho
 zničení prakticky znamená vypnutí aplikace.
 
-\subsection{Obohacování}
+\subsection{Obohacování}\label{section:enrichment}
 
 Aby nebylo nutné si na všech místech předávat instanci manežera, případně instance všech
 potřebných služeb, nabízí Parasim rozšiřitelný mechanismus obohacování objektů.
@@ -362,7 +362,7 @@ Tyto anotace lze použít ve dvou nastaveních, v jednom nastavení bude při ob
 vyhozena výjimka, pokud poskytovaný případně injektovaný objekt není k dispozici.
 Pokud je anotace použita s přiřazením \texttt{required=false}, výjimka se nevyhodí.
 
-\subsection{Vzdálený přístup}
+\subsection{Vzdálený přístup}\label{section:remote}
 
 Další části práce ukážou, jak je možné Parasim použít k distribovanému počítání.
 To je umožněno pomocí rozšíření pro vzdálený přístup, které u\-mož\-ňu\-je získat
@@ -403,29 +403,75 @@ a komutativní operace. Jak přesně se výpočetní instance dělí a jak jsou 
 slučovány, určuje ten, kdo implementuje algoritmus.
 
 Důležitým aspektem však je, že se vývojář implementující algoritmus nemusí starat
-o způsob, jakým konkrétně budou výpočetní instance provedeny. Parasim tím nabízí
-jednotné rozhraní pro výpočty ve sdílené a~dístribuované paměti.
+o způsob, jakým konkrétně budou výpočetní instance provedeny. To na druhou stranu vynucuje
+některá omezení, která musí vývojář při implementaci výpočtu dodržet.  Parasim zatím nabízí
+jednotné rozhraní pro počítání ve sdílené a~dís\-tri\-buo\-va\-né paměti.
 
 \subsection{Reprezentace výsledku}
 
 Třída reprezentující výsledek pro daný výpočet musí implementovat rozhraní \href{https://github.com/sybila/parasim/blob/master/model/core/src/main/java/org/sybila/parasim/model/Mergeable.java}{\texttt{Mergeable}}. Toto rozhraní si vynucuje krom uchování dat také definci komutativní
-a asociativní operaci pro slučování mezivýsledků. Zároveň je nezbytné, aby třída
-byla schopna serializace. Serializace je nezbytná pro výpočet v distribuované paměti,
+a asociativní operaci pro slučování mezivýsledků. Sou\-čas\-ně je nezbytné, aby třída
+byla schopna serializace. Serializace je nezbytná pro výpočet v dis\-tri\-buo\-va\-né paměti,
 kde se data po skončení mezivýpočtu po\-sí\-la\-jí mezi počítači po síti.
 
 Z formálního hlediska již není kladen na datový typ výsledku žádný požadavek, nicméně
-je třeba mít na paměti, že ...
+je třeba mít na paměti, že mezivýsledek je v případě distribuovaného počítání se výsledek
+serializuje a je mezi stroji posílán po síti, tudíž velikost mezivýsledků může velkou měrou
+ovlivnit výpočetní čas. Podobně i metoda pro slučování mezivýsledků by neměla být vý\-po\-čet\-ně
+příliš náročná, protože spojování výsledků má zpravidla na starost jedno vlákno, respektive
+jeden stroj.
 
 \subsection{Reprezentace výpočtu}
 
-\subsection{Výpočet ve sdílené paměti}
+Jakýkoliv výpočet je v Parasimu definován jako třída implementující rozhraní \href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/Computation.java}{\texttt{Computation}}. Ve třídě vývojář
+implementuje algoritmus výpočtu za pomoci injektovaných služeb. V případě potřeby
+lze určit způsob, jakým se má instance zachovat ve chvíli, kdy již není za potřebí.
 
-\subsection{Výpočet v distribované paměti}
+V případě distribuovaného počítání se instance výpočtu může i ně\-ko\-lik\-rát posílat mezi stroji po sítí. Z toho důvodu
+je nutné, aby i třída definující výpočet byla serializovatelná. To v praxi znamená, že musí
+být seriazovatelné i hodnoty všech atributů, které nejsou injektovány. Bohužel chybová hláška z virtuálního stroje Javy
+není v případě, že třída nesplňuje podmínky serializovatelnosti, přílíš popisná, takže
+zejména tento typ chyb se velice špatně opravuje.
 
-\subsection{Možná nastavení výpočtu}
+\subsection{Životní cyklus výpočtu}
 
+Vstupním bodem pro spuštění výpočtu je služba \href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/ComputationContainer.java}{\texttt{ComputationContainer}}. Tento kontejner rozhoduje
+rozhoduje, jaké použít prostředí pro výpočet na základě dostupné konfigurace a anotací.
+Pomocí anotace \href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/annotations/RunWith.java}{\texttt{RunWith}} lze zvolit mezi prostředím se sdílenou nebo distribuovanou pamětí. Pokud tato anotace
+není k dispozici, je použito výchozí prostředí, které lze předefinovat globálně v konfiguraci
+Parasimu.
 
-\begin{figure}[h!]
+Jakmile kontejner provedl analýzu výpočetní instance, předává tuto instance dále
+ke zvolenému výpočetnímu prostředí, ve kterém se instance spustí. Toto prostředí
+vytvoří kontext výpočtu, který je sdílen napříč celým výpočtem na
+jednom stroji. Pozor, v případě prostředí s distribuovanou pamětí, se tento kontext
+vytvoří na každém použitém stroji. Tento kontext je vhodný pro bezstavové služby
+a cache, do které si jednotlivé výpočetní instance mohou ukládat informace, jejichž
+získání je vý\-po\-čet\-ně náročné. Například u algoritmu pro analýzu dynamických systémů
+se v tomto kontextu nacházejí již nasimulované trajektorie chování nebo služba schopná spočítat
+pro trajektorii chování její lokální robustnost.
+
+Pro každou výpočetní instanci je dále vytvořen další kontext, který již není sdílený
+s žádnou další instancí a jehož délka trvání může být  mnohem kratší než u výpočetního kontextu.
+Tento kontext je vhodný pro služby, které by v případě sdílení napříč více vláken musely
+být synchronizovány. V Parasimu se v tomto kontextu nachází služba pro simulaci trajektorie
+chování, která pro tento účel používá proces nástroje GNU Octave \cite{eaton2008}. Není
+žádoucí, aby jeden proces nástroje GNU Octave byl sdílen více vlákny. 
+
+Aby se usnadnilo použití služeb z různých rozšíření, je před samotným spuštěním výpočetní
+instance použito obohacování zmíněné v sekci \ref{section:enrichment}. Až v tomto bodě
+se instance výpočtu spustí. Do této chvíle se v kontejneru nenachází žádná souběžnost
+a vše je prováděno pouze sekvenčně. V těle výpočtu však mohou být vytvářeny další instance výpočtu,
+a ty pak pomocí asynchronního volání služby \href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/Emitter.java}{\texttt{Emitter}} emitovány do výpočetního prostředí, které je zodpovědné za jejich spuštění.
+Průběh počítání je tudíž podobný jako u modelu Fork/Join \cite{lea2000} uvedeného v Javě verze 7.
+
+Jakmile je výpočetní instance s výpočtem hotová, je vrácen výsledek a zničí se
+kontext spojený s touto instancí. Kontejner sbírá mezivýsledky a postupně je slučuje
+s dalšími. Až svůj výpočet ukončí poslední instance, zničí se výpočetní kontext na
+všech použitých strojích. Konečný výsledek, případně i aktuální podoba sloučených
+mezivýsledků je k dispozici v podobě objektu \href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/Future.java}{\texttt{Future}}.
+
+\begin{figure}[H]
 \label{figure:computation:shared:memory}
 \begin{center}
 \resizebox{0.9\textwidth}{!}{
@@ -444,7 +490,7 @@ je třeba mít na paměti, že ...
     	rounded corners, 
     	fill=black!10,
     	draw=black, very thick,
-    	text width=10em, 
+    	text width=9em, 
     	minimum height=3em, 
     	text centered},
 	package/.style={
@@ -457,39 +503,50 @@ je třeba mít na paměti, že ...
 		rectangle,
 		draw=black!50, dashed,
 		rounded corners,
+    	text width=12em, 
     	minimum height=3em, 
-    	text centered}
+    	text centered},
+	dot/.style={
+		circle,
+		draw=black,
+		fill=black,
+		inner sep=0pt,
+		minimum size=1pt
+	}
 }
-	\node[class] (computation) {Computation comp\\výpočet};
-	\node[code, below of=computation] (compute) {ComputationContainer.compute(comp)};
+	\node[class] (computation) {Computation comp\\instance výpočtu};
+	\node[code, below of=computation] (compute) {ComputationContainer\\.compute(comp)};
 	\node[code, below of=compute] (execute) {Executor.submit(comp)};
 	\node[event, below of=execute] (before-computation) {BEFORE\\kontext výpočtu};
 	\node[event, below of=before-computation] (before-computation-instance-1) {BEFORE\\kontext\\instance výpočtu};
-	\node[class, below of=before-computation-instance-1] (computation-copy-1) {kopie\\instance výpočtu};
-	\node[code, below of=computation-copy-1] (computation-enrichment-1) {obohacení instance výpočtu};
-	\node[code, below of=computation-enrichment-1] (thread-pool-executor-execute-1) {spuštění instance výpočtu};
+	\node[code, below of=before-computation-instance-1] (computation-enrichment-1) {obohacení};
+	\node[code, below of=computation-enrichment-1] (thread-pool-executor-execute-1) {výpočet};
 	\node[class, below of=thread-pool-executor-execute-1] (result-partial-1) {mezivýsledek};
-	\node[code, below of=result-partial-1] (computation-instance-destroy-1) {zničení instance výpočtu};
+	\node[code, below of=result-partial-1] (computation-instance-destroy-1) {zničení};
 	\node[event, below of=computation-instance-destroy-1] (after-computation-instance-1) {AFTER\\kontext\\instance výpočtu};
 	\node[event, below of=after-computation-instance-1] (after-computation) {AFTER\\kontext výpočtu};
 	\node[class, below of=after-computation] (result) {výsledek};
 
-	\node[event, left of=before-computation-instance-1, node distance=5cm] (before-computation-instance-2) {BEFORE\\kontext\\instance výpočtu};
-	\node[class, below of=before-computation-instance-2] (computation-copy-2) {kopie\\instance výpočtu};
-	\node[code, below of=computation-copy-2] (computation-enrichment-2) {obohacení instance výpočtu};
-	\node[code, below of=computation-enrichment-2] (thread-pool-executor-execute-2) {spuštění instance výpočtu};
+	\node[class, left of=before-computation-instance-1, node distance=6.5cm] (computation-copy-2) {instance výpočtu};
+	\node[event, below of=computation-copy-2] (before-computation-instance-2) {BEFORE\\kontext\\instance výpočtu};
+	\node[code, below of=before-computation-instance-2] (computation-enrichment-2) {obohacení};
+	\node[code, below of=computation-enrichment-2] (thread-pool-executor-execute-2) {výpočet};
 	\node[class, below of=thread-pool-executor-execute-2] (result-partial-2) {mezivýsledek};
-	\node[code, below of=result-partial-2] (computation-instance-destroy-2) {zničení instance výpočtu};
+	\node[code, below of=result-partial-2] (computation-instance-destroy-2) {zničení};
 	\node[event, below of=computation-instance-destroy-2] (after-computation-instance-2) {AFTER\\kontext\\instance výpočtu};
 
-	\node[event, right of=before-computation-instance-1, node distance=5cm] (before-computation-instance-3) {BEFORE\\kontext\\instance výpočtu};
-	\node[class, below of=before-computation-instance-3] (computation-copy-3) {kopie\\instance výpočtu};
-	\node[code, below of=computation-copy-3] (computation-enrichment-3) {obohacení instance výpočtu};
-	\node[code, below of=computation-enrichment-3] (thread-pool-executor-execute-3) {spuštění instance výpočtu};
+	\node[class, right of=before-computation-instance-1, node distance=6.5cm] (computation-copy-3) {instance výpočtu};
+	\node[event, below of=computation-copy-3] (before-computation-instance-3) {BEFORE\\kontext\\instance výpočtu};
+	\node[code, below of=before-computation-instance-3] (computation-enrichment-3) {obohacení};
+	\node[code, below of=computation-enrichment-3] (thread-pool-executor-execute-3) {výpočet};
 	\node[class, below of=thread-pool-executor-execute-3] (result-partial-3) {mezivýsledek};
-	\node[code, below of=result-partial-3] (computation-instance-destroy-3) {zničení instance výpočtu};
+	\node[code, below of=result-partial-3] (computation-instance-destroy-3) {zničení};
 	\node[event, below of=computation-instance-destroy-3] (after-computation-instance-3) {AFTER\\kontext\\instance výpočtu};
 
+	\node[dot, left of=thread-pool-executor-execute-1, node distance=3cm] (line11) {};
+	\node[dot, left of=before-computation-instance-1, node distance=3cm, label=above left:emit] (line12) {};
+	\node[dot, right of=thread-pool-executor-execute-1, node distance=3cm] (line21) {};
+	\node[dot, right of=before-computation-instance-1, node distance=3cm, label=above right:emit] (line22) {};
 
 	\begin{scope}[->, thick]
 		\draw (computation) -> (compute);
@@ -498,16 +555,13 @@ je třeba mít na paměti, že ...
 		\draw (after-computation) -> (result);
 
 		\draw (before-computation) -> (before-computation-instance-1);
-		\draw (before-computation) -> (before-computation-instance-2);
-		\draw (before-computation) -> (before-computation-instance-3);
 
-		\draw (before-computation-instance-1) -> (computation-copy-1);
-		\draw (before-computation-instance-2) -> (computation-copy-2);
-		\draw (before-computation-instance-3) -> (computation-copy-3);
+		\draw (before-computation-instance-1) -> (computation-enrichment-1);
+		\draw (before-computation-instance-2) -> (computation-enrichment-2);
+		\draw (before-computation-instance-3) -> (computation-enrichment-3);
 
-		\draw (computation-copy-1) -> (computation-enrichment-1);
-		\draw (computation-copy-2) -> (computation-enrichment-2);
-		\draw (computation-copy-3) -> (computation-enrichment-3);
+		\draw (computation-copy-2) -> (before-computation-instance-2);
+		\draw (computation-copy-3) -> (before-computation-instance-3);
 
 		\draw (computation-enrichment-1) -> (thread-pool-executor-execute-1);
 		\draw (computation-enrichment-2) -> (thread-pool-executor-execute-2);
@@ -528,6 +582,16 @@ je třeba mít na paměti, že ...
 		\draw (after-computation-instance-1) -> (after-computation);
 		\draw (after-computation-instance-2) -> (after-computation);
 		\draw (after-computation-instance-3) -> (after-computation);
+
+		\draw (line12) -> (computation-copy-2);
+
+		\draw (line22) -> (computation-copy-3);
+	\end{scope}
+	\begin{scope}[thick]
+		\draw (thread-pool-executor-execute-1) -- (line21);
+		\draw (line21) -- (line22);
+		\draw (thread-pool-executor-execute-1) -- (line11);
+		\draw (line11) -- (line12);
 	\end{scope}
 \end{tikzpicture}}
 \end{center}
@@ -535,10 +599,63 @@ je třeba mít na paměti, že ...
 šedými obdelníkymi objekty a čerchovaně ohraničené jsou části Java kódu.}
 \end{figure}
 
+\subsection{Výpočetní prostředí}
+
+Jak již bylo řečeno, Parasim nabízí dva typy prostředí, ve kterém lze výpočet spustit.
+Výchozí prostředím, které bude použito bez jakéhokoliv nastavování, je počítání ve sdílené paměti.
+Toto prostředí využívá standardního způsobu nepřímé práce s vlákny ve virtuálním stroji Javy
+pomocí třídy implementující \texttt{java.util.concurrent.ExecutorService}.
+Instance té\-to třídy má k dispozici určité množství vláken, kterému se posílají objekty
+implementující \texttt{java.util.concurrent.Callable}, vlákna pak tyto objekty zpracovávají.
+
+Takto odeslané objekty \texttt{java.util.concurrent.Callable} již nelze získat zpět,
+což způsobuje problém. Aby bylo možné model pro sdílenou paměť převyužít i pro prestředí s distribuovanou pamětí,
+je zapotřebí u\-mož\-nit balancovat výpočet napříč více stroji. V případě, že některý ze strojů není vytížený, kontejner zajistí,
+aby se na tento stroj přesunula instance výpočtu ze stroje více vytíženého. Z toho důvodu
+obsahuje Parasim mezivrstvu (třída \href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-impl/src/main/java/org/sybila/parasim/computation/lifecycle/impl/common/Mucker.java}{\texttt{Mucker}}). Instance výpočtu jsou nejprve uloženy do fronty a objektu \texttt{java.util.concurrent.ExecutorService} jsou dále posílány teprve z této fronty 
+ tak, aby dostupná vlánka byla co nejvíce vytížená.
+Pokud dojde k přesouvání instancí výpočtu mezi stroji, jsou k tomu využity instance z fronty dané stroje.
+
+Centrálním bodem výpočtu je třída implementující \href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/MutableStatus.java}{\texttt{MutableStatus}}. Skrze tento bod se dorozumívají všechny objekty
+starající se o řádný průběh počítání. Využívají k tomu systém událostí a naslouchajících objektů
+implementujících rozhraní \href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/ProgressListener.java}{\texttt{ProgressListener}}. Použité události jsou:
+
+\begin{description}
+
+    \item[emitted] 		Událost nastane ve chvíli, kdy je emitován nový výpočet pomocí služby
+						\href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/Emitter.java}{\texttt{Emitter}}.
+
+    \item[computing] 	Událost nastane ve chvíli, kdy je instance výpočtu z fronty vý\-poč\-tů poslána
+						vláknů k provedení a ještě před tím, než je pro instanci vytvořen příslušný kontext.
+
+    \item[done] 		Událost nastane ve chvíli, kdy se instance výpočtu se svým výpočtem
+						hotova. Stane se tak ještě před tím, než je vrácen výsledek,
+						zničen kontext a zničena instance.
+
+	\item[finished]		Událost nastane ve chvíli, kdy již není k dispozici žádná instance výpočtu.
+	
+	\item[balanced]		Událost nastane ve chvíli, kdy dojde k přesunutí instance výpočtu z jednoho stroje na jiný,
+						a to pouze na stroji, kam byla instance pře\-su\-nu\-ta.
+\end{description}
+
+V případě prostředí s distribuovanou pamětí je průběh výpočtu slo\-ži\-těj\-ší. Než začne samotný výpočet,
+je nutné na strojích, které chceme použít, spustit podporu pro vzdálený přístup
+zmíněný v sekci \ref{section:remote}. Na každém z~těch\-to strojů je výpočet zaregistrován
+pod náhodným identifikátorem a vytvoří se výpočetní kontext. V celém mechanismu se tedy  nacházejí dva typy strojů.
+Stroj, ze kterého byl výpočet iniciován (\textit{master}), a stroje, mezi které je distribuovaná práce (\textit{slave}).
+
+Narozdíl od prostředí se sdílenou pamětí se zde nacházejí syn\-chro\-ni\-zač\-ní body dva.
+Na každém stroji se nachází lokální status, který skrze události volá příslušné objekty
+nutné k obsluze lokálního výpočtu. Tanto lokální status ještě před tím, než zavolá naslouchající objekty implementující rozhraní 
+\href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/ProgressListener.java}{\texttt{ProgressListener}},
+kontaktuje s příslušnou událostí vzdálený status, synchronizační bod pro všechny stroje participující na da\-ném vý\-poč\-tu.
+Tanto vzdálený status se nachází na stroji, ze kterého byl výpočet iniciován, a zařizuje přesun
+instancí výpočtu mezi méně a více vytíženými stroji.
+
 \begin{figure}[h!]
 \label{figure:computation:events}
 \begin{center}
-\resizebox{0.9\textwidth}{!}{
+\resizebox{0.95\textwidth}{!}{
 \begin{tikzpicture}  	[node distance=1.8cm,start chain=going below]
 \tikzset{>=stealth',
 	event/.style={
@@ -554,7 +671,7 @@ je třeba mít na paměti, že ...
     	rounded corners, 
     	fill=black!10,
     	draw=black, very thick,
-    	text width=8em, 
+    	text width=9em, 
     	minimum height=3em, 
     	text centered},
 	package/.style={
@@ -565,21 +682,113 @@ je třeba mít na paměti, že ...
  	scope/.style={decorate},
 	code/.style={
 		rectangle,
+    	text width=9em, 
 		draw=black!50, dashed,
 		rounded corners,
     	minimum height=3em, 
     	text centered}
 }
 	\node[class] (computation-instance) {instance výpočtu};
-	\node[event, right of=computation-instance, node distance=5cm] (mucker) {Mucker};
-	\node[event, above of=mucker, node distance=5cm] (computing) {Future};
+	\node[event, below left of=computation-instance, node distance=3.5cm] (computing) {COMPUTING};
+	\node[event, left of=computing, node distance=4.9cm] (emitted) {EMITTED};
+	\node[event, below right of=computation-instance, node distance=3.5cm] (balanced) {BALANCED};
+	\node[event, right of=balanced, node distance=4.9cm] (done) {DONE};
+	\node[event, below of=computation-instance, node distance=7cm] (finished) {FINISHED};
+
+	\node[code, below of=computing] (executor-service) {ExecutorService};
+
+	\node[package, below of=emitted, node distance=4cm] (emitted-listeners) {
+		\begin{tikzpicture}
+			\begin{scope}[node distance=1.8cm, solid]
+				\node[class] (distributed-mucker-1) {DistributedMemory\\Mucker};
+				\node[class, below of=distributed-mucker-1] (mucker-1) {Mucker};
+				\node[class, below of=mucker-1] (offerer) {Offerer};
+			\end{scope}
+		\end{tikzpicture}
+	};
+
+	\node[package, below of=done, node distance=4cm] (done-listeners) {
+		\begin{tikzpicture}
+			\begin{scope}[node distance=1.8cm, solid]
+				\node[class] (distributed-mucker-2) {DistributedMemory\\Mucker};
+				\node[class, below of=distributed-mucker-2] (mucker-2) {Mucker};
+				\node[class, below of=mucker-2] (computation-future) {ComputationFuture};
+			\end{scope}
+		\end{tikzpicture}
+	};
 
 	\begin{scope}[->, thick]
-		\path (computation-instance) edge node[below] {emitted} (mucker);
+		\draw (computation-instance) -> (computing);
+		\draw (computation-instance) -> (emitted);
+		\draw (computation-instance) -> (balanced);
+		\draw (computation-instance) -> (done);
+		\draw (emitted) -> (emitted-listeners);
+		\draw (computing) -> (executor-service);
+		\draw (done) -> (done-listeners);
+		\draw (computation-instance) -> (finished);
 	\end{scope}
 \end{tikzpicture}}
 \end{center}
-\caption{jsdhkjfshd fskjdhf skjd hfsldfkj }
+\caption{Schéma událostí, které nastávají během výpočtu, a objektů, které na tyto události reagují.}
 \end{figure}
 
+\subsection{Možná nastavení výpočtu}
+
+Jednotlivé výpočty se od sebe mohou velkou mírou lišit, a je proto vhodné, aby celý mechanismus
+počítání v Parasimu byl co nejsnáze nastavitelný. Jednou z věcí, která může výpočet ovlivnit, je pořadí,
+v jakém se jednotlivé instance budou počítat. Dalším důležitým faktorem může být vývěr instance,
+která se přesune při balancování mezi méně a více vytíženým strojem. Tyto dva atributy se zdají být
+kritické pro implementaci uvažovaného algoritmu pro analýzu dynamického systému, protože obsahuje
+výpočetně velice náročnou numerickou simulaci, kvůli které je vhodné používat cache.
+
+Ukládání trajektorií chování je paměťově poměrně náročné, a proto se po nějaké době
+musí trajektorie z paměti vymazat. Pokud se výpočetní instance pro\-vá\-dě\-jí v pořadí daném
+iterací zahušťování, je možné některé trajektorie vymazat z paměti dříve. V případě virtuálního
+stroje Javy se navíc menší využití paměti projeví i na výkonu \textit{Garbage collector} \cite{printezis2000}. 
+
+Pokud přesováme jednu výpočetní instanci z jednoho stroje na druhé, je třeba si uvědomit,
+že každý z těchto strojů má již vybudovanou svoji cache. Cílem balancování je přesouvat
+nejlépe takovou výpočetní instanci, která bude pracovat s trajektoriemi nenacházejícími
+se v cache zdrojového stroje. Výpočet takové instance bude na cílovém stroji trvat nejvíce tak dlouho jako
+na stroji zdrojovém.
+
+Parasim k tomuto účelu nabízí rozhraní \href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/Selector.java}{\texttt{Selector}}, které z dané kolekce vybere jeden její prvek. Pomocí anotace \href{https://github.com/sybila/parasim/blob/master/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/annotations/RunWith.java}{\texttt{RunWith}} lze nastavit třídu implementující toto rozhraní
+pro účely balancování nebo výběru instance pro další počítání. U těchto objektů je opět použito mechanismu obohacování ze sekce \ref{section:enrichment},
+a tudíž mají k dispozici všechny služby z výpočetního kontextu na daném stroji.
+Vývojář však musí mít na paměti, že se tyto objekty budou volat velice často, 
+a proto by výběr z kolekce neměl být příliš výpočetně náročný.
+
+
 \section{Dostupná rozšíření}
+
+Na závěr této kapitoly je vhodné uvést rozšíření, která jsou zatím pro účely aplikace
+implementující algoritmus pro analýzu dynamických systémů dostupná. Zde je uveden pouze výčet
+s krátkým popisem. Možné způsoby konfigurace jsou k dispozici v příloze \ref{appendix:extensions}.
+
+\begin{description}
+
+	\item[computation-simulation] 		Rozšíření poskytuje numerickou simulaci. Pro se\-kven\-ci bodů vrátí
+										sekvenci trajektorií chování. Umožňuje rovněž již nasimulovanou trajektorii
+										chování prodloužit o zvolený čas. Současná implementace použivá volně dostupný
+										nástroj GNU Octave~\cite{eaton2008}. 
+
+    \item[computation-cycledetection]	Rozšíření pro detekci cyklu na trajektorii cho\-vá\-ní. V současné
+										implementaci nástroje toto rozšížení není použito. Nicméně ostatní
+										rozšíření jsou schopna s výsledky analýzy pracovat. Od detekování
+										cyklu se upustilo z důvodu použití konečných intervalů u
+										temporálních operátorů ve zkoumaných vlastnostech.
+
+    \item[computation-density]			Rozšíření dokáže určit vzdálenosi mezi hlavní trajektorií a sousedními trajektoriemi chování a na
+										základě této vzdá\-le\-nos\-ti zahustit prostor iniciálních podmínek. Obsahuje cache pro
+										již použité trajektorie. Z důvodu nepřesnosti při počítání s reálnými čísly v Javě se
+										se jako klíč v této paměti používají souřadnice obsahující zlomky, jejichž jmenovatel
+										je mocninou čísla 2. Tento zlomek určuje v jaké části prostoru iniciálních podmínek,
+										který je po celou dobu výpočtu stejně velký, se trajektorie chování nachází.
+
+	\item[computation-lifecycle]		Rozšíření poskytující již dříve zmíněný výpočetní model použitý v Parasimu. 
+
+\end{description}
+
+V současné době Parasim obsahuje více rozšíření, než je zde zmíněno. Nicméně tato rozšíření se vztahují ne k samotnému
+algoritmu, ale spíše k~samotné aplikaci. Tato aplikace umí spravovat projekty s modely a nastavením
+pro analýzu. Také umožňuje výsledky analýzy zobrazovat a ukládat do souboru.
