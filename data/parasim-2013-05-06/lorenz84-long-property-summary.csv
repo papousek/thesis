@@ -1,0 +1,6 @@
+environment.name, environment.size, time, instances, cache.primary.hit, cache.primary.miss, cache.secondary.hit, cache.secondary.miss, result.duplicates, result.size
+dist, 1, 3359.929, 379, 0, 6365, 19679, 5496, 4643, 9609
+dist, 16, 452.760, 379, 0, 6365, 17308, 7867, 4643, 9609
+dist, 2, 1855.186, 379, 0, 6365, 19504, 5671, 4643, 9609
+dist, 4, 1018.490, 379, 0, 6365, 18615, 6560, 4643, 9609
+dist, 8, 612.501, 379, 0, 6365, 18104, 7071, 4643, 9609
