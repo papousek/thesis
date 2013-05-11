@@ -45,4 +45,15 @@ for (model in models) {
 	plot(iterations$iteration, iterations$secondary, pch=18, ylab="Trajectories", xlab="Iteration");
 	lines(iterations$iteration, iterations$secondary);
 	dev.off();
+	iterations_all <- iterations$primary + iterations$secondary;
+	if (iterations_all[1] == 9) {
+		pdf(paste0("../images/generated/", model, "-iterations-summary.pdf"), width = width, height = height) 
+		f <- function(x) {
+			(2^x + 1)^2
+		}
+		plot(iterations$iteration, iterations_all, pch=18, ylab="Trajectories", xlab="Iteration", ylim = c(0, f(nrow(iterations))));
+		lines(iterations$iteration, iterations_all);
+		curve(f, from = 1, to = nrow(iterations), col="red", add=TRUE, lty=2)
+		dev.off();
+	}
 }

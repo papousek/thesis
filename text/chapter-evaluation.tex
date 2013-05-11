@@ -1,5 +1,208 @@
 \chapter{Evaluace}\label{chapter:evaluation}
+
+Předešlé kapitoly představily upravený algoritmus pro analýzu dy\-na\-mic\-kých systémů
+a jeho implementaci v rámci nástroje Parasim. Následující kapitola prezentuje průběh 
+analýzy nad vybranými modely v různě nastaveném prostředí. Nejdůležitějším měřítkem
+je čas, který je nutný k analýze, avšak budou prezentovýny i data jiného typu.
+
+
+Nejprve si ukážeme, jakým způsobem byly vybrány analyzované modely. Následuje
+popis těchto modelů a prezentace naměřených dat. Na\-mě\-ře\-ná data obsahují především
+výpočetní čas, který je nutný k provedení experimentu v různých konfiguracích výpočetního
+prostředí. Na závěr se nachází interpretace měření.
+
 \section{Možné parametry}
+
+Průběh výpočtu popisovaného algoritmu pro analýzu dynamický systémů lze rozdělit do tří hlavních částí:
+
+\begin{enumerate}
+	\item	zahuštění inicialníhi prostoru požadovanými body, \label{item:density}
+	\item	získání trajektorií chování,\label{item:simulation}
+	\item	ověření dané vlastnosti nad nasimulovanými trajektoriemi. 
+\end{enumerate}
+
+Ukazuje se, že bod \ref{item:simulation} je výpočetně nejnáročnější, tvoří více než 90~\% výpočetního času a přímo závisí na 
+množství  trajektorií chování nutných k~analýze úzce. Toto množství samozřejmě plyne z modelu, vlastnosti, perturbací.
+V algoritmu se nové trajektorie vytváří pomocí bodu \ref{item:density}, který je parametrizován maximálním
+počtem provedených iterací zahuštění.
+
+Dále je pravděpodobné, že z hlediska roz\-dě\-le\-ní práce v paralelním a distribuovaném
+prostředí bude rozdíl mezi analýzou menšího počtu dlouhých trajektorií, jejichž simulace
+je náročná, a mnoha krátkých trajektorií, které lze nasimulovat rychle. Délka trajektorie
+závisí na intervalech nacházejících se v ověřované formuli. 
+
+Z pohledu vstupních dat experimentu se tedy nabízí následující parametry:
+
+\begin{enumerate}
+	\item	maximální počet iterací zahuštění,
+	\item	počet perturbovaných parametrů a proměnných,
+	\item	minimální délka trajektorie nutná k ověření dané vlastnosti,
+	\item	vlastnosti modelu ovlivňující zahušťování.
+\end{enumerate}
+
 \section{Použité modely}
-\section{Měření}
+
+Pomocí aplikace Parasim bylo provedeno několik experimentů pokrývající výše uvedené vlastnosti, tyto experimenty
+zahrnují tři modely. U dvou z nich jsou dostupné tři konfigurace. Jednotlivé konfigurace se od sebe liší 
+jen v~několika detailech, ale i tyto detaily mají obrovský vliv na průběh analýzy, což bude ukázáno později
+v sekci \ref{section:measurement}.
+
+\subsection{Predátor a kořist}
+
+Prvním analyzovaným modelem je systém predátora a kořisti již dříve popsaný v~sek\-ci \ref{section:lotkav}. Model
+obsahuje dvě proměnné, proměnnou $x$ pro kořist a pro\-měn\-nou $y$ pro predátora. Analýza používá
+perturbaci iniciálních hodnot  těchto proměnných v prostoru $[1, 100] \times [1, 100]$ a zkoumá oscilaci pomocí vlastnosti \ref{eq:model:stl:lotkav},
+která vznikla úpravou předpisu \ref{eq:stl:lotkav:oscil}. Délka oscilace je pak dána konkrétní konfigurací,
+která byla k analýze použita. Hodnoty parametrů jsou nastaveny na $\alpha = \frac{1}{10}$,  $\beta = \frac{2}{10000}$, $\gamma = \frac{1}{10}$ a $\delta = \frac{2}{10000}$.
+
+\begin{align}
+\label{eq:model:stl:lotkav}
+\mathcal{F}_{[0, 100]}\mathcal{G}_{[0, \textrm{délka oscilace}]}\mathcal{F}_{[0, 50]}(x \geq 40 \wedge \mathcal{F}_{[0, 40]}x \leq 40)
+\end{align}
+
+Analýza byla provedena ve třech různých nastaveních, jejichž jména nesou pro další účely prefix \texttt{lotkav}
+a jejichž konkrétní popis je k dispozici v tabulce \ref{tabular:benchmark:models}.
+
+K zahuštění dochází zejména v extrémních hodnotách pro\-měn\-ných $x$ a $y$, kde systém vůbec neosciluje,
+a ve středních hodnotách, ve kterých systém sice osciluje, ale okolo jiné hodnoty, než je požadováno v uvažované vlastnosti.
+Charakter zahuštění je vidět na obrázku \ref{image:lotkav:result}. 
+
+\begin{figure}[h!]
+\begin{center}
+\subfigure[analýza na vybraných parametrech]{
+	\label{image:lotkav:result}
+	\includegraphics[width=0.48\textwidth]{../images/generated/lotkav-analysis.pdf}
+}
+\subfigure[vývoj systému v čase]{
+	\label{image:lorenz84:result}
+	\includegraphics[width=0.48\textwidth]{../images/generated/lotkav-timeserie.pdf}
+}
+\caption{Pradátor a kořist}
+\end{center}
+\end{figure}
+
+
+\subsection{Lorenzův atraktor}
+
+Dalším analyzovaným modelem je Lorenzův atraktor \cite{lorenz2010} skládající se
+ze tří stavových proměnných, který je odvozen ze zjednodušených rovnic prou\-dě\-ní
+vzduchu v atmosféře, k. Ačkoliv tento model vykazuje v určitých hodnotách chaotické chování,
+je možné u něj nalézt na jedné z proměnných oscilaci.
+
+\begin{figure}[h!]
+\begin{center}
+\subfigure[analýza na vybraných parametrech]{
+	\label{image:lorenz84:result}
+	\includegraphics[width=0.48\textwidth]{../images/generated/lorenz84-analysis.pdf}
+}
+\subfigure[vývoj systému v čase]{
+	\label{image:lorenz84:result}
+	\includegraphics[width=0.48\textwidth]{../images/generated/lorenz84-timeserie.pdf}
+}
+\caption{Lorenzův systém}
+\end{center}
+\end{figure}
+
+Konkrétní podoba modelu je dána rovnicemi \ref{eq:model:ode:lorenz84}. Uvažovány jsou perturbace
+parametrů $F$ a $G$ v prostoru iniciálních podmínek $[\frac{1}{10}, 2] \times [\frac{1}{10}, 2]$.
+Hodnoty fixních parametrů jsou $a = \frac{1}{4}$ a $b = 4$ a iniciální hodnoty $x_1 = x_2 = x_3 = 0$.
+
+\begin{align}\label{eq:model:ode:lorenz84}
+\begin{array}{ll}
+\frac{dx_0}{dt} = a \cdot F - x_1^2 - x_2^2 - a \cdot x_0				\\
+\frac{dx_1}{dt} = x_0 \cdot x_1 + G - b \cdot x_0 \cdot x_2 - x_1			\\
+\frac{dx_2}{dt} = b \cdot x_0 \cdot x_1 + x_0 \cdot x_2 - x_2				\\
+\end{array}
+\end{align}
+
+Analyzovanou vlastností je opět oscilace, tudíž lze s malými úpravami použít opět
+vlastnost \ref{eq:stl:lotkav:oscil}. Pozorovanou proměnnou je $x_1$, která
+osciluje okolo $0$. 
+
+\begin{align}
+\label{eq:model:stl:lorenz84}
+\mathcal{F}_{[0, 5]}\mathcal{G}_{[0, \textrm{délka oscilace}]}\mathcal{F}_{[0, 5]}(x \geq \frac{1}{100} \wedge \mathcal{F}_{[0, 5]}x \leq -\frac{1}{100})
+\end{align}
+
+Lorenzův atraktor je velikostí modelu podobný predátoru a kořisti, nic\-mé\-ně v průběhu
+analýzy nedochází k tak rovnoměrnému zahušťování prostoru iniciálních podmínek.
+Popis konfigurací modelu použitých v rámci evaluace  se nacházejí v tabulce \ref{tabular:benchmark:models},
+jejich názvy začínají prefixem \texttt{lorenz84}.
+
+\subsection{Oscilace vápníku}
+
+Posledním uvažovaným experimentem je model oscilace vápníku \cite{meyer1991} po\-chá\-ze\-jí\-cí z~volně dostupné databáze biologických modelů \cite{biomodels}.
+Model lze z~této databáze stáhnout za použití identifikátoru \texttt{BIOMD0000000224}.
+Hodnoty fix\-ních parametrů a výchozí koncentrace látek jsou získané ze sta\-že\-né\-ho SBML souboru,
+který byl bez jakýchkoliv změn importován do aplikace Parasim.
+
+\begin{align}\label{eq:model:ode:lorenz84}
+\begin{array}{ll}
+\frac{dCaI}{dt} &= (1 - g) \cdot \bigg(\frac{A \cdot \big(\frac{IP_3}{2}\big)^4}{\big(\frac{IP_3}{2} + k_1\big)^4} + L\bigg) \cdot CaS - \frac{B \cdot \big(\frac{CaI}{100}\big) ^ 2}{\big(\frac{CaI}{100}\big) ^ 2 + k_2 ^ 2}\\
+\frac{dIP3}{dt} &= C \cdot (1 - \frac{k_3}{CaI \cdot \frac{1}{100} + k_3} \cdot \frac{1}{1 + R} ) - D \cdot \frac{IP_3}{2}	\\
+\frac{dCaS}{dt} &= \frac{B \cdot \big(\frac{CaI}{100}\big) ^ 2}{\big(\frac{CaI}{100}\big) ^ 2 + k_2 ^ 2} - (1 - g) \cdot \bigg(\frac{A \cdot \big(\frac{IP_3}{2}\big)^4}{\big(\frac{IP_3}{2} + k_1\big)^4} + L\bigg) \cdot CaS	\\
+\frac{dg}{dt}   &= E \cdot \big(\frac{CaI}{100}\big) ^ 4 \cdot (1 - g) - F
+\end{array}
+\end{align}
+
+
+\begin{figure}[h!]
+\begin{center}
+\subfigure[analýza na vybraných parametrech]{
+	\includegraphics[width=0.48\textwidth]{../images/generated/meyer91-analysis.pdf}
+	\label{fig:meyer91:result}
+}
+\subfigure[vývoj systému v čase]{
+	\includegraphics[width=0.48\textwidth]{../images/generated/meyer91-timeserie.pdf}
+}
+\caption{Oscilace vápníku}
+\end{center}
+\end{figure}
+
+Model obsahuje velké množství parametrů a čtyři stavové proměnné $CaI$, $IP_3$, $CaS$ a $g$, u tří z nich je požadována oscilace.
+Jak je vidět na obrázku \ref{fig:meyer91:result}, zahušťování
+během analýzy navíc probíhá velice rov\-no\-měr\-ně. Během analýzy byly perturbovány čtyři parametry
+$k_1$, $k_2$, $C$ a $D$ v prostoru i\-ni\-ciál\-ních podmínek $[\frac{1}{10}, \frac{9}{10}] \times [\frac{1}{10}, \frac{2}{10}] \times [\frac{6}{10}, \frac{16}{10}] \times [\frac{15}{10}, \frac{25}{10}]$.
+
+Požadovanou vlastností je opět oscilace. I když sledujeme oscilaci více proměnných,
+oscilují tyto proměnné synchronně, a proto lze opět použít upravenou vlastnost
+ze schématu \ref{eq:stl:lotkav:oscil}:
+
+
+\begin{align}
+\begin{array}{ll}
+\label{eq:model:stl:meyer91}
+\mathcal{F}_{[0, 5]}\mathcal{G}_{[0, \textrm{délka oscilace}]}\mathcal{F}_{[0, 50]}(\varphi_1  \wedge \mathcal{F}_{[20, 50]}\varphi_2),\\\\
+\textrm{kde~~}
+\varphi_1 \equiv CaI \geq 100 \wedge IP_3 \geq \frac{1}{2} \wedge g \geq \frac{9}{10}	\\
+~~~~~~~~~\varphi_2 \equiv CaI  \leq 15 \wedge IP_3 \leq \frac{2}{10} \wedge g \leq \frac{4}{10}
+\end{array}
+\end{align}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ l c c }
+\toprule
+	~ 									& počet iterací zahušťování		& délka oscilace	\\
+\midrule
+	\texttt{lotkav-common}				& 8								& 300				\\
+	\texttt{lotkav-iterations}			& 10							& 300				\\
+	\texttt{lotkav-long-property}		& 8								& 6000				\\
+	\texttt{lorenz84-common}			& 8								& 15				\\
+	\texttt{lorenz84-iterations}		& 10							& 15				\\
+	\texttt{lorenz84-long-property}		& 8								& 150				\\
+	\texttt{meyer91-common}				& 6								& 150				\\
+\bottomrule
+\end{tabular}
+\caption{Jednotlivé konfigurace experimentů, které byly pro účely evaluace použity. Vstupní soubory k experimentům jsou k dispozici v adresáři \texttt{benchmark/experiments} repozitáře aplikace Parasim.}
+\label{tabular:benchmark:models}
+\end{table}
+
+\section{Měření}\label{section:measurement}
+
+
+% 2 strany
+
 \section{Interpretace měření}
+
+% 2 strany
