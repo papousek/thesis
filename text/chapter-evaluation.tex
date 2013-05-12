@@ -200,9 +200,90 @@ ze schématu \ref{eq:stl:lotkav:oscil}:
 
 \section{Měření}\label{section:measurement}
 
+Experimenty byly spuštěny v prostředí se sdílenou i distribuovanou pamětí s různým
+počtem dostupných procesorových jader, respektive strojů. Pro každé výpočetní vlákno
+Parasimu běží dva procesy nástroje Octave, který obstarává numerickou simulace. Při měření
+ve sdílené paměti byla aplikace parasim spouštěna s $n$ výpočetními vlákny na $2n$
+procesorových jádrech.
 
-% 2 strany
+Na strojích pro prostředí s distribuovanou pamětí byla aplikace Parasim spouštěna se dvěma
+výpočetními vlákno a konfigurace těchto počítačů se lišily od počítače použitého pro prostředí
+s pamětí sdílenou. v obou prostředích měl vyrtuální stroj Javy k dispozici 4 GB paměti.
+
+\begin{description}
+	\item[sdílená paměť: ]
+		 64 jader, 2.27 GHz; paměť 450 GB; Red Hat Enterprise Linux Server release 6.4; Java 1.7.0\_13-b20 (64 bit); Octave 3.4.3
+	\item[distribuovaná paměť]
+		4 jádra, 2.0 GHz; paměť 16 GB; Java 1.7.0\_13-b20 (64 bit); Octave 3.6.4
+\end{description}
+
+Kompletní výsledky měření pro všechny uvažované konfigurace modelů jsou k dispozici
+v příloze \ref{appendix:measurement}. Ke každé konfiguraci jsou k dispozici čtyři grafy:
+
+\begin{itemize}
+	\item	čas nutný k provedení analýzy v prostředí se sdílenou a distribuovanou pamětí,
+			pro názornost je v grafu červeně uvedeno ideální zrychlení,
+	\item	počet simulovaných trajektorií chování během analýzy, pro názornost je v grafu
+			uveden počet trajektorií, který by byl použit při naivním zahušťování odpovídajícímu
+			dané iteraci,
+	\item	množství neplatných přístupů do paměti v závislosti na počtu strojů v distribuovaném prostředí,
+			tato pomáhá předejít po\-čí\-tá\-ní duplicitních trajektorií.
+\end{itemize}
+
+Experiment s modelem v konfiguraci \texttt{meyer91-common} byl spouštěn pouze v distribuovaném prostředí
+a to minimálně na dvou strojích kvůli velkému množství trajektorií, se kterými je během analýzy nutno
+pracovat. Toto množství trajektorií je dáno počtem perturbovaných parametetrů.
 
 \section{Interpretace měření}
 
-% 2 strany
+\subsection{Prostředí s distribuovanou pamětí}
+
+Při pohledu na grafy času nutného k provedění analýzy plyne, že implementace
+prostředí s distribuovanou pamětí pro jeden až šestnáct strojů šká\-lu\-je poměrně. Výjimku tvoří
+Lorenzův systém s maximálním množ\-stvím iterací nastaveným na 8. Při analýze tohoto modelu
+se prostor iniciálních podmínek zahušťuje pouze v poměrně malém regionu a z toho důvodu se při tak
+malém množství iterací nestihne vytvořit dostatečné množství trajektorií tak, aby se plně
+vytížily všechny stroje. 
+
+\begin{figure}[h!]
+\begin{center}
+\subfigure[\texttt{lorenz84-common}]{
+	\includegraphics[width=0.48\textwidth]{../images/generated/lorenz84-common-balancer.pdf}
+}
+\subfigure[\texttt{lorenz84-iterations}]{
+	\includegraphics[width=0.48\textwidth]{../images/generated/lorenz84-iterations-balancer.pdf}
+}
+\caption{Množství strojů v čase, kterým náleží neprázdná fronta výpočtů. Každý tik odpovídá jednomu provedenému balancování.}
+\end{center}
+\end{figure}
+
+Rozdělování práce mezi výpočetní jednotky vede k možnosti du\-pli\-cit\-ních výpočtů,
+a proto Parasim používá cache, ve které ukládá již dříve analyzované trajektorie.
+V prostředí s více stroji si každý počítač udržuje svou verzi paměti s již
+analyzovanými trajektoriemi. Jelikož je tato cache lokální, je možné, že při balancování
+výpočtu napříč stroji dojde k tomu, že se některe trajektorie analyzují vícekrát.
+
+V současné implementaci se dává přednost rychlému výběru instance výpočtu pro
+přesun kvůli balancování, protože se na výběr čeká v kritické sekci na hlavním
+počítači (master), skrze který je celý výpočet řízen. Sofistikovanější, ale časově
+náročnější výběr zvýšit čekací čas na komunikaci mezi výpočetními stroji a hlavním strojem.
+Ukazuje se, že podíl duplicitní práce u náročnějších modelů tvoří pouze zlomek výpočtu,
+na druhou stranu u menších analýz se může množství duplicitně počítaných trajektorií
+vyšplhat i na 20 \%. Je na zvážení, zda by se nevyplatilo používat časově náročnější
+balancovací metodu, která by se u větších a na komunikaci náročnějších analýz vypínala.
+
+\subsection{Prostředí se sdílenou pamětí}
+
+Ve sdílené paměti odpadá problém s duplicitními výpočty, protože cache s~již napočítanými
+trajektoriemi je sdílená napříč všemi výpočetními vlákny. Při menším množství jader se
+projevují nedostatky Parasimu. Na grafech výpočetního času například u experimentu \texttt{lotkav-long-property}
+je vidět, že při přechodu z~jednoho na dvě vlákna dochází k většímu než dvojnásobnému zrychlení. To je pravděpodobně způsobeno
+množstvím vlá\-ken vytvořených aplikací Parasim a knihovnou pro komunikaci s aplikací Octave,
+kterých je více, než dokáže efektivně obsloužit daný počet jader. Tento \uv{over\-head} se
+při větším jader projevuje méně.
+
+\subsection{Pozorování nezávislá na prostředí}
+
+Při měření se projevilo i několik faktorů nezávislých na prostředí, ve kterém se
+analýza prováděla.
+
