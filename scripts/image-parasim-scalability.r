@@ -45,24 +45,13 @@ for (model in models) {
 		# iterations
 		iterations <- data.iterations[data.iterations$environment.name == env,]
 		iterations <- iterations[iterations$environment.size == 4,]
-		pdf(paste0("../images/generated/", model, "-", env,"-iterations-primary.pdf"), width = width, height = height)
-		par(mar = mar);
-		plot(iterations$iteration, iterations$primary, pch=18, ylab="Trajectories", xlab="Iteration");
-		lines(iterations$iteration, iterations$primary);
-		dev.off();
-		pdf(paste0("../images/generated/", model, "-", env,"-iterations-secondary.pdf"), width = width, height = height)
-		par(mar = mar);
-		plot(iterations$iteration, iterations$secondary, pch=18, ylab="Trajectories", xlab="Iteration");
-		lines(iterations$iteration, iterations$secondary);
-		dev.off();
-		iterations_all <- iterations$primary + iterations$secondary;
-		pdf(paste0("../images/generated/", model, "-", env,"-iterations-summary.pdf"), width = width, height = height);
+		pdf(paste0("../images/generated/", model, "-", env,"-iterations-primary-summary.pdf"), width = width, height = height);
 		par(mar = mar);
 		f <- function(x) {
-			(2^x + 1)^log(iterations_all[1], 3)
+			((2^x + 1)^log(iterations$primary[1] + iterations$secondary[1], 3)) / 2
 		}
-		plot(iterations$iteration, iterations_all, pch=18, ylab="Trajectories", xlab="Iteration", ylim = c(0, f(nrow(iterations))));
-		lines(iterations$iteration, iterations_all);
+		plot(iterations$iteration, iterations$primary, pch=18, ylab="Trajectories", xlab="Iteration", ylim = c(0, max(iterations$primary[nrow(iterations)], f(nrow(iterations)))));
+		lines(iterations$iteration, iterations$primary);
 		curve(f, from = 1, to = nrow(iterations), col="red", add=TRUE, lty=2)
 		dev.off();
 	}

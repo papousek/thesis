@@ -223,8 +223,8 @@ v příloze \ref{appendix:measurement}. Ke každé konfiguraci jsou k dispozici 
 \begin{itemize}
 	\item	čas nutný k provedení analýzy v prostředí se sdílenou a distribuovanou pamětí,
 			pro názornost je v grafu červeně uvedeno ideální zrychlení,
-	\item	počet simulovaných trajektorií chování během analýzy, pro názornost je v grafu
-			uveden počet trajektorií, který by byl použit při naivním zahušťování odpovídajícímu
+	\item	počet simulovaných hlavních trajektorií chování během analýzy, pro názornost je v grafu
+			uveden počet hlavních trajektorií, který by byl použit při naivním zahušťování odpovídajícímu
 			dané iteraci,
 	\item	množství neplatných přístupů do paměti v závislosti na počtu strojů v distribuovaném prostředí,
 			tato pomáhá předejít po\-čí\-tá\-ní duplicitních trajektorií.
@@ -269,21 +269,54 @@ počítači (master), skrze který je celý výpočet řízen. Sofistikovanějš
 náročnější výběr zvýšit čekací čas na komunikaci mezi výpočetními stroji a hlavním strojem.
 Ukazuje se, že podíl duplicitní práce u náročnějších modelů tvoří pouze zlomek výpočtu,
 na druhou stranu u menších analýz se může množství duplicitně počítaných trajektorií
-vyšplhat i na 20 \%. Je na zvážení, zda by se nevyplatilo používat časově náročnější
+vyšplhat i na 15 \%. Je na zvážení, zda by se nevyplatilo používat časově náročnější
 balancovací metodu, která by se u větších a na komunikaci náročnějších analýz vypínala.
 
 \subsection{Prostředí se sdílenou pamětí}
 
 Ve sdílené paměti odpadá problém s duplicitními výpočty, protože cache s~již napočítanými
 trajektoriemi je sdílená napříč všemi výpočetními vlákny. Při menším množství jader se
-projevují nedostatky Parasimu. Na grafech výpočetního času například u experimentu \texttt{lotkav-long-property}
-je vidět, že při přechodu z~jednoho na dvě vlákna dochází k většímu než dvojnásobnému zrychlení. To je pravděpodobně způsobeno
-množstvím vlá\-ken vytvořených aplikací Parasim a knihovnou pro komunikaci s aplikací Octave,
-kterých je více, než dokáže efektivně obsloužit daný počet jader. Tento \uv{over\-head} se
+projevují nedostatky Parasimu. Například na grafu \ref{fig:lotkav:long:property:shared:time} výpočetního času u experimentu \texttt{lotkav-long-property}
+je vidět, že při srovnání použití jednoho a dvou výpočetních vláken dochází k většímu
+než dvojnásobnému zrychlení. To je pravděpodobně způsobeno množstvím vlá\-ken vytvořených
+aplikací Parasim a knihovnou pro komunikaci s aplikací Octave, kterých je více,
+než dokáže efektivně obsloužit daný počet jader. Tento \uv{over\-head} se
 při větším jader projevuje méně.
 
-\subsection{Pozorování nezávislá na prostředí}
+\subsection{Další pozorování}
 
-Při měření se projevilo i několik faktorů nezávislých na prostředí, ve kterém se
-analýza prováděla.
+Hlavní motivací použití v této práci popsaného algoritmu snížit počet trajektorií
+chování, které je nutné nasimulovat pro provedení analýzy daného dynamického systému.
+Je samozřejmě vhodné se zeptat, zda při provedených experimentech došlo k nějakému
+výraznějšímu zlepšení oproti naivním metodám zahušťování. 
 
+\begin{figure}[h!]
+\begin{center}
+	\includegraphics[width=0.48\textwidth]{../images/generated/phase-shift.pdf}
+	\caption{Příklad fázového posunu, který vede k větší vzdálenosti, i~když oba signály splňují oscilační vlastnost. Tuto vzdálenost znázorňuje černá úsečka.}
+	\label{fig:phase:shift}
+\end{center}
+\end{figure}
+
+Při pohledu na grafy množství použitých hlavních trajektorií v závislosti na iteraci
+zahušťování je zřejmé, že ve většině případů dochází k obrovské úspoře. Jedinou výjimkou
+je experiment \texttt{lotkav-long-property}, což je vidět na obrázku \ref{fig:lotkav:long:property:shared:iterations:primary:summary}.
+U tohoto experimentu sice výsledek analýzy dopadne podobně jako u experimentu \texttt{lotkav-common},
+ale větší délka časového intervalu v analyzované vlastnosti je náchylnější na posun fází oscilace
+mezi jednotlivých trajektoriemi chování. Posun fáze vede k větší vzdálenosti trajektorií,
+a proto se prostor mezi nimi musí dále zahušťovat. Jak takový fázový posun může vypadat, ukazuje
+obrázek \ref{fig:phase:shift}
+
+Obrázek \ref{fig:meyer91:common:dist:iterations:primary:summary} u experimentu \texttt{meyer91-common} je lehce
+zkreslený nedokonalostí popisované heuristiky zahušťování, kdy blízkost dvou trajektorií vyústí v to,
+že se nezahustí poměrně velký prostor okolo nich. Kdyby v tomto prostoru k nějakému zahušťění došlo,
+je možné, že by docházelo k~dalším iteracím zahuštění. Příkladem nedokonalého zahušťování je vý\-sle\-dek
+analýzy oscilace vápníku za použití perturbace parametrů $k_1$ a $k_2$ na obrázku \ref{fig:meyer91:analysis:wrong:density}.
+
+\begin{figure}[h!]
+\begin{center}
+	\includegraphics[width=0.48\textwidth]{../images/generated/meyer91-analysis-wrong-density.pdf}
+	\caption{Příklad analýzy, u které blízkost trajektorií pro iniciální body v extrémních hodnotách zapříčiní nedostatečné zahuštění.}
+	\label{fig:meyer91:analysis:wrong:density}
+\end{center}
+\end{figure}
