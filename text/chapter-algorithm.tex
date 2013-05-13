@@ -4,59 +4,48 @@ Tato kapitola ukáže jednu z možností, jak přistoupit k analýze modelů zad
 pomocí obyčejných diferenciálních rovnic. Zde uvedená analýza se snaží řešit následující
 problémy:
 \begin{enumerate}
-	\item\label{item:init}	Máme k dispozici již hotový model, jehož chování sedí se skutečným
-			systémem pro jedno konkrétní nastavení iniciálních hodnot stavovým
-			proměnným. Splňuje tento model požadované vlastnosti i pro jiná nastavení?
+	\item\label{item:init}	Máme k dispozici již hotový model, jehož chování odpovídá chování skutečného
+			systému pro jedno konkrétní nastavení iniciálních hodnot stavovým
+			proměnným. Splňuje tento model požadované vlastnosti i~pro jiná nastavení?
 	\item	Máme kostru modelu, v němž se vyskytuje několik parametrů, jejichž hodnota
 			není známá. Jak nastavit parametry modelu tak, aby splňoval dané chování~\cite{aster2012}?
 \end{enumerate}
 
-V~bodu \ref{item:init} lze jít ještě dál než ke kontrole modelů. Můžeme si představit
+V~bodě \ref{item:init} lze jít ještě dál než ke kontrole modelů. Můžeme si představit
 poměrně přesný model, který využijeme k analýze jeho chování v~pod\-mín\-kách, které nelze
 navodit u reálného systému. Typickým příkladem může být živý organismus v~toxickém
 prostředí nebo extrémně vysoká nákaza šířící se ce\-lo\-svě\-to\-vou populací.
 
 \section{Definice problému}\label{section:initial:condtion:problem:definition}
 
-Nechť je dynamický systém $\mathcal{DS} = (\mathbf{X}, f)$, kde $\mathbf{X} = (x_1, \ldots, x_n)$
-je vektor stavových proměnných a dynamiku systému popisují obyčejné diferenciální rovnice $\frac{dx_i}{dt} = f_i(\mathbf{X})$.
-Tento systém rovnic souhrnně označíme jednou rovnicí $\frac{d\mathbf{X}}{dt} = f(\mathbf{X})$. Narozdíl
-od obecného modelu zadaného pomocí systému obyčejných diferenciálních rovnic budeme předpokládat,
-že funkce stojící na pravé straně nezávisí na čase. Nechť $\mathbf{P}  = (p_1, \ldots, p_m)$ značí
-parametry dostupné v~systému rovnic. Systém rovnic s konkrétním ohodnocení parametrů $[\mathbf{P}]$
-označíme $f_{\mathbf{P} \leftarrow [\mathbf{P}]}$.
+Nechť je dynamický systém $\mathcal{DS} = (\mathbf{X}, f(\mathbf{P}))$, kde $\mathbf{X} = (x_1, \ldots, x_n) \in \mathbb{R}^n$
+je vektor stavových proměnných, $\mathbf{P}  = (p_1, \ldots, p_m) \in \mathbb{R}^m$ je vektor parametrů, dynamiku systému popisují obyčejné diferenciální
+rovnice $\frac{dx_i}{dt} = f_i(\mathbf{P})(\mathbf{X})$ a $f_i: \mathbb{R}^m \rightarrow (\mathbb{R}^n \rightarrow \mathbb{R}^n)$.
+Tento systém rovnic souhrnně označíme jednou rovnicí $\frac{d\mathbf{X}}{dt} = f(\mathbf{P})(\mathbf{X})$. Narozdíl
+od obecného modelu zadaného pomocí systému obyčejných diferenciálních rovnic uvažujeme pouze autonomní systémy,
+tedy budeme předpokládat, že funkce stojící na pravé straně ne\-zá\-vi\-sí na čase, a proto je čas z definicí funkcí zcela vynechán.
 
 Pro každou stavovou proměnnou $x_i$ je dán interval $\mathcal{I}_{x_i} = [\iota_{x_i}^{min}, \iota_{x_i}^{max}]$
 a pro každý parametr $p_j$ interval $\mathcal{I}_{p_j} = [\iota_{p_j}^{min}, \iota_{p_j}^{max}]$
-Tyto intervaly omezují nastavení iniciálních hodnot $[x_i]_0$ stavových proměnných $x_i$, respektive o\-hod\-no\-ce\-ní $[p_j]$
+Tyto intervaly omezují nastavení iniciálních hodnot stavových proměnných $x_i$, respektive o\-hod\-no\-ce\-ní
 parametrů $p_j$, a určují tak prostor iniciálních podmínek \cite[str. 23]{drazan2011}.
 
 \begin{align}
 \mathcal{I} &= \mathcal{I}_{x_1} \times \mathcal{I}_{x_n} \times \ldots \times \mathcal{I}_{p_1} \times \ldots \times \mathcal{I}_{p_m}
 \end{align}
 
-$\mathcal{I} \models [\mathbf{X}]_0$ značí, že množina iniciálních hodnot $[\mathbf{X}]_0$ splňuje
-omezení prostoru iniciálních podmínek, podobné označení $\mathcal{I} \models [\mathbf{P}]$ zavedeme
-pro ohodnocení parametrů $\mathbf{P}$.
-
-Dále je dána numerická metoda $\mathcal{M}_\varepsilon (f, [\mathbf{X}]_{t_0}, \Delta t) = [\mathbf{X}]_{t_0 + \Delta t}$,
-která pro daný systém diferenciálních rovnic $f$,
-ohodnocení stavových proměnných $[\mathbf{X}]_{t_0}$ v čase $t_0$ a časový krok $\Delta t$
-vrátí stav $\mathbf{X}_{t_0 + \Delta t}$ v čase $t_0 + \Delta t$ s relativní chybou $\varepsilon$.
-Díky numerické metodě lze sestrojit již dříve zmíněnou posloupnost bodů
-$\mathcal{M}^{\tau}_\varepsilon(f, [\mathbf{X}]_{t_0}, \Delta t) = [\mathbf{X}]_{t_0}, [\mathbf{X}]_{t_0 + \Delta t}, \ldots, [\mathbf{X}]_{t_0 + \tau}$, kde $\tau$
-je množství času, po~který model simulujeme.
-
-Je-li dáná formule temporální logiky signálů $\varphi$, dynamický systém $\mathcal{DS}$
+Pro vektor $\mathbf{V} = (x_1, \ldots, x_n, p_1, \ldots, p_m) \in \mathcal{I}$, definujme projekční funkce $\pi_x(\mathbf{V}) = (x_1, \ldots, x_n)$
+a $\pi_p(\mathbf{V}) = (p_1, \ldots, p_m)$. Je-li dáná numerická metoda $\mathcal{M}_\varepsilon$,
+formule temporální logiky signálů $\varphi$, dynamický systém $\mathcal{DS}$
 a prostor iniciálních podmínek $\mathcal{I}$, pak řešeným problémem je najít
 části prostoru $\mathcal{S}, \mathcal{N} \subseteq \mathcal{I}$ takové, že platí
 vztah \ref{eq:initial:value:problem} \cite[str. 23]{drazan2011}.
 
 \begin{align}\label{eq:initial:value:problem}
-\forall [\mathbf{X}]_0 \forall [\mathbf{P}] . (\mathcal{S} \models [\mathbf{X}]_0 \wedge \mathcal{S} \models [\mathbf{P}])
-\Rightarrow \mathcal{M}^\tau_\varepsilon(f_{\mathbf{P} \leftarrow [\mathbf{P}]}, [\mathbf{X}]_0, \Delta t) \models \varphi \\
-\forall [\mathbf{X}]_0 \forall [\mathbf{P}] . (\mathcal{N} \models [\mathbf{X}]_0 \wedge \mathcal{N} \models [\mathbf{P}])
-\Rightarrow \mathcal{M}^\tau_\varepsilon(f_{\mathbf{P} \leftarrow [\mathbf{P}]}, [\mathbf{X}]_0, \Delta t) \not\models \varphi
+\begin{array}{ll}
+\forall \mathbf{V} \in \mathcal{S} . \mathcal{M}^\tau_\varepsilon(f(\mathbf{P}), \mathbf{X}, \Delta t) \models \varphi, \textrm{~kde~} \mathbf{P} = \pi_p(\mathbf{V}), \mathbf{X} = \pi_x(\mathbf{V}) \\
+\forall \mathbf{V} \in \mathcal{N} . \mathcal{M}^\tau_\varepsilon(f(\mathbf{P}), \mathbf{X}, \Delta t) \not\models \varphi, \textrm{~kde~} \mathbf{P} = \pi_p(\mathbf{V}), \mathbf{X} = \pi_x(\mathbf{V})
+\end{array}
 \end{align}
 
 Tyto části prostoru popisují ohodnocení počátečních stavů a parametrů, za kterých se daný systém vyvíjí
@@ -94,7 +83,7 @@ hranice regionů platnosti a neplatnosti se zvolenou přes\-nos\-tí~$\delta$.
 \caption{Analýza prostoru inicálních podmínek}
 \begin{algorithmic}[1]
 \Require 	$\mathcal{DS} = (\mathbf{X}, f), \mathcal{I}, \varphi, \Delta t, \delta, \varepsilon$
-\Ensure 	$\textsc{Result} = \{([\mathbf{F}_0]_0, s_1), \ldots ([\mathbf{F}_k]_0, s_k)\}$ -- body a splněnost $\varphi$
+\Ensure 	$\textsc{Result} = \{([\mathbf{F}_0]_0, s_1), \ldots ([\mathbf{F}_k]_0, s_k)\}$ \Comment body a splněnost $\varphi$
 \State		$\textsc{M}_{new} 	\gets $ počáteční zahuštění $\mathcal{I}$
 \State		$\textsc{Result} \gets \emptyset$
 \While{$\textsc{M}_{new} \neq \emptyset$}
@@ -120,7 +109,7 @@ hranice regionů platnosti a neplatnosti se zvolenou přes\-nos\-tí~$\delta$.
 
 Je samozřejme otázkou, jakým způsobem konkrétně probíhá počáteční zahuštění prostoru
 iniciálních podmínek, co přesně znamená obsahuje mno\-žina sousedů daného bodu a jak
-se se změří vzdálenost dvou chování. Poslední zmíněné otázce se podrobně zabývá \cite{drazan2011}.
+se změří vzdálenost dvou chování. Poslední zmíněnou otázkou se podrobně zabývá \cite{drazan2011}.
 Zbytek bude ještě rozveden v sekci \ref{section:algorithm:updated} společně s tím,
 jak zvolit hodnotu $\delta$.
 

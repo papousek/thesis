@@ -23,7 +23,7 @@ všechny aspekty zahrnuté ve skutečném světě. Svým způsobem je mapa již 
 \uv{špatně}, nabízí pouze jistou abstrakci systému a může i zkreslovat náš pohled.
 Přesto nelze popírat její užitečnost. Na příkladu mapy si lze také ukázat pohled, že se
 nemodeluje systém, ale problém. Existuje celá řada druhů map od turistických, automap
-až po map podloží a každá z nich má svůj specifický účel. \cite[str. 47 -- 58]{pelanek2012}
+až po mapy podloží a každá z nich má svůj specifický účel. \cite[str. 47 -- 58]{pelanek2012}
 
 Pro tuto práci jsou důležité modely, které lze simulovat. Model definuje pravidla, podle
 kterých se systém chová a simulace umožňuje se podívat na chování systému v čase, ať už
@@ -34,13 +34,17 @@ diskrétním či spojitém. Pro simulaci je sa\-mozřej\-mě potřeba znát stav
 
 Hojně užívaným způsobem modelování, kde vystupuje spojitý čas, jsou obyčejné diferenciální rovnice.
 Stav systému se vyjádří pomocí stavových pro\-měn\-ných $\mathbf{X} = (\mathit{x_1}, \mathit{x_2}, \dots \mathit{x_n})$.
-Každé stavové proměnné přísluší diferenciální rovni\-ce prvního řádu, ve které vystupue
+Každé stavové proměnné přísluší diferenciální rovni\-ce prvního řádu, ve které vystupuje
 Lipschitzovsky spojitá \cite[str. 149 -- 163]{eriksson2004} funkce
 $f_i: [t, \infty) \times \mathbb{R}^n \rightarrow \mathbb{R}$, která popisuje,
-jak se hodnota stavové proměnné mění v čase. Tvar takové rovnice je vidět ve sché\-ma\-tu~\ref{eq:ode}.
+jak se hodnota stavové proměnné mění v čase. Tvar takové rovnice je vidět ve sché\-ma\-tu~\ref{eq:ode:one}.
+Celý systém označujeme zkráceně funkcí $f$ danou předpisem \ref{eq:ode:all}.
 
-\begin{align}\label{eq:ode}
-\frac{d\mathit{x_i}}{dt} = f_i(t, \mathbf{X})
+\begin{align}
+\label{eq:ode:one}
+\frac{d\mathit{x_i}}{dt} &= f_i(t, \mathbf{X})									\\
+\label{eq:ode:all}
+f(t, \mathbf{X})		 &= \big(f_0(t, \mathbf{X}), \ldots, f_n(t, \mathbf{X})\big)
 \end{align}
 
 Pro účely simulace není nutné znát úplné řešení této soustavy rovnic, ale postačuje pouze znalost
@@ -52,12 +56,20 @@ Tyto metody hledají aproximaci v diskrétním čase a chyba, s níž se vy\-po\
 aproximace liší od skutečného řešení, je shora ohraničená uživatelem danou hodnotou.
 Fakt, že si může uživatel takto zvolit toleranci chy~by, je je jednou z nejdůležitějších
 vlastností těchto metod. Nastavení chyby může samozřejmě v případě nízké tolerance
-a některých systémů vyústit ve výkonostní problémy. Jestliže tedy zvolíme časový
-krok $h \in \mathbb{R}$, pak výstupem těchto metod je sekvence bodů $\mathbf{X_0}, \mathbf{X_1}$, \ldots,
-pro kterou platí vztah \ref{eq:ode:aprox}.
+a některých systémů vyústit ve výkonostní problémy.
 
-\begin{align}\label{eq:ode:aprox}
-\mathbf{X}_i \sim \mathbf{X}(t_i) \textrm{ kde } t_i = t_0 + i \cdot h, i \in \mathbb{N}
+Jestliže je dána numerická metoda $\mathcal{M}_\epsilon(f, \mathbf{X}(t_0), \Delta t)$,
+kde $\epsilon$ je relativní chyba a $\Delta t$ požadovaný časový krok,
+pak zpravidla pracujeme ze sekvencí bodů danou předpisem \ref{eq:ode:aprox},
+ve kterém $\tau$ představuje délku numerické simulace.
+
+\begin{align}
+\begin{array}{ll}
+\label{eq:ode:aprox}
+\mathcal{M}^\tau_\epsilon(f, \mathbf{X}(t_0), \Delta t) = (\mathbf{X}_0, \mathbf{X}_1, \ldots \mathbf{X}_k), \\
+\textrm{~~~~~~~kde~~~}\mathbf{X}_i \sim \mathbf{X}(t_i), t_i = t_0 + i \cdot \Delta t,	\\
+\textrm{~~~~~~~~~~~~~~~~~}k \cdot \Delta t \leq \tau \wedge (k+1) \cdot \Delta t > \tau
+\end{array}
 \end{align}
 
 % Priklad modelu ve spojitem case
@@ -103,7 +115,7 @@ množství kořisti opět naroste a tento cyklus se znovu opakuje.
 Síla modelů a simulace se ukazuje být v tom, že tento druh informace získáme, aniž bychom prováděli
 experiment se skutečným systémem se  skutečnými liš\-ka\-mi a zajíci. Samozřejmě se na závěr neobejdeme
 bez validace výsledků simulace oproti realitě, ale tomu může předcházet velké množství
-experementů \textit{in silico}, které by jinak stály mnoho prostředků nebo by ani 
+experementů na počítači, které by jinak stály mnoho prostředků nebo by ani 
 nebyly uskutečnitelné. Za zmínku stojí například model popisující šíření nákazy
 populací~\cite{kermack1927}, což je téma, u něhož si opravdu lze jen těžko představit
 experimenty na reálném systému.
@@ -116,7 +128,7 @@ se rovnice používají, jsou chemické reakce. Pro systém elementárních chem
 lze za jistých předpokladů \cite{TODO} automatizovaně zkonstruovat systém diferenciálních rovnic,
 kde stavovými proměnnými jsou koncentrace jednotlivých látek. Elementárními che\-mic\-ký\-mi
 reakcemi se mají na mysli ty chemické reakce, u nichž dochází k přímé přeměně reaktantů
-v produkty bez reakčních mezikroků nebo je možné tyto mezikroky zanedbat \cite{TODO}.
+v produkty bez reakčních mezikroků nebo je možné tyto mezikroky zanedbat \cite{horn1972}.
 Schémata \ref{eq:chemeq} ukazují, jak tento převod konkrétně vypadá pro jednotlivé
 elementární chemické reakce a specifickou kinetickou konstantu $k$. Koncentraci látky
 $\textrm{X}$ značíme $[\textrm{X}]$.
@@ -128,7 +140,7 @@ A \xrightarrow{k} 			&\leadsto \frac{d[\textrm{A}]}{dt} = - k \cdot [\textrm{A}]
 A \xrightarrow{k} B			&\leadsto \frac{d[\textrm{A}]}{dt} = - k \cdot [\textrm{A}], \frac{d[\textrm{B}]}{dt} = k \cdot [\textrm{A}] \\
 AB \xrightarrow{k} A + B	&\leadsto \frac{d[\textrm{AB}]}{dt} = - k \cdot [\textrm{AB}], \frac{d[\textrm{A}]}{dt} = \frac{d[\textrm{B}]}{dt} = k \cdot [\textrm{A}] \\
 A + B \xrightarrow{k} AB	&\leadsto \frac{d[\textrm{A}]}{dt} = \frac{d[\textrm{B}]}{dt} = - k \cdot [\textrm{A}] \cdot [\textrm{B}], \frac{d[\textrm{AB}]}{dt} = k \cdot [\textrm{A}] \cdot [\textrm{B}] \\
-A + B \xrightarrow{k} AB	&\leadsto \frac{d[\textrm{A}]}{dt} = - 2k \cdot [\textrm{A}]^2, \frac{d[\textrm{AB}]}{dt} = k \cdot [\textrm{A}]^2 \\
+A + A \xrightarrow{k} AA	&\leadsto \frac{d[\textrm{A}]}{dt} = - 2k \cdot [\textrm{A}]^2, \frac{d[\textrm{AB}]}{dt} = k \cdot [\textrm{A}]^2 \\
 \end{array}
 \end{align}
 
@@ -136,6 +148,11 @@ Pro obecné reakce abstrahující určitou kaskádu elementárních reakcí univ
 převod neexistuje. Zde je již nutné přihlédnout k typu reakce. Tím, že se
 zanedbají mezireakce s meziprodukty, může výsledný systém diferenciálních rovnic obsahovat
 méně proměnných a je tak snazší jej simulovat.
+
+Je vhodné poznamenat, že nástroj, který popisuje tato práce v~kapitole \ref{chapter:implementation},
+načítá model zapsaný v jazyce SBML \cite{hucka2003,drager2011}. Tento jazyk představuje standard
+v oboru systémové biologie pro sdílení modelů a lze z něj automatizovaným způsobem získat model
+ve formě systému diferenciálních rovnic.
 
 \section{Vlastnosti modelovaných systémů}
 
@@ -149,24 +166,23 @@ daného druhu opakovaně pře\-sáh\-lo maximální a minimální mez. Jak konkr
 tento po\-ža\-da\-vek zformulovat, je ukázáno v následující části této kapitoly.
 
 K vyjádření vlastností nad lineárními běhy systémů se nejčastěji používá lieární
-temporální logika~\cite{strejcek2007}, případě logiky z ní odvozené.
-Lineární temporální logika u\-mož\-ňu\-je se zjednodušeně vyjadřovat o sta\-vech
+temporální logika~\cite{strejcek2007} (\textit{linear temporal logic}, LTL), případě logiky z ní odvozené.
+LTL u\-mož\-ňu\-je se zjednodušeně vyjadřovat o sta\-vech
 systému v čase formulacemi typu \uv{v budoucnu nastane \ldots}, \uv{vždy platí \ldots} apod.
 Tato logika se definuje nad nekonečnými běhy, a proto je v~této práci použita temporální logika
-signálů~\cite{maler2004} založená na temporální logice metrických intervalů~\cite{alur1996},
-která se od lineární temporální logiky liší pouze přidáním ča\-so\-vých intervalů u temporálních operátorů. Tím temporální
-logika signálů u\-mož\-ňu\-je formulovat výroky, které jsou částečně závislé na čase, jako
+signálů~\cite{maler2004} (\textit{signal temporal logic}, STL) založená na temporální logice metrických intervalů~\cite{alur1996} (\textit{metric interval temporal logic}, MITL),
+která se od LTL liší zejména přidáním ča\-so\-vých intervalů u temporálních operátorů. Tím STL
+u\-mož\-ňu\-je formulovat výroky, které jsou částečně zá\-vis\-lé na čase, jako
 je například \uv{za hodinu až dvě nastane \ldots} \uv{za třicet minut bude celé
 čtyři hodiny platit \ldots}.
 
 \subsection{Signál}
-
+Pro účely vyjadřování se o chování modelu pomocí STL se zavádí pojem signálu~\cite{maler2004}.
 Zvolme si časovou doménu $\mathbb{T} = \mathbb{R}_{\geq 0}$ a signál konečné délky
 nad libovolnou doménou $\mathbb{D}$ jako parciální zobrazení $s: \mathbb{T} \rightarrow \mathbb{D}$.
 Definičním oborem tohoto zobrazení nechť je interval $l = [0, r)$, kde $r \in \mathbb{Q}_{\geq0}$ nazáváme
-délkou signálu a značíme ji $|s| = r$. Pro všechna $t \geq r$ položíme $s[t] = \bot$.
-
-Tyto signály lze sdružovat pomocí párovací funkce $||$.
+délkou signálu a značíme ji $|s| = r$. Pro všechna $t \geq r$ položíme $s[t] = \bot$. Takto definované
+signály lze sdružovat pomocí párovací funkce $||$.
 
 \begin{align}\label{eq:signals:pairing}
 \begin{array}{ll}
@@ -176,7 +192,9 @@ s_1 || s_2= s_{12}\textrm{, kde }\forall t\in\mathbb{T}. s_{12}[t] = (s_1[t] \ti
 \end{array}
 \end{align}
 
-Standardní cestou lze na těchto sdružených signálech definovat projekční funkce.
+Pro případ, že se délky skládaných signálů liší, definujeme výslednou délku složeného
+signálu jako $|s_{12}| = min(|s_1|, |s_2|)$. Standardní cestou lze na těchto sdružených
+signálech definovat projekční funkce.
 
 \begin{align}\label{eq:signals:pairing}
 \begin{array}{ll}
@@ -184,17 +202,14 @@ s_1 = \pi_1(s_{12})		& s_2 = \pi_2(s_{12})
 \end{array}
 \end{align}
 
-Pro případ, že se délky skládaných signálů liší, definujeme výslednou délku
-složeného signálu jako $|s_{12}| = min(|s_1|, |s_2|)$ a při aplikaci libovolé
-funkce $f: \mathbb{D}_1 \times \mathbb{D}_2 \rightarrow \mathbb{D}_3$
-položíme $f(s_1, s_2) = f(s_1[t], s_2[t]$ pro všechna $t \in \mathbb{T}$ a
-$f(x_1, \bot) = f(\bot, x_2) = \bot$.
+Pro libovolnou funkci $f: \mathbb{D} \rightarrow \mathbb{D}'$ a signál $s: \mathbb{T} \rightarrow \mathbb{D}$ je zápisem $f(s_1)$ myšleno
+skládání funkcí $f \circ s_1 : \mathbb{T} \rightarrow \mathbb{D}'$, kde $f(\bot) = \bot$.
 
-Je dobré si povšimnou, že definice signálu je konzistentní s tím, jak chápeme chování modelu,
+Je dobré si povšimnout, že definice signálu je konzistentní s tím, jak chápeme chování modelu,
 tedy jako trajektorii v $\mathbb{R}^n$, kde $n$ je počet sta\-vo\-vých proménných. Zároveň
 je třeba si však uvědomit, že výstupem numerické simulace není spojitá trajektorie, nýbrž pouze
 sekvence bodů s~ča\-so\-vým razítkem. Z praktických důvodu je dále v této kapitole tato sekvence
-chá\-pá\-ní jako po částech konstantní funkce.
+chá\-pá\-na jako po částech konstantní funkce.
 
 \begin{figure}[h!]
 \begin{center}
@@ -219,7 +234,8 @@ Nechť $U = \{\mu_1, \mu_2, \mu_3, \ldots, \mu_k\}$ je množina efektivně vyč�
 $\mu_i: \mathbb{R}^n \rightarrow \{T, F\}$, které zpravidla odpovídají predikátům tvaru
 $f(\mathbf{X})~\geq~k$ nebo $f(\mathbf{X})~\leq~k$. Všimněme si, že nemá smysl v predikátech
 používat samotnou rovnost, protože numerická simulace vrací data s~určitou chybou.
-K těmto atomickým propozicím přísluší signály $s = \mu_1(x)|| \ldots|| \mu_k(x)$.
+K těmto vyčíslitelným funkcím přísluší složený $s = \mu_1(x)|| \ldots|| \mu_k(x)$,
+indexy skládaných signálů představují atomické propozice $p$.
 
 Gramatiku temporální logiky signálů definujeme podle předpisu \ref{eq:stl:grammar},
 ve kterém $p$ značí atomickou propozici.
@@ -246,10 +262,10 @@ Signál $s$ splňuje formuli $\varphi$ právě tehdy, když $(s, 0) \models \var
 
 \begin{align}\label{eq:stl:semantics}
 \begin{array}{ll}
-(s, t) \models p				&\longleftrightarrow \pi_p(s)[t] = T			\\
-(s, t) \models \neg \varphi		&\longleftrightarrow (s, t) \not\models \varphi	\\
-(s, t) \models \varphi_1 \wedge \varphi_2	&\longleftrightarrow (s, t) \models \varphi_1 \textrm{ a současně } (s, t) \models \varphi_2	\\
-(s, t) \models \varphi_1 \mathcal{U}_{[a,b]} \varphi_2 	&\longleftrightarrow \exists t' \in [t+a, t+b] . (s, t') \models \varphi_2			\\														
+(s, t) \models p				&\Longleftrightarrow \pi_p(s)[t] = T			\\
+(s, t) \models \neg \varphi		&\Longleftrightarrow (s, t) \not\models \varphi	\\
+(s, t) \models \varphi_1 \wedge \varphi_2	&\Longleftrightarrow (s, t) \models \varphi_1 \textrm{ a současně } (s, t) \models \varphi_2	\\
+(s, t) \models \varphi_1 \mathcal{U}_{[a,b]} \varphi_2 	&\Longleftrightarrow \exists t' \in [t+a, t+b] . (s, t') \models \varphi_2			\\														
 &~~~~~~~~\textrm{ a současně } \forall t'' \in [t, t'] . (s, t'') \models \varphi_1
 \end{array}
 \end{align}
@@ -301,7 +317,7 @@ chápat jako periodické pře\-kra\-čo\-vá\-ní dolní a horní meze. Atomick�
 predikáty $[x] \geq k$ a $[x] \leq -k$, jejichž platnost lze vidět na obrázcích
 \ref{fig:stl:example:geq:limit} a \ref{fig:stl:example:leq:limit}.
 
-\begin{figure}[h!]
+\begin{figure}[t]
 \begin{center}
 \subfigure[{$[x] \geq k$}]{
 	\includegraphics[width=.48\textwidth]{../images/generated/stl-example-geq-limit.pdf}\label{fig:stl:example:geq:limit}
@@ -330,7 +346,7 @@ tudíž je potřeba do formule přidat ještě nějaké čekání v~podobě oper
 Výsledná formule tedy vypadá následovně:
 
 \begin{align}\label{eq:stl:lotkav:oscil}
-\mathcal{F}_{[0, \textrm{čekání}]}\mathcal{G}_{[0, \textrm{doba oscilace}]}\mathcal{F}_{[0, \textrm{perioda}]}([x] \geq k \wedge \mathcal{F}_{[0, \textrm{perioda}]}[x] \leq -k)
+\mathcal{F}_{[0, \textrm{čekání}]}\mathcal{G}_{[0, \textrm{doba oscilace}]}\mathcal{F}_{[0, \textrm{perioda}]}\Big([x] \geq k \wedge \mathcal{F}_{[0, \textrm{perioda}]}[x] \leq -k\Big)
 \end{align}
 
 Z uvedeného příkladu je zřejmě, že platnost formule nad daným signá\-lem
