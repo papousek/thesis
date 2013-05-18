@@ -2,14 +2,11 @@
 
 Předešlé kapitoly představily upravený algoritmus pro analýzu dy\-na\-mic\-kých systémů
 a jeho implementaci v rámci nástroje Parasim. Následující kapitola prezentuje průběh 
-analýzy nad vybranými modely v různě nastaveném prostředí. Nejdůležitějším měřítkem
-je čas, který je nutný k analýze, avšak budou prezentovýny i data jiného typu.
-
-
-Nejprve si ukážeme, jakým způsobem byly vybrány analyzované modely. Následuje
-popis těchto modelů a prezentace naměřených dat. Na\-mě\-ře\-ná data obsahují především
-výpočetní čas, který je nutný k provedení experimentu v různých konfiguracích výpočetního
-prostředí. Na závěr se nachází interpretace měření.
+analýzy nad vybranými modely v různě nastaveném výpočetním prostředí se sdílenou a distribuovanou pamětí.
+Nejprve si ukážeme, jakým způsobem byly vybrány analyzované modely. Následuje popis těchto modelů
+a prezentace naměřených dat. Na\-mě\-ře\-ná data obsahují především
+výpočetní čas, který je nutný k provedení experimentu v~růz\-ných konfiguracích výpočetního
+prostředí. Na závěr se nachází interpretace mě\-ře\-ní.
 
 \section{Možné parametry}
 
@@ -22,8 +19,8 @@ Průběh výpočtu popisovaného algoritmu pro analýzu dynamický systémů lze
 \end{enumerate}
 
 Ukazuje se, že bod \ref{item:simulation} je výpočetně nejnáročnější, tvoří více než 90~\% výpočetního času a přímo závisí na 
-množství  trajektorií chování nutných k~analýze úzce. Toto množství samozřejmě plyne z modelu, vlastnosti, perturbací.
-V algoritmu se nové trajektorie vytváří pomocí bodu \ref{item:density}, který je parametrizován maximálním
+množství  trajektorií chování nutných k~analýze. Toto množství samozřejmě plyne z modelu, vlastnosti, perturbací.
+V algoritmu se nové trajektorie vytváří v bodu \ref{item:density}, který je parametrizován maximálním
 počtem provedených iterací zahuštění.
 
 Dále je pravděpodobné, že z hlediska roz\-dě\-le\-ní práce v paralelním a distribuovaném
@@ -42,8 +39,8 @@ Z pohledu vstupních dat experimentu se tedy nabízí následující parametry:
 
 \section{Použité modely}
 
-Pomocí aplikace Parasim bylo provedeno několik experimentů pokrývající výše uvedené vlastnosti, tyto experimenty
-zahrnují tři modely. U dvou z nich jsou dostupné tři konfigurace. Jednotlivé konfigurace se od sebe liší 
+Pomocí aplikace Parasim bylo provedeno několik experimentů po\-krý\-va\-jí\-cích výše uvedené vlastnosti, tyto experimenty
+zahrnují tři modely. U dvou z~nich jsou dostupné tři konfigurace. Jednotlivé konfigurace se od sebe liší 
 jen v~několika detailech, ale i tyto detaily mají obrovský vliv na průběh analýzy, což bude ukázáno později
 v sekci \ref{section:measurement}.
 
@@ -54,18 +51,6 @@ obsahuje dvě proměnné, proměnnou $x$ pro kořist a pro\-měn\-nou $y$ pro pr
 perturbaci iniciálních hodnot  těchto proměnných v prostoru $[1, 100] \times [1, 100]$ a zkoumá oscilaci pomocí vlastnosti \ref{eq:model:stl:lotkav},
 která vznikla úpravou předpisu \ref{eq:stl:lotkav:oscil}. Délka oscilace je pak dána konkrétní konfigurací,
 která byla k analýze použita. Hodnoty parametrů jsou nastaveny na $\alpha = \frac{1}{10}$,  $\beta = \frac{2}{10000}$, $\gamma = \frac{1}{10}$ a $\delta = \frac{2}{10000}$.
-
-\begin{align}
-\label{eq:model:stl:lotkav}
-\mathcal{F}_{[0, 100]}\mathcal{G}_{[0, \textrm{délka oscilace}]}\mathcal{F}_{[0, 50]}(x \geq 40 \wedge \mathcal{F}_{[0, 40]}x \leq 40)
-\end{align}
-
-Analýza byla provedena ve třech různých nastaveních, jejichž jména nesou pro další účely prefix \texttt{lotkav}
-a jejichž konkrétní popis je k dispozici v tabulce \ref{tabular:benchmark:models}.
-
-K zahuštění dochází zejména v extrémních hodnotách pro\-měn\-ných $x$ a $y$, kde systém vůbec neosciluje,
-a ve středních hodnotách, ve kterých systém sice osciluje, ale okolo jiné hodnoty, než je požadováno v uvažované vlastnosti.
-Charakter zahuštění je vidět na obrázku \ref{image:lotkav:result}. 
 
 \begin{figure}[h!]
 \begin{center}
@@ -81,12 +66,24 @@ Charakter zahuštění je vidět na obrázku \ref{image:lotkav:result}.
 \end{center}
 \end{figure}
 
+\begin{align}
+\label{eq:model:stl:lotkav}
+\mathcal{F}_{[0, 100]}\mathcal{G}_{[0, \textrm{délka oscilace}]}\mathcal{F}_{[0, 50]}(x \geq 40 \wedge \mathcal{F}_{[0, 40]}x \leq 40)
+\end{align}
+
+Analýza byla provedena ve třech různých nastaveních, jejichž jména nesou pro další účely prefix \texttt{lotkav}
+a jejichž konkrétní popis je k dispozici v~ta\-bul\-ce \ref{tabular:benchmark:models}.
+
+K zahuštění dochází zejména v extrémních hodnotách pro\-měn\-ných $x$ a~$y$, kde systém vůbec neosciluje,
+a ve středních hodnotách, ve kterých systém sice osciluje, ale okolo jiné hodnoty, než je požadováno v uvažované vlastnosti.
+Charakter zahuštění je vidět na obrázku \ref{image:lotkav:result}. 
+
 
 \subsection{Lorenzův atraktor}
 
 Dalším analyzovaným modelem je Lorenzův atraktor \cite{lorenz2010} skládající se
-ze tří stavových proměnných, který je odvozen ze zjednodušených rovnic prou\-dě\-ní
-vzduchu v atmosféře, k. Ačkoliv tento model vykazuje v určitých hodnotách chaotické chování,
+ze~tří stavových proměnných, který je odvozen ze zjednodušených rovnic prou\-dě\-ní
+vzduchu v atmosféře. Ačkoliv tento model vykazuje v určitých hodnotách chaotické chování,
 je možné u něj nalézt na jedné z proměnných oscilaci.
 
 \begin{figure}[h!]
@@ -136,7 +133,7 @@ Model lze z~této databáze stáhnout za použití identifikátoru \texttt{BIOMD
 Hodnoty fix\-ních parametrů a výchozí koncentrace látek jsou získané ze sta\-že\-né\-ho SBML souboru,
 který byl bez jakýchkoliv změn importován do aplikace Parasim.
 
-\begin{align}\label{eq:model:ode:lorenz84}
+\begin{align}\label{eq:model:ode:meyer91}
 \begin{array}{ll}
 \frac{dCaI}{dt} &= (1 - g) \cdot \bigg(\frac{A \cdot \big(\frac{IP_3}{2}\big)^4}{\big(\frac{IP_3}{2} + k_1\big)^4} + L\bigg) \cdot CaS - \frac{B \cdot \big(\frac{CaI}{100}\big) ^ 2}{\big(\frac{CaI}{100}\big) ^ 2 + k_2 ^ 2}\\
 \frac{dIP3}{dt} &= C \cdot (1 - \frac{k_3}{CaI \cdot \frac{1}{100} + k_3} \cdot \frac{1}{1 + R} ) - D \cdot \frac{IP_3}{2}	\\
@@ -207,8 +204,8 @@ ve sdílené paměti byla aplikace parasim spouštěna s $n$ výpočetními vlá
 procesorových jádrech.
 
 Na strojích pro prostředí s distribuovanou pamětí byla aplikace Parasim spouštěna se dvěma
-výpočetními vlákno a konfigurace těchto počítačů se lišily od počítače použitého pro prostředí
-s pamětí sdílenou. v obou prostředích měl vyrtuální stroj Javy k dispozici 4 GB paměti.
+výpočetními vlákny a konfigurace těchto počítačů se lišily od počítače použitého pro prostředí
+s pamětí sdílenou. V obou prostředích měl vyrtuální stroj Javy k dispozici 4 GB paměti.
 
 \begin{description}
 	\item[sdílená paměť: ]
@@ -226,7 +223,7 @@ v příloze \ref{appendix:measurement}. Ke každé konfiguraci jsou k dispozici 
 	\item	počet simulovaných hlavních trajektorií chování během analýzy, pro názornost je v grafu
 			uveden počet hlavních trajektorií, který by byl použit při naivním zahušťování odpovídajícímu
 			dané iteraci,
-	\item	množství neplatných přístupů do paměti v závislosti na počtu strojů v distribuovaném prostředí,
+	\item	množství neplatných přístupů do paměti v závislosti na počtu strojů v~dis\-tri\-buova\-ném prostředí,
 			tato pomáhá předejít po\-čí\-tá\-ní duplicitních trajektorií.
 \end{itemize}
 
@@ -239,9 +236,9 @@ pracovat. Toto množství trajektorií je dáno počtem perturbovaných paramete
 \subsection{Prostředí s distribuovanou pamětí}
 
 Při pohledu na grafy času nutného k provedění analýzy plyne, že implementace
-prostředí s distribuovanou pamětí pro jeden až šestnáct strojů šká\-lu\-je poměrně. Výjimku tvoří
-Lorenzův systém s maximálním množ\-stvím iterací nastaveným na 8. Při analýze tohoto modelu
-se prostor iniciálních podmínek zahušťuje pouze v poměrně malém regionu a z toho důvodu se při tak
+prostředí s distribuovanou pamětí pro jeden až šestnáct strojů šká\-lu\-je poměrně dobře. Výjimku tvoří
+Lorenzův systém s maximálním množ\-stvím iterací nastaveným na 8. Při takto nastavené analýze
+se prostor ini\-ci\-ál\-ních podmínek zahušťuje pouze v poměrně malém regionu a z toho důvodu se při
 malém množství iterací nestihne vytvořit dostatečné množství trajektorií tak, aby se plně
 vytížily všechny stroje. 
 
@@ -285,9 +282,9 @@ při větším jader projevuje méně.
 
 \subsection{Další pozorování}
 
-Hlavní motivací použití v této práci popsaného algoritmu snížit počet trajektorií
+Hlavní motivací použít v této práci popsaný algoritmus je snížit počet trajektorií
 chování, které je nutné nasimulovat pro provedení analýzy daného dynamického systému.
-Je samozřejmě vhodné se zeptat, zda při provedených experimentech došlo k nějakému
+Je samozřejmě vhodné se ptát, zda při provedených experimentech došlo k nějakému
 výraznějšímu zlepšení oproti naivním metodám zahušťování. 
 
 \begin{figure}[h!]
