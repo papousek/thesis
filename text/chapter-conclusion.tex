@@ -1,1 +1,36 @@
-\chapter{Závěr}
+\chapter{Závěr}\label{chapter:conclusion}
+
+Cílem diplomové práce bylo implementovat v prostředí s distribuovanou pamětí
+algoritmus pro analýzu dynamických systémů zadaných pomocí
+soustavy diferenciálních rovnic vzhledem k vlastnostem definovaným
+v~tem\-po\-rál\-ní logice signálů. Implementovaný algoritmus byl
+převzat z~\cite{drazan2011} a rozšířen o lokální robustnost, jejíž použití umožňuje
+efektivnější pokrytí prostoru iniciálních pod\-mí\-nek. 
+Implementace takto upraveného algoritmu vyústila ve vytvoření volně dostupného nástroje Parasim\footnote{\url{https://github.com/sybila/parasim/wiki}}.
+
+Na základě identifikovaných parametrů, jež mohou ovlivnit výpočet, byly vybrány modely,
+nad kterými se poté spustila analýza v ruzně nastaveném výpočetním prostředí.
+Z průběhu této analýzy a jejích výsledků vyplývá, že až na výjimky implementace
+ve sdílené i distribuované paměti škáluje. Pro dosažení tohoto výsledku nebylo zapotřebí
+žádných sofistikovanějších metod pro balancování výpočtu. Z naměřených
+dat také plyne, že použití robustnosti a prezentovaného způsobu pokrytí prostoru iniciálních podmínek má svůj význam,
+protože ve většině případů se oproti naivním metodám ušetřilo velké množství práci.
+
+Princip analýzy je ve velké míře podobný tomu, který se používá v~nás\-tro\-ji Breach~\cite{donze2010breach}.
+Nicméně narozdíl od něj je Parasim založen na volně dostupných technologiích, je snadno rozšiřitelný
+a podporuje distribuované počítání. Také způsob pokrytí prostoru iniciálních podmínek
+a použití robustnosti se liší.
+
+Byl naimplmentován vlastní výpočetní model, který abstrahuje od vý\-po\-čet\-ního
+prostředí a umožňuje snadno přecházet z prostředí se sdí\-le\-nou pamětí do prostředí z pamětí distribuovanou
+a naopak. Díky tomuto a\-spek\-tu a modulární architektuře je Parasim otevřen pro rozšiřování a
+implementaci dalších algoritmů.
+
+Ve stávající implementaci je pro numerickou simulaci použit Octave, který se
+však ukázal v mnoha případech nevyhovující. Simulace trvá příliš dlouho a často ani
+neposkytne požadované výsledky. Použití jiného nástroje pro řešení systému
+diferenciálních rovnic nebylo předmětem této práce, nicméně do budoucna se jeví jako vhodné
+místo nástroje Octave použít například nástroj COPASI~\cite{hoops2006}, který je přímo určen
+pro analýzu biologických modelů.
+
+% future work
