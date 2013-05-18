@@ -1,0 +1,47 @@
+\chapter{Úvod}\label{chapter:introduction}
+
+Všude okolo nás se vyskytují různé systémy rozličných vlastností, k jejichž
+pochopení se stále častěji používá modelování. Růst významu modelů se stupňuje
+se stále větším používáním výpočetní techniky, která je schopná s těmito modely
+efektivně pracovat. Modelování se již nepoužívá pouze v~tradičních oblastech, jako je
+předpověď počasí, ale s postupem času proníká i~do~oblastí, jakými je například
+modelování procesů v~živých organismech, kte\-ré\-mu se věnuje systémová biologie~\cite{westerhoff2005}.
+
+Jak roste význam modelů, zdá se být stále více a více důležité dokázat formulovat
+vlastnosti, které od modelů očekáváme, za použití nějaké for\-mál\-ní logiky a následně
+je automatizovaným způsobem nad těmito modely o\-vě\-řo\-vat. Není vhodné se však spokojit s ověřením
+vlastnosti pro jedno konkrétní nastavení hodnot proměnných a parametrů modelu. Analýza
+by měla jít dál a nahlížet na model obecněji. Model je možné vychýlit z jeho ideálního
+nastavení nebo naopak jeho ideální nastavení vzhledem k dané vlastnosti najít. V kontextu
+modelů živých organismů takový druh analýzy otevírá možnost studovat systém v méně příznivých
+nebo dokonce pro daný organismus životu nebezpečných podmínkách.
+
+Cílém této diplomové práce je naimplementovat algoritmus právě pro takový druh analýzy,
+která bude schopna pro různá ohodnocení parametrů a proměnných efektivně najít ta
+ohodnocení, která splňují požadovanou vlastnost. Implementovaný algoritmus vychází z algoritmu
+prezentovaného v~\cite{drazan2011} a lokální robustnosti použité v~nástroji Breach~\cite{donze2010breach},
+který se tímto té\-ma\-tem rovněž zabývá. Narozdíl od algoritmu použitého v nástroji Breach však
+implementovaný algoritmus není takovu mírou provázán s numerickou simulací a používá
+jednodušší způsob pokrytí množiny ohodnocení parametrů a proměnných.
+
+Výsledkem práce je volně dostupná aplikace Parasim, která vznikla ve spolupráci s Tomášem Vejpustkem,
+který zajistil uživatelské rozhraní. Tvor\-ba této aplikace proběhla v rámci Laboratoře
+systémové biologie\footnote{\url{http://sybila.fi.muni.cz/}} pod dohledem Svena Dražana.
+Parasim umožňuje provést výpočet analýzy nejen na jednom počítači, ale i v distribuovaném
+prostředí, a tak analýzu urychlit.
+
+Následující text se nejprve v kapitole \ref{chapter:preliminaries} zabývá základními pojmy, jako je definice modelu a logiky
+pro vyjádření vlastností. Následuje kapitola \ref{chapter:algorithm} popisující řešený problém, původní
+algoritmus, ze kterého práce vychází, pojem lokální robustnosti a provedené úpravy v algoritmu.
+Kapitola \ref{chapter:implementation} se věnuje implementaci modulárního systému a výpočetního modelu.
+V kapitole \ref{chapter:evaluation} se nachází evaluace, která zahrnuje provedení několika analýz
+a~vy\-hod\-no\-ce\-ní naměřených dat. Práci zakončuje závěr v kapitole \ref{chapter:conclusion}.
+
+% systemova biologie jak
+% analyza modelu
+% proc je to tema v ramci systemove biologie zajimave
+% naimplementovat konkretni algoritmus
+% proc tento algoritmus
+% jak budu postupovat pri implementaci
+% jaka struktura prace
+% jak zjistim, ze se to povedlo
