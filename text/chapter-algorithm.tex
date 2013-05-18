@@ -79,8 +79,8 @@ zda z nich simulovaná chování splňují či nesplňují danou vlastnost. Tyto
 hranice regionů platnosti a neplatnosti se zvolenou přes\-nos\-tí~$\delta$.
 
 \begin{algorithm}
-\label{algorithm:main:original}
 \caption{Analýza prostoru inicálních podmínek}
+\label{algorithm:main:original}
 \begin{algorithmic}[1]
 \Require 	$\mathcal{DS} = (\mathbf{X}, f), \mathcal{I}, \varphi, \Delta t, \delta, \varepsilon$
 \Ensure 	$\textsc{Result} = \{([\mathbf{F}_0]_0, s_1), \ldots ([\mathbf{F}_k]_0, s_k)\}$ \Comment body a splněnost $\varphi$
@@ -98,7 +98,7 @@ hranice regionů platnosti a neplatnosti se zvolenou přes\-nos\-tí~$\delta$.
 			\State $\textsc{Satisfied}_{neigh} \gets $ splněnost $\varphi$ nad $\textsc{Traj}_{neigh}$
 			\State $\textsc{Result} \gets \textsc{Result} \cup \{(\textsc{Satisfied}_{main}, [\mathbf{X}_{main}]_0, [\mathbf{P}_{main}])\}$
 			\State $\textsc{Distance} \gets $ vzdálenost $\textsc{Traj}_{main}$ a $\textsc{Traj}_{neigh}$\label{algorithm:line:trajectory:distance}
-			\If{$\textsc{Distance} > \delta$}
+			\If{$\textsc{Distance} > \delta$}\label{algorithm:line:trajectory:delta}
 				\State	$\textsc{M}_{new} \gets \textsc{M}_{new} \cup \{(\frac{[\mathbf{X}_{main}]_0 + [\mathbf{X}_{neigh}]_0}{2}, \frac{[\mathbf{P}_{main}] + [\mathbf{P}_{neigh}]}{2})\}$
 			\EndIf
 		\EndFor
@@ -118,11 +118,11 @@ jak zvolit hodnotu $\delta$.
 Platnost formule lze chápat trochu šířeji než prosté \uv{platí}/\uv{neplatí}.
 Nemusíme se pouze ptát, zda dané chování splňuje danou formuli, otázku lze posunout dál.
 Jak moc dané chování splňuje danou formuli? Jak moc je vlastnost nesplňena? Pro účely
-této práce zmíněné otázky zcela postačují, ale samozřejmě je možné požadovat ještě víc.
-Jak moc je daný systém robustní vůči změnám podmínek, teplot nebo koncentrací
-chemických látek?
+této práce zmíněné otázky zcela postačují, ale samozřejmě je možné požadovat ještě více.
+Odpověď lze kvantizovat a získat tak představu o míře, s  jakou je daný systém robustní
+vůči změnám podmínek, teplot nebo koncentrací chemických látek.
 
-V této sekci zavedeme pojem \textit{lokální a globální robustnosti}. Lokální robustnosti
+V této sekci zavedeme pojem \textit{lokální a globální robustnosti}. Lokální robustností
 rozumíme míru, do jaké je daná vlastnost splněna na jednom chování. Globální robustnost
 na druhé straně vztáhneme na celý systém, tzn. že zahrnuje míru platnosti dané vlastnosti
 nad větším množství chování, která vzniknou tzv. \textit{perturbacemi}. Existuje jedno
@@ -134,9 +134,9 @@ Jednou z věcí, které je třeba předem zmínit, je, že pro účely vylepšen
 analýzu dynamických systémů, se na robustnost díváme z~pohledu chování systému \cite{donze2011}.
 To znamená, že se při výpočtu lokální robustnosti snažíme ohraničit prostor okolo jednoho chování,
 ve kterém má daná vlastnost stejnou platnost. Podobně lze k problému přistoupit z opačné strany \cite{rizk2009}.
-Ve formuli identifikovat parametry, napočítat podprostor parametrického prostoru, ve kterém je formule
-pro dané chování splněna splněna a určit vzdálenost již konkrétní formule s dosazenými parametry
-od tohoto podprostoru.
+Ve formuli jsme schopni identifikovat volné proměnné, na\-po\-čí\-tat podprostor prostoru ohodnocení těchto proměnných, ve kterém je formule
+pro dané chování splněna a určit vzdálenost již konkrétní formule s dosazenými hodnotami za volné proměnné
+od tohoto napočítaného podprostoru.
 
 \subsection{Lokální robustnost}
 
@@ -145,13 +145,13 @@ funkce určující vzdálenost dvou bodů v prostoru $\mathbb{R}^n$.
 Vzdálenost dvou signálů zavedeme předpisem \ref{eq:signal:distance}.
 
 \begin{align}\label{eq:signal:distance}
-\sigma(s_1, s_2) = {\displaystyle \sup_{t \in \mathbb{R}^{+}}} \{d(s_1(t), s_1(t))\}
+\sigma(s_1, s_2) = {\displaystyle \sup_{t \in \mathbb{R}^{+}}} \{d(s_1(t), s_2(t))\}
 \end{align}
 
 Od robustnosti $\rho$ budeme požadovat konzistentní chování s již zavedenou dvouhodnotovou platností
 formule. 
 
-\begin{align}\label{eq:signal:distance}
+\begin{align}
 \rho(\varphi, s) = \left\{\begin{array}{r@{\quad}c}
 \inf\{\sigma(s, s') | \forall s'. s' \not\models \varphi \}	& \textrm{pokud } s \models \varphi	\\
 - \inf\{\sigma(s, s') | \forall s'. s' \models \varphi \}	& \textrm{pokud } s \not\models \varphi
@@ -160,7 +160,7 @@ formule.
 
 Oborem hodnot funkcí $\mu_i$ odpovídajících atomickým prozicím tentokrát není množina $\{T, F\}$,
 nýbrž množina reálných čísel $\mathbb{R}$. Toto chápání je spíše technického charakteru. U nejčastěji používaných
-atomických propozic, kde $f(\mathbf{X}) = x_i$, je převoid ze starého chápání přímočarý.
+atomických propozic, kde $f(\mathbf{X}) = x_i$, je převod z v sekci \ref{section:stl} popsaného chápání přímočarý.
 
 \begin{align}\label{eq:stl:semantics}
 \begin{array}{ll}
@@ -194,8 +194,8 @@ samostatně, což umožňuje naimplementovat její výpočet efektivněji.
 
 Jestliže je k dispozici analyzovaný primární signál, lze použit robustnost pro definici tzv. sekundárních
 signálů příslušejících každé podformuli $\varphi'$ dané formule $\varphi$, kde $s_{\varphi'}[t] = \rho(\varphi', s, t)$.
-a $|s_{\varphi'}| = |s| - ||\varphi'|| + 1$. Tyto se\-kun\-dár\-ní signály dávají informaci o tom, jak moc se lze od primárního
-signálu vzdálit, aby daná podformule zůstala ještě platná v případě klad\-ných hodnot sekundárního signálů
+a $|s_{\varphi'}| = |s| - ||\varphi'||$. Tyto se\-kun\-dár\-ní signály dávají informaci o tom, jak moc se lze od primárního
+signálu vzdálit, aby daná podformule zůstala ještě platná v případě klad\-ných hodnot sekundárních signálů
 nebo neplatná v případě hodnot zá\-por\-ných. Krajní hodnotou je signál nulový, který značí hranici platnosti formule.
 
 Vraťme se k příkladu formule popisující oscilaci systému s jednou stavovou proměnnou ze 
@@ -225,7 +225,7 @@ $\neg$ a $\wedge$ lze spočítat v lineárním čase vzhledem k délce signálu.
 Pro hledání maxima,
 respektive minima pro všechny podsekvence dané sekvence prvků existuje algoritmus s lineární časovou složitostí~\cite{lemire2006}. Díky tomu lze
 výpočet sekundárního signálu i odvozených operátorů $\mathcal{F}$ a $\mathcal{G}$ pro\-vést
-rovněž v lineárním čase. Použitím pomocné funkce, jejíž struktura je popsaná v algoritmu \ref{algorithm:unary:signal}
+rovněž v lineárním čase. Použitím pomocné funkce, jejíž struktura je popsaná v pseudokódu \ref{algorithm:unary:signal}
 získáme předpis 
 
 \begin{align}\label{eq:future:gloabally:robustness:impl}
@@ -255,22 +255,23 @@ s_{\mathcal{G}_{[a,b]}\varphi} = \textsc{Signal}([a,b], \varphi, <)
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}\label{algorithm:unary:signal}
+\begin{algorithm}
 \caption{pomocná funkce pro sekundárního signálu}
+\label{algorithm:unary:signal}
 \begin{algorithmic}[1]
 \Function{Signal}{$[a, b]$, $s_\varphi$, $\prec$}
 	\State	$queue \gets $ nová \textsc{Lemire-Queue} s uspořádáním $\prec$
-	\State	$monitor \gets ()$
-	\State	$t' \gets t_0$
+	\State	$monitor \gets$ nové prázdné asociativní pole
+	\State	$t' \gets t_0 + a$
 	\While{$t'\leq t_0 + b - \Delta t$}
-		\State $queue$.\textsc{Offer}($s_\varphi[t']$)
+		\State $queue$.\textsc{Offer}($t'$, $s_\varphi[t']$)
 		\State $t' \gets t' + \Delta t$
 	\EndWhile
 	\State	$t' \gets t_0$
 	\While{$t' \leq |s|$}
-		\State	$qeue$.\textsc{offer}($s_\varphi[t']$)
+		\State	$qeue$.\textsc{offer}($t' + b$, $s_\varphi[t' + b]$)
 		\State	$monitor[t'] \gets queue$.\textsc{peek()}
-		\If{$queue$.\textsc{peek()}.$time = t'$}
+		\If{$queue$.\textsc{peek()}.$time < t' + a + \Delta t$}
 			\State	$queue$.\textsc{poll()}
 		\EndIf
 		\State	$t' \gets t' + \Delta t$
@@ -281,7 +282,7 @@ s_{\mathcal{G}_{[a,b]}\varphi} = \textsc{Signal}([a,b], \varphi, <)
 \end{algorithm}
 
 Pro výpočet robustnosti formule $\varphi\mathcal{U}_{[a,b]}\psi$ lze použít vztahu \ref{eq:until:robustness:impl}~\cite{donze2010},
-který umožňuje formuli ve výpočtu nahradit konjukcí několika podformulí, pro něž lze robustnost spočítat v lineárním čase, zejména 
+který umožňuje formuli ve výpočtu nahradit konjunkcí několika podformulí, pro něž lze robustnost spočítat v lineárním čase, zejména 
 to platí pro $\varphi\mathcal{U}\psi$ bez požadavku na dodržení intervalu $[a,b]$. Výpočet robustnosti pro operátor $\mathcal{U}$
 s omezením na interval $[a,b]$ má proto rovněž lineární časovou složitost~\cite{donze2010}.
 
@@ -316,27 +317,31 @@ důležitý pojem, nicméně nabízí užitečnou metriku, jak porovnávat model
 Nyní se vraťme k algoritmu pro analýzu dynamických systémů. V jeho původní podobě
 vystupuje parametr $\delta$, se kterým se porovnává vzdálenost hlavní trajektorie chování
 s trajektorií sousední, viz. řádek \ref{algorithm:line:trajectory:distance}
-algoritmu \ref{algorithm:main:original}. Pro účely této práce je postačující již ukázaná
+pseudokódu~\ref{algorithm:main:original}. Pro účely této práce je postačující již ukázaná
 definice vzdálenosti dvou trajektorií jako $\sigma(s_1, s_2) = {\displaystyle \sup_{t \in \mathbb{R}^{+}}} \{d(s_1(t), s_1(t))\}$,
-nicméně je samozřejmě možné použít jiný předpis. Hodnota parametru $\delta$ je pro celý prostor
-chování stejná, a to vede k podobnému zahuštění v regionech prostoru iniciálních podmínek,
-kde dáná formule určitě platí, určitě neplatí i v regionech, kde se platnnost formule mění.
+nicméně je samozřejmě mož\-né použít jiný předpis. Hodnota parametru $\delta$ je pro celý prostor
+chování stejná, a to vede k podobnému zahuštění v regionech prostoru iniciálních pod\-mí\-nek,
+kde dáná formule určitě platí, určitě neplatí i v regionech, kde se platnost formule mění.
 
 Pro zvýšení efektivity algoritmu je vhodné, aby pro regiony, kde je platnost formule již zřejmá,
-nedocházelo k dalšímu zahušťování a simulaci trajektorie chování. Naopak pro regiony, kterými prochází
+nedocházelo k dalšímu zahušťování a simulaci trajektorií chování. Naopak pro regiony, kterými prochází
 hranice změny platnosti by k zahušťování docházet mělo. Jak určit části prostoru od sebe odlišit?
 
 Absolutní hodnotu lokální robustnosti nad danou trajektorií chování lze chápat
 jako odchylku, o kterou je možné se od trajektorie vzdálit, aby platnost
-formule byla zachovaná. Nabízí se tak porovnání tak nahrazení konstanty $\delta$ 
+formule byla zachovaná. Nabízí se tak nahrazení konstanty $\delta$ na řádku \ref{algorithm:line:trajectory:delta} pseudokódu \ref{algorithm:main:original}
 právě tímto číslem.
-%Ukazuje se, že u systémů, jejichž chování se v závislosti na
-%hodnotách z prostoru iniciálních hodnot mění spojitě, toto nahrazení v praxi funguje,
-%což bude ukázáno na vybraných modelech v~kapitole \ref{chapter:evaluation}.
+
+\section{Zahušťování}
+
+Na závěr této kapitoly je vhodné se ještě zmínit o způsobu, jakým jsou vybírány
+body pro iniciální zahuštění, případně další body poté, co se nějaká ze sousedních trajektorií
+chování vzdálila od hlavní trajektorie více, než přípouští napočítá lokální 
+robustnost.
 
 \begin{figure}[H]
 \begin{center}
-\subfigure[počáteční zahuštění]{
+\subfigure[1. iterace zahuštění]{
 \label{figure:algorithm:run:init}
 \resizebox{.48\textwidth}{!}{
 \begin{tikzpicture}[node distance=2cm]
@@ -344,32 +349,32 @@ právě tímto číslem.
 	\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
 	\tikzstyle{neigh}=[circle,fill=white,minimum size=5pt,inner sep=0pt,draw=black]
 	\node[main, label=left:D] 				(D) {};
-	\node[neigh,right of=D, label=below:z] 	(z) {};
-	\node[main, right of=z, label=right:E] 	(E) {};
-	\node[neigh, above of=D, label=left:x] 	(x) {};
-	\node[main, right of=x, label=above right:C] 	(C) {};
-	\node[neigh, right of=C, label=right:y]	(y) {};
-	\node[main, above of=x, label=left:A] 	(A) {};
-	\node[neigh, right of=A, label=above:v] (v) {};
-	\node[main, right of=v, label=right:B] 	(B) {};
+	\node[neigh,right of=D, label=below:S] 	(S) {};
+	\node[main, right of=S, label=right:E] 	(E) {};
+	\node[neigh, above of=D, label=left:Q] 	(Q) {};
+	\node[main, right of=Q, label=above right:C] 	(C) {};
+	\node[neigh, right of=C, label=right:R]	(R) {};
+	\node[main, above of=Q, label=left:A] 	(A) {};
+	\node[neigh, right of=A, label=above:P] (P) {};
+	\node[main, right of=P, label=right:B] 	(B) {};
 
 	\begin{scope}[->, thick, shorten <=1pt] 
-		\draw	(A) -> (v);
-		\draw	(A) -> (x);
-		\draw	(B) -> (v);
-		\draw	(B) -> (y);
-		\draw	(C) -> (v);
-		\draw	(C) -> (x);
-		\draw	(C) -> (y);
-		\draw[label={[above]{$f(x)=x^2$}}]	(C) -> (z);
-		\draw	(D) -> (x);
-		\draw	(D) -> (z);
-		\draw	(E) -> (z);
-		\draw	(E) -> (y);
+		\draw	(A) -> (P);
+		\draw	(A) -> (Q);
+		\draw	(B) -> (P);
+		\draw	(B) -> (R);
+		\draw	(C) -> (P);
+		\draw	(C) -> (Q);
+		\draw	(C) -> (R);
+		\draw[label={[above]{$f(x)=x^2$}}]	(C) -> (S);
+		\draw	(D) -> (Q);
+		\draw	(D) -> (S);
+		\draw	(E) -> (S);
+		\draw	(E) -> (R);
 	\end{scope}
 \end{tikzpicture}
 }}
-\subfigure[další iterace zahuštění]{
+\subfigure[2. iterace zahuštění]{
 \label{figure:algorithm:run:iteration}
 \resizebox{.48\textwidth}{!}{
 \begin{tikzpicture}[node distance=2cm]
@@ -377,46 +382,54 @@ právě tímto číslem.
 	\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
 	\tikzstyle{neigh}=[circle,fill=white,minimum size=5pt,inner sep=0pt,draw=black]
 	\node[main, label=left:D] 				(D) {};
-	\node[neigh,right of=D, label=below:z] 	(z) {};
-	\node[main, right of=z, label=right:E] 	(E) {};
-	\node[neigh, above of=D, label=left:x] 	(x) {};
-	\node[neigh, right of=x, label=above right:C] 	(C) {};
-	\node[neigh, right of=C, label=right:y]	(y) {};
-	\node[main, above of=x, label=left:A] 	(A) {};
-	\node[neigh, right of=A, label=above:v] (v) {};
-	\node[main, right of=v, label=right:B] 	(B) {};
+	\node[neigh,right of=D, label=below:S] 	(S) {};
+	\node[main, right of=S, label=right:E] 	(E) {};
+	\node[neigh, above of=D, label=left:Q] 	(Q) {};
+	\node[neigh, right of=Q, label=above right:C] 	(C) {};
+	\node[neigh, right of=C, label=right:R]	(R) {};
+	\node[main, above of=Q, label=left:A] 	(A) {};
+	\node[neigh, right of=A, label=above:P] (P) {};
+	\node[main, right of=P, label=right:B] 	(B) {};
 	
 	\node[main, label=above right:F] (F) at (2,1) {};
-	\node[neigh, label=above left:t] (t) at (1,1) {};
-	\node[neigh, label=above right:u] (u) at (3,1) {};
+	\node[neigh, label=above left:M] (M) at (1,1) {};
+	\node[neigh, label=above right:N] (N) at (3,1) {};
 	\begin{scope}[->, thick, shorten <=1pt] 
 		\draw	(F) -> (C);
-		\draw	(F) -> (u);
-		\draw	(F) -> (t);
-		\draw	(F) -> (z);
+		\draw	(F) -> (N);
+		\draw	(F) -> (M);
+		\draw	(F) -> (S);
 	\end{scope}
 \end{tikzpicture}
 }}
 \caption{Znázornění průběhu výpočtu pro dvourozměrný prostor iniciálních podmínek.
-Černé tečky znázorňují hlavní body ($\textsc{X}_{main}$) a bílé pomocné body ($\textsc{X}_{neigh}$).
-Ke každému bodu $X$ odpovídá signál $s_X$. Šipka $X \rightarrow Y$ značí porovnání
-$\big|\rho(\varphi, s_X)\big| \geq dist(s_X, s_Y)$.}
+Černé tečky znázorňují hlavní a bílé pomocné body, které odpovídají bodům $\textsc{X}_{main}$ a $\textsc{X}_{neigh}$ v pseudokódu \ref{algorithm:main:original}.
+Ke každému bodu $X$ odpovídá signál $s_X$. Hrana $X \rightarrow Y$ značí porovnání
+$\big|\rho(\varphi, s_X)\big| \geq \rho(s_X, s_Y)$.}
 \end{center}
 \end{figure}
 
-Na závěr této kapitoly je vhodné se ještě zmínit o způsobu, jakým jsou vybírány
-body pri iniciální zahuštění, případně body poté, co nějaká ze sousedních trajektorií
-chování se vzdálila od hlavní trajektorie více, než přípouští napočítá lokální 
-robustnost.
-
 Na obrázku \ref{figure:algorithm:run:init} je ukázáno, jak vypadá iniciální zahuštění
-pro dvourozměrný prostor iniciálních podmínek. Algoritmus vloží jeden hlavní bod (C) do středu prostoru
-a navíc další hlavní body (A, B, D, E) pro všechny kombinace okrajových hodnot. Pomocné sousedící body
-jsou vytvořeny v~každé dimenzi ve vzdálenosti poloviny velikosti prostoru iniciálních hodnot
-v této dimenzi.
+pro dvourozměrný prostor iniciálních podmínek. Algoritmus vloží jeden hlavní bod (C) do středu prostoru. 
+Tento prostřední bod obklopí dvěma vedlejšími body v každé dimenzi iniciálního prostoru (P, Q, R, S) ve vzdálenosti
+poloviny velikosti prostoru v dané dimenzi. Takto vzniklé body opět obklopí dalšími, tentokrát již hlavními (A, B, D, E).
+Tento postup se opakuje, dokud není prostor iniciálních podmínek dostatečně zahuštěn.
+Každý z hlavních bodů s sebou během výpočtu nese odkaz na příslušné vedlejší body.
+Toto iniciální zahuštění je označeno jako první iterace.
 
-Obrázek \ref{figure:algorithm:run:iteration} znázorňuje situaci, kdy došlo k dalšímu zahuštení,
-pro\-tože $\big|\rho(\varphi, s_C)\big| < dist(s_C, s_z)$. Ze středu úsečky $|C,z|$ se vytvoří
+Obrázek \ref{figure:algorithm:run:iteration} znázorňuje situaci, kdy došlo k druhé iteraci zahuštění,
+pro\-tože $\big|\rho(\varphi, s_C)\big| < dist(s_C, s_S)$. Ze středu úsečky CS se vytvoří
 nový hlavní bod F. Pro každou dimenzi se vytvoří pomocné body tentokrát ve vzdá\-le\-nosti jedné čtvrtiny
-velikosti prostoru iniciálních hodnot v této dimenzi, tím se hlavní bod C v této nové iteraci stává bodem
-vedlejším.
+velikosti prostoru iniciálních hodnot v dané dimenzi, tím se hlavní bod C v této
+nové iteraci zahuštění stává bodem vedlejším.
+
+V nejméně příznivém scénáři je do iterace $i$ nutno pracovat s $(2^i + 1)^d$ body,
+kde $d$ je dimenze prostoru iniciálních podmínek. Algoritmus v mnoha případech
+ke svému výpočtu nevyžaduje takové množství bodů, expo\-nen\-ciál\-ní nárůst počtu
+potřebných bodů se však i přesto od určitě iterace za\-huš\-tě\-ní objeví. To je způsobeno
+zejména regiony prostoru iniciálních podmínek, kterými prochází hranice platnosti dané formule.
+
+Nutnost analyzovat exponenciální množštví trajektorií chování společně s
+výpočetní náročností numerické simulace vede k tomu, že analýza i po\-měr\-ně
+malých modelů může trvat nesmírně dlouho. Tato práce se snaží tento problém řešit
+distribucí výpočtu na více počítačích.
