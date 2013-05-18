@@ -1,11 +1,11 @@
 \chapter{Ukázka rozšíření pro Parasim}\label{appendix:extension}
 
-\begin{lstlisting}[caption={META-INF/services/org.sybila.parasim.core.spi.\\LoadableExtension}]
+\begin{lstlisting}[caption={META-INF/services/org.sybila.parasim.core.spi.\\LoadableExtension}, style=Java]
 org.sybila.parasim.myextension.MyExtension
 \end{lstlisting}
 
 
-\begin{lstlisting}[caption={org/sybila/parasim/myextension/MyExtension.java}]
+\begin{lstlisting}[caption={org/sybila/parasim/myextension/MyExtension.java}, style=Java]
 public class MyExtension implements LoadableExtension {
     public void register(ExtensionBuilder builder) {
         builder.extension(FunctionalityRegistrar.class);
@@ -13,7 +13,7 @@ public class MyExtension implements LoadableExtension {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[caption={org/sybila/parasim/myextension/\\FunctionalityRegistrar.java}]
+\begin{lstlisting}[caption={org/sybila/parasim/myextension/\\FunctionalityRegistrar.java}, style=Java]
 @ApplicationScope
 public class FunctionalityRegistrar {
 

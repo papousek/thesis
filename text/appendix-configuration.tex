@@ -1,6 +1,6 @@
 \chapter{Ukázka konfigurace pro Parasim}\label{appendix:configuration}
 
-\begin{lstlisting}[label={code:config:bean}, caption={Konfigurační třída}]
+\begin{lstlisting}[label={code:config:bean}, caption={Konfigurační třída}, style=Java]
 public class ExampleConfig {
 	private long timeoutAmount = 10;
 	private TimeUnit timeoutUnit = TimeUnit.SECONDS;
@@ -15,7 +15,7 @@ public class ExampleConfig {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[label={code:config:provide}, caption={Metoda poskytující konfiguraci}]
+\begin{lstlisting}[style=Java, label={code:config:provide}, caption={Metoda poskytující konfiguraci}]
 public ExampleConfig provideConfig(
 		ParasimDescriptor descriptor,
 		ExtensionDescriptorMapper mapper) {
@@ -30,7 +30,7 @@ public ExampleConfig provideConfig(
 }
 \end{lstlisting}
 
-\begin{lstlisting}[language=xml, label={code:config:xml}, caption={parasim.xml}]
+\begin{lstlisting}[style=Java, language=xml, label={code:config:xml}, caption={parasim.xml}]
 <parasim>
 	<extension qualifier="example">
 		<property name="timeoutAmount">2</property>

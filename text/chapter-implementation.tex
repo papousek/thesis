@@ -172,7 +172,7 @@ Aby mohl Parasim od se\-be rozlišit jednotlivé kontexty, používá speciáln�
 rozsahů. Samotná deklarace takové anotace je označená anotací \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Scope.java}{\texttt{Scope}},
 jak je ukázáno ve zdrojovém kódu \ref{code:scope}.
 
-\begin{lstlisting}[label={code:scope}, caption={Anotace rozsahu}]
+\begin{lstlisting}[label={code:scope}, caption={Anotace rozsahu}, style=Java]
 @Scope
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -185,7 +185,7 @@ nový, jak je ukázáno v ukázce kódu \ref{code:context}. Vývojář je zodpov
 aby kontext zničil, když už jej nebude potřebovat, aby roz\-ší\-ře\-ním, která se nacházejí
 v tomto kontextu, umožnil uvolnit zdroje.
 
-\begin{lstlisting}[label={code:context}, caption={Vytvoření kontextu}]
+\begin{lstlisting}[label={code:context}, caption={Vytvoření kontextu}, style=Java]
 // vytvori kontext Scope1
 // s rodicovskym kontextem Application
 Context context1 = manager.context(Scope1.class); 
@@ -218,7 +218,7 @@ by měla být schopna spočítat robustnost pro všechny podporované typy tempo
 Avšak je možné, že se v~takovéto implementaci bude nacházet méně efektivní algoritmus,
 případě analýza předložené formule, což zbrzdí výpočet.
 
-\begin{lstlisting}[label={code:qualifier}, caption={Kvalikátor}]
+\begin{lstlisting}[label={code:qualifier}, caption={Kvalikátor}, style=Java]
 @Qualifier
 @Target({
 	ElementType.FIELD,
@@ -234,7 +234,7 @@ které umožňuje na základě rozhraní a kvalifikátoru získat instance dané
 Pokud se v daném kontextu nenachází žádné rozšíření poskytující danou službu,
 je zavolán rodičovský kontext. 
 
-\begin{lstlisting}[label={code:resolve}, caption={Získání instance služby}]
+\begin{lstlisting}[label={code:resolve}, caption={Získání instance služby}, style=Java]
 Manager manager = ...
 Enrichment enrichment = manager.resolve(
 		Enrichment.class,
@@ -280,7 +280,7 @@ Takové poskytující metody jsou zavolány již během načítání rozšířen
 poskytující metody nelze najít hodnoty pro všechny její parametry, dojde k vyhození výjimky a
 pravděpodobně i k~pádu celé aplikace.
 
-\begin{lstlisting}[label={code:provide:required}, caption={První metoda poskytující službu \texttt{Functionality}}]
+\begin{lstlisting}[label={code:provide:required}, caption={První metoda poskytující službu \texttt{Functionality}}, style=Java]
 /**
  * selze, pokud neni v aktualnim kontextu k dispozici 
  * retezec pro dosazeni za parametr metody
@@ -297,7 +297,7 @@ Jestliže chce autor rozšíření záviset na jiných službách pouze volně, 
 u parametrů poskytujících metod anotace \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Inject.java}{\texttt{Inject}} způsobem u\-ká\-za\-ným ve zdrojovém
 kódu \ref{code:provide:optional}.
 
-\begin{lstlisting}[label={code:provide:optional}, caption={Druhá metoda poskytující službu \texttt{Functionality}}]
+\begin{lstlisting}[label={code:provide:optional}, caption={Druhá metoda poskytující službu \texttt{Functionality}}, style=Java]
 /**
  * pokud neni v aktualnim kontextu k dispozici 
  * retezec pro dosazeni za parametr metody,
@@ -381,7 +381,7 @@ Na tomto stroji je nejprve nutné tuto funkcionalitu aktivovat skrze rozhraní \
 jak je ukázáno ve zdrojovém kódu \ref{code:remote}. Ukázaný kód nastartuje server
 pro práci s \textit{Remote Method Invocation}~\cite{grosso2001} a na tento server vystaví \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/remote/Loader.java}{\texttt{Loader.java}}.
 
-\begin{lstlisting}[label={code:remote}, caption={Spuštění serveru}]
+\begin{lstlisting}[label={code:remote}, caption={Spuštění serveru}, style=Java]
 manager.resolve(Loader.class, Default.class)
 	   .load(Loader.class, Default.class);
 \end{lstlisting}
@@ -390,7 +390,7 @@ tohoto stroje na tento server. Aby bylo možné službu vystavit, je nutné, aby
 rozhraní \texttt{java.rmi.Remote}. Jakmile je server na vzdáleném stroji aktivován,
 je možné s ním komunikovat podobně jako ve zdrojovém kódu \ref{code:host:control}.
 
-\begin{lstlisting}[label={code:host:control}, caption={Přístup ke vzdálenému serveru}]
+\begin{lstlisting}[label={code:host:control}, caption={Přístup ke vzdálenému serveru}, style=Java]
 HostControl control = new HostControlImpl(
 		new URI("localhost"))
 

@@ -1,1 +1,43 @@
 \chapter{Způsob použití aplikace Parasim}\label{appendix:usage}
+
+Pro použití aplikace Parasim je nutné mít na svém počítačí nainstalovanou Javu verze 7
+a Octave ve verzi 3.6.x. Poslední verzi  Parasimu je možné si stáhnout ze
+stránek projektu \footnote{\url{https://github.com/sybila/parasim/wiki}} v podobě
+archivu JAR. Na těchto stránkách se rovněž nachází podrobný návod, jak aplikaci Parasim používat.
+Zde je uvedeno jen několik příkladů. Stažený archiv lze spustit standardní cestou:
+
+\begin{lstlisting}[style=Bash]
+java -jar parasim-2.0.0.Final-dist;
+\end{lstlisting}
+
+V případě, že je Parasim spuštěn bez jakýchkoliv dalších parametrů, nastartuje se grafické
+uživatelské rozhraní pro správu experimentů. Pro získání nápovědy k jednotlivým argumentům
+je nutné použít přepínač \texttt{-h}:
+
+\begin{lstlisting}[style=Bash]
+java -jar parasim-2.0.0.Final-dist -h;
+\end{lstlisting}
+
+K nastartování serveru pro distribuované počítání lze použít přepínač \texttt{-s},
+je rovněž vhodné nastavit adresu stroje v síti:
+
+\begin{lstlisting}[style=Bash]
+java -Dparasim.remote.host=pheme01 -jar \
+	parasim-2.0.0.Final-dist -s;
+\end{lstlisting}
+
+Na stránkách projektu je rovněž k dispozici GIT repozitář, který krom zdrojových kódů obsahuje
+i projekty experimentů připravené ke spuštění. Tento repozitář je možné si stáhnout
+za použití následujícího příkazu:
+
+\begin{lstlisting}[style=Bash]
+git clone git://github.com/sybila/parasim.git;
+\end{lstlisting}
+
+V ukázkových projektech je k dispozici i model predátora a kořisti, jehož analýzu
+lze po načtení spustit z grafického uživatelského rozhraní nebo z~příkazové řádky:
+
+\begin{lstlisting}[style=Bash]
+java -jar parasim-2.0.0.Final-dist\
+	-e experiments/lotkav/oscil.experiment.properties;
+\end{lstlisting}

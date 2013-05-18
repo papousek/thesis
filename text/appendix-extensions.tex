@@ -1,1 +1,74 @@
 \chapter{Konfigurace dostupných rozšíření}\label{appendix:extensions}
+
+Následuje seznam rozšíření a jejich dostupných konfiguračních proměnných. V závorkách
+u názvů rozšíření je klíč, pod kterým je nutné k nim přistupovat v konfiguraci.
+V závorkách u názvů konfiguračních proměnných se nachází výchozí hodnota.
+
+\section{Aplikace (\texttt{application})}
+
+\begin{description}
+	\item[warmupComputationSize] (30) \\
+		Minimální počet hlavních trajektorií, se kterými pracuje jedna nezbytková výpočetní instance v zahřívací fázi výpočtu.
+	\item[warmupBranchFactor] (4) \\
+		Maximální počet výpočetních instancí, které se emitují z jedné instance v zahřívací fázi výpočtu.
+	\item[warmupIterationLimit] (2) \\
+		Číslo poslední iterace zahušťování, která ještě patří do zahřívací fáze výpočtu.
+	\item[computationSize] (60) \\
+		Minimální počet hlavních trajektorií, se kterými pracuje jedna nezbytková výpočetní instance.
+	\item[branchFactor] (2) \\
+		Maximální počet výpočetních instancí, které se emitují z~jedné instance.
+	\item[showingRobustnessComputation] (\texttt{true}) \\
+		Zapíná a vypíná možnost zobrazit okno s výpočtem robustnosti pro jeden iniciální bod po kliknutí na vizualizaci výsledků analýzy.
+\end{description}
+
+\section{Logování (\texttt{logging})}
+
+\begin{description}
+	\item[configFile] ~\\
+		Konfigurační pro logovací knihovnu \texttt{log4j}. Pokud není specifikován použije se se konfigurační soubor \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/resources/org/sybila/parasim/log4j/log4j.properties}{\texttt{log4j.properties}} distribuovaný společně s rozšířením.
+	\item[level] (\texttt{info}) \\
+		Úroveň logovacích zpráv, které se zobrazí v konzoli. Možné hodnoty jsou -- \texttt{all}, \texttt{debug}, \texttt{error}, \texttt{fatal}, \texttt{info}, \texttt{off}, \texttt{trace} a \texttt{warn}.
+\end{description}
+
+\section{Vzdálená správa (\texttt{remote})}
+
+\begin{description}
+	\item[host] (\texttt{InetAddress.getLocalHost().getHostAddress()}) \\
+		Adresa stroje v síti.
+\end{description}
+
+\section{Výpočetní model (\texttt{computation-lifecycle})}
+
+\begin{description}
+	\item[numberOfThreads] (počet dostupných procesorových jader) \\
+		Počet použitých výpočetních vláken ve sdílené paměti.
+	\item[nodeThreshold] ($\frac{3}{2} \times $ počet dostupných procesorových jader) \\
+		Minimální počet současně počítaných výpočtů ve službě \texttt{ExecutorService}, který se výpočetní kontejner snaží udržet.
+	\item[balancerMultiplier] ($\frac{3}{2}$) \\
+		K balancování dochází pouze pokud $b > \texttt{balancerMultiplier} \cdot i$, kde $b$ je počet výpočetních instancí na nejvíce zatíženém stroji a $i$ počet instancí na nejméně vytíženém.
+	\item[balancerBusyBound] (1) \\
+		K balancování dochází pouze pokud je počet výpočetních instancí na nejvíce zatíženém stroji vyšší než toto číslo.
+	\item[balancerIdleBound] (1) \\
+		K balancování dochází pouze pokud je počet výpočetních instancí na nejméně zatíženém stroji nižší než toto číslo.
+	\item[nodes] ~\\
+		Stroje použité pro distribuované počítání. Na těchto strojích musí být Parasim spuštěn s přepínačem \texttt{-s}.
+	\item[defaultExecutor] (org.sybila.parasim.computation.lifecycle.api.SharedMemoryExecutor) \\
+		Výchozí výpočetní prostředí.
+\end{description}
+
+\section{Numerická simulace (\texttt{simulation})}
+
+\begin{description}
+	\item[lsodeIntegrationMethod] (\texttt{nonstiff}) \\
+		Integrační metoda pro LSODE, k dispozici jsou -- \texttt{adams}, \texttt{nonstiff}, \texttt{bdf} a \texttt{stiff}.
+	\item[odepkgFunction] ~\\
+		Pokud je nastaveno, je použita integrační metoda z balíku \texttt{odepkg}, dostupné hodnoty jsou
+		 -- \texttt{ode5r}, \texttt{ode78}, \texttt{odebda}, \texttt{odebdi}, \texttt{odekdi}, \texttt{oders} a \texttt{odesx}.
+\end{description}
+
+\section{Detekce cyklu (\texttt{cycledetection})}
+
+\begin{description}
+	\item[relativeTolerance] ($\frac{1}{100}$) \\
+		Relativní tolerance pro ověření ekvivalence dvou bodů pro účely detekce cyklu.
+\end{description}

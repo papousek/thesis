@@ -73,7 +73,7 @@
 \definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
 \definecolor{sourcebackground}{RGB}{250, 250, 250} % javadoc
 
-\lstset{
+\lstdefinestyle{Java}{
 	language=Java,
 	basicstyle=\ttfamily,
 	keywordstyle=\color{javapurple}\bfseries,
@@ -83,6 +83,19 @@
 	numbers=left,
 	frame=leftline,
 	backgroundcolor=\color{sourcebackground},
+	numberstyle=\tiny\color{black},
+	stepnumber=1,
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false,
+	captionpos=b
+}
+
+\lstdefinestyle{Bash}{
+	language=Bash,
+	basicstyle=\ttfamily,
+	numbers=left,
+	frame=leftline,
 	numberstyle=\tiny\color{black},
 	stepnumber=1,
 	tabsize=4,
