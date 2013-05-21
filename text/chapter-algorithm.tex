@@ -11,7 +11,7 @@ problémy:
 			není známá. Jak nastavit parametry modelu tak, aby splňoval dané chování~\cite{aster2012}?
 \end{enumerate}
 
-V~bodě \ref{item:init} lze jít ještě dál než ke kontrole modelů. Můžeme si představit
+V~bodě \ref{item:init} lze jít dál než k pouhé kontrole modelů. Můžeme si představit
 poměrně přesný model, který využijeme k analýze jeho chování v~pod\-mín\-kách, které nelze
 navodit u reálného systému. Typickým příkladem může být živý organismus v~toxickém
 prostředí nebo extrémně vysoká nákaza šířící se ce\-lo\-svě\-to\-vou populací.
@@ -19,14 +19,14 @@ prostředí nebo extrémně vysoká nákaza šířící se ce\-lo\-svě\-to\-vou
 \section{Definice problému}\label{section:initial:condtion:problem:definition}
 
 Nechť je dynamický systém $\mathcal{DS} = (\mathbf{X}, f(\mathbf{P}))$, kde $\mathbf{X} = (x_1, \ldots, x_n) \in \mathbb{R}^n$
-je vektor stavových proměnných, $\mathbf{P}  = (p_1, \ldots, p_m) \in \mathbb{R}^m$ je vektor parametrů, dynamiku systému popisují obyčejné diferenciální
+je vektor stavových proměnných a $\mathbf{P}  = (p_1, \ldots, p_m) \in \mathbb{R}^m$ je vektor parametrů. Dynamiku systému popisují obyčejné diferenciální
 rovnice $\frac{dx_i}{dt} = f_i(\mathbf{P})(\mathbf{X})$ a $f_i: \mathbb{R}^m \rightarrow (\mathbb{R}^n \rightarrow \mathbb{R}^n)$.
 Tento systém rovnic souhrnně označíme jednou rovnicí $\frac{d\mathbf{X}}{dt} = f(\mathbf{P})(\mathbf{X})$. Narozdíl
 od obecného modelu zadaného pomocí systému obyčejných diferenciálních rovnic uvažujeme pouze autonomní systémy,
 tedy budeme předpokládat, že funkce stojící na pravé straně ne\-zá\-vi\-sí na čase, a proto je čas z definicí funkcí zcela vynechán.
 
 Pro každou stavovou proměnnou $x_i$ je dán interval $\mathcal{I}_{x_i} = [\iota_{x_i}^{min}, \iota_{x_i}^{max}]$
-a pro každý parametr $p_j$ interval $\mathcal{I}_{p_j} = [\iota_{p_j}^{min}, \iota_{p_j}^{max}]$
+a pro každý parametr $p_j$ interval $\mathcal{I}_{p_j} = [\iota_{p_j}^{min}, \iota_{p_j}^{max}]$.
 Tyto intervaly omezují nastavení iniciálních hodnot stavových proměnných $x_i$, respektive o\-hod\-no\-ce\-ní
 parametrů $p_j$, a určují tak prostor iniciálních podmínek \cite[str. 23]{drazan2011}.
 
@@ -34,7 +34,7 @@ parametrů $p_j$, a určují tak prostor iniciálních podmínek \cite[str. 23]{
 \mathcal{I} &= \mathcal{I}_{x_1} \times \mathcal{I}_{x_n} \times \ldots \times \mathcal{I}_{p_1} \times \ldots \times \mathcal{I}_{p_m}
 \end{align}
 
-Pro vektor $\mathbf{V} = (x_1, \ldots, x_n, p_1, \ldots, p_m) \in \mathcal{I}$, definujme projekční funkce $\pi_x(\mathbf{V}) = (x_1, \ldots, x_n)$
+Pro vektor $\mathbf{V} = (x_1, \ldots, x_n, p_1, \ldots, p_m) \in \mathcal{I}$ definujme projekční funkce $\pi_x(\mathbf{V}) = (x_1, \ldots, x_n)$
 a $\pi_p(\mathbf{V}) = (p_1, \ldots, p_m)$. Je-li dáná numerická metoda $\mathcal{M}_\varepsilon$,
 formule temporální logiky signálů $\varphi$, dynamický systém $\mathcal{DS}$
 a prostor iniciálních podmínek $\mathcal{I}$, pak řešeným problémem je najít
@@ -59,11 +59,11 @@ potřebného množství bodů, a proto je vhodné pokusit se počet bodů omezit
 
 \section{Původní algoritmus}
 
-Původní algoritmus, na kterém staví tato práce vychází z velice důležitého předpokladu.
+Původní algoritmus, na kterém staví tato práce vychází z velice důležitého předpokladu:
 \uv{Většina řešení začínajících v iniciálních bodech blízko sebe zůstávají blízko sebe
 i v průběhu času~\cite[str. 25]{drazan2011}.} Předpokládá se tedy, že chování určená blízkými
 hodnotami z prostoru iniciálních podmínek mají i blízkou míru platnosti dané formule.
-Není třeba tedy zjišťovat chování pro všechny body prostoru inicálních podmínek,
+Není tedy třeba zjišťovat chování pro všechny body prostoru inicálních podmínek,
 ale jen pro určitou množinu reprezentantů, pro kterou platí \cite[str. 25]{drazan2011}:
 
 \begin{enumerate}
@@ -108,8 +108,8 @@ hranice regionů platnosti a neplatnosti se zvolenou přes\-nos\-tí~$\delta$.
 \end{algorithm}
 
 Je samozřejme otázkou, jakým způsobem konkrétně probíhá počáteční zahuštění prostoru
-iniciálních podmínek, co přesně znamená obsahuje mno\-žina sousedů daného bodu a jak
-se změří vzdálenost dvou chování. Poslední zmíněnou otázkou se podrobně zabývá \cite{drazan2011}.
+iniciálních podmínek, co přesně obsahuje mno\-žina sousedů daného bodu a jak
+se změří vzdálenost dvou chování. Poslední zmí\-ně\-nou otázkou se podrobně zabývá diplomová práce Svena Dražana \cite{drazan2011}.
 Zbytek bude ještě rozveden v sekci \ref{section:algorithm:updated} společně s tím,
 jak zvolit hodnotu $\delta$.
 
@@ -119,23 +119,23 @@ Platnost formule lze chápat trochu šířeji než prosté \uv{platí}/\uv{nepla
 Nemusíme se pouze ptát, zda dané chování splňuje danou formuli, otázku lze posunout dál.
 Jak moc dané chování splňuje danou formuli? Jak moc je vlastnost nesplňena? Pro účely
 této práce zmíněné otázky zcela postačují, ale samozřejmě je možné požadovat ještě více.
-Odpověď lze kvantizovat a získat tak představu o míře, s  jakou je daný systém robustní
+Odpověď lze kvantizovat a~zís\-kat tak představu o míře, s  jakou je daný systém robustní
 vůči změnám podmínek, teplot nebo koncentrací chemických látek.
 
 V této sekci zavedeme pojem \textit{lokální a globální robustnosti}. Lokální robustností
 rozumíme míru, do jaké je daná vlastnost splněna na jednom chování. Globální robustnost
-na druhé straně vztáhneme na celý systém, tzn. že zahrnuje míru platnosti dané vlastnosti
+na druhé straně vztáhneme na celý systém, a pak zahrnuje míru platnosti dané vlastnosti
 nad větším množství chování, která vzniknou tzv. \textit{perturbacemi}. Existuje jedno
 referenční chování za ideálních podmínek, a pak mnoho perturbovaných chování za podmínek
 ne tak i\-deál\-ních. Perturbace lze chápat různě, v této práci odpovídají prostoru i\-ni\-ciál\-ních
-podmínek definovaného v sekci \ref{section:initial:condtion:problem:definition}. 
+podmínek definovaném v sekci \ref{section:initial:condtion:problem:definition}. 
 
 Jednou z věcí, které je třeba předem zmínit, je, že pro účely vylepšení algoritmu pro
 analýzu dynamických systémů, se na robustnost díváme z~pohledu chování systému \cite{donze2011}.
 To znamená, že se při výpočtu lokální robustnosti snažíme ohraničit prostor okolo jednoho chování,
 ve kterém má daná vlastnost stejnou platnost. Podobně lze k problému přistoupit z opačné strany \cite{rizk2009}.
 Ve formuli jsme schopni identifikovat volné proměnné, na\-po\-čí\-tat podprostor prostoru ohodnocení těchto proměnných, ve kterém je formule
-pro dané chování splněna a určit vzdálenost již konkrétní formule s dosazenými hodnotami za volné proměnné
+pro dané chování splněna, a určit vzdálenost již konkrétní formule s~do\-sa\-ze\-ný\-mi hodnotami za volné proměnné
 od tohoto napočítaného podprostoru.
 
 \subsection{Lokální robustnost}
@@ -158,9 +158,9 @@ formule.
 \end{array} \right.
 \end{align}
 
-Oborem hodnot funkcí $\mu_i$ odpovídajících atomickým prozicím tentokrát není množina $\{T, F\}$,
+Oborem hodnot funkcí $\mu_i$ odpovídajících atomickým propozicím tentokrát není množina $\{T, F\}$,
 nýbrž množina reálných čísel $\mathbb{R}$. Toto chápání je spíše technického charakteru. U nejčastěji používaných
-atomických propozic, kde $f(\mathbf{X}) = x_i$, je převod z v sekci \ref{section:stl} popsaného chápání přímočarý.
+atomických propozic, kde $f(\mathbf{X}) = x_i$, je převod z chápání popsaného v sekci \ref{section:stl} přímočarý.
 
 \begin{align}\label{eq:stl:semantics}
 \begin{array}{ll}
@@ -169,7 +169,7 @@ atomických propozic, kde $f(\mathbf{X}) = x_i$, je převod z v sekci \ref{secti
 \end{array}
 \end{align}
 
-Podobně jako při výpočtu dvouhodnotové platnosti formule i u robustnosti je potřeba se odkazovat
+Podobně jako při výpočtu dvouhodnotové platnosti formule i u robustnosti je potřeba odkazovat se
 na robustnost v určitém čase $\rho(\varphi, s, t)$, která se definuje induktivně ke struktuře
 formule. Výslednou robustnost dostaneme položením $\rho(\varphi, s) = \rho(\varphi, s, 0)$.
 
@@ -183,7 +183,7 @@ formule. Výslednou robustnost dostaneme položením $\rho(\varphi, s) = \rho(\v
 \end{align}
 
 Pro odvozené temporální operátory $\mathcal{F}$ a $\mathcal{G}$ lze definovat robustnost
-samostatně, což umožňuje naimplementovat její výpočet efektivněji.
+samostatně, což umožňuje naimplementovat její efektivnější výpočet.
 
 \begin{align}\label{eq:stl:semantics}
 \begin{array}{ll}
@@ -192,7 +192,7 @@ samostatně, což umožňuje naimplementovat její výpočet efektivněji.
 \end{array}
 \end{align}
 
-Jestliže je k dispozici analyzovaný primární signál, lze použit robustnost pro definici tzv. sekundárních
+Jestliže je k dispozici analyzovaný primární signál, lze použít robustnost pro definici tzv. sekundárních
 signálů příslušejících každé podformuli $\varphi'$ dané formule $\varphi$, kde $s_{\varphi'}[t] = \rho(\varphi', s, t)$.
 a $|s_{\varphi'}| = |s| - ||\varphi'||$. Tyto se\-kun\-dár\-ní signály dávají informaci o tom, jak moc se lze od primárního
 signálu vzdálit, aby daná podformule zůstala ještě platná v případě klad\-ných hodnot sekundárních signálů
@@ -225,7 +225,7 @@ $\neg$ a $\wedge$ lze spočítat v lineárním čase vzhledem k délce signálu.
 Pro hledání maxima,
 respektive minima pro všechny podsekvence dané sekvence prvků existuje algoritmus s lineární časovou složitostí~\cite{lemire2006}. Díky tomu lze
 výpočet sekundárního signálu i odvozených operátorů $\mathcal{F}$ a $\mathcal{G}$ pro\-vést
-rovněž v lineárním čase. Použitím pomocné funkce, jejíž struktura je popsaná v pseudokódu \ref{algorithm:unary:signal}
+rovněž v lineárním čase. Použitím pomocné funkce, jejíž struktura je popsaná v pseudokódu \ref{algorithm:unary:signal},
 získáme předpis 
 
 \begin{align}\label{eq:future:gloabally:robustness:impl}
@@ -282,7 +282,7 @@ s_{\mathcal{G}_{[a,b]}\varphi} = \textsc{Signal}([a,b], \varphi, <)
 \end{algorithm}
 
 Pro výpočet robustnosti formule $\varphi\mathcal{U}_{[a,b]}\psi$ lze použít vztahu \ref{eq:until:robustness:impl}~\cite{donze2010},
-který umožňuje formuli ve výpočtu nahradit konjunkcí několika podformulí, pro něž lze robustnost spočítat v lineárním čase, zejména 
+který umožňuje formuli ve výpočtu nahradit konjunkcí několika podformulí, pro něž lze robustnost spočítat v lineárním čase. Zejména 
 to platí pro $\varphi\mathcal{U}\psi$ bez požadavku na dodržení intervalu $[a,b]$. Výpočet robustnosti pro operátor $\mathcal{U}$
 s omezením na interval $[a,b]$ má proto rovněž lineární časovou složitost~\cite{donze2010}.
 
@@ -297,7 +297,7 @@ k dané vlastnosti jako celek. Je možné si představit systém, u něhož se h
 hodnot, vychylují, tzv. perturbují, od ideálního stavu. Často požadujeme, aby systém byl schopen do určité velikosti
 perturbací vykazovat jisté chování.
 
-Mějme systém $\mathcal{S}$, množinu perturbací $P$ a s pravděpodobnostmi výskytu a ohodnocovací funkci $D_\varphi^\mathcal{S}$.
+Mějme systém $\mathcal{S}$, množinu perturbací $P$ s pravděpodobnostmi výskytu a ohodnocovací funkci $D_\varphi^\mathcal{S}$.
 Míru, s jakou je systém schopen zachovat vlastnost $\varphi$ při daných perturbacích,
 definujeme předpisem \ref{eq:global:robustness:general} \cite{kitano2007}. Za ohodnocovací funkcí je vhodné zvolit lokální
 robustnost $D_\varphi^\mathcal{S} = \rho(\varphi, s_p)$. Nahrazením vzniká předpis \ref{eq:global:robustness:concrete}.
@@ -310,22 +310,22 @@ R_{\varphi, P}^\mathcal{S} = {\displaystyle\int_{p \in P}}prob(p) \cdot \rho(\va
 \end{align}
 
 V kontextu ukázaného algoritmu pro analýzu dynamických systémů není globální robustnost až tak
-důležitý pojem, nicméně nabízí užitečnou metriku, jak porovnávat modely mezi sebou.
+důležitý pojem, nicméně nabízí užitečnou metriku k porovnávání modelů.
 
 \section{Upravený algoritmus}\label{section:algorithm:updated}
 
 Nyní se vraťme k algoritmu pro analýzu dynamických systémů. V jeho původní podobě
 vystupuje parametr $\delta$, se kterým se porovnává vzdálenost hlavní trajektorie chování
-s trajektorií sousední, viz. řádek \ref{algorithm:line:trajectory:distance}
+s trajektorií sousední, viz řádek \ref{algorithm:line:trajectory:delta}
 pseudokódu~\ref{algorithm:main:original}. Pro účely této práce je postačující již ukázaná
 definice vzdálenosti dvou trajektorií jako $\sigma(s_1, s_2) = {\displaystyle \sup_{t \in \mathbb{R}^{+}}} \{d(s_1(t), s_1(t))\}$,
 nicméně je samozřejmě mož\-né použít jiný předpis. Hodnota parametru $\delta$ je pro celý prostor
-chování stejná, a to vede k podobnému zahuštění v regionech prostoru iniciálních pod\-mí\-nek,
-kde dáná formule určitě platí, určitě neplatí i v regionech, kde se platnost formule mění.
+chování stejná, což vede k podobnému zahuštění jak v~regionech prostoru iniciálních pod\-mí\-nek,
+kde dáná formule určitě platí, určitě neplatí, tak i v~regionech, kde se platnost formule mění.
 
 Pro zvýšení efektivity algoritmu je vhodné, aby pro regiony, kde je platnost formule již zřejmá,
 nedocházelo k dalšímu zahušťování a simulaci trajektorií chování. Naopak pro regiony, kterými prochází
-hranice změny platnosti by k zahušťování docházet mělo. Jak určit části prostoru od sebe odlišit?
+hranice změny platnosti, by k zahušťování docházet mělo. Jak tyto části prostoru od sebe odlišit?
 
 Absolutní hodnotu lokální robustnosti nad danou trajektorií chování lze chápat
 jako odchylku, o kterou je možné se od trajektorie vzdálit, aby platnost
@@ -336,7 +336,7 @@ právě tímto číslem.
 
 Na závěr této kapitoly je vhodné se ještě zmínit o způsobu, jakým jsou vybírány
 body pro iniciální zahuštění, případně další body poté, co se nějaká ze sousedních trajektorií
-chování vzdálila od hlavní trajektorie více, než přípouští napočítá lokální 
+chování vzdálila od hlavní trajektorie více, než přípouští napočítaná lokální 
 robustnost.
 
 \begin{figure}[H]
@@ -423,10 +423,10 @@ nový hlavní bod F. Pro každou dimenzi se vytvoří pomocné body tentokrát v
 velikosti prostoru iniciálních hodnot v dané dimenzi, tím se hlavní bod C v této
 nové iteraci zahuštění stává bodem vedlejším.
 
-V nejméně příznivém scénáři je do iterace $i$ nutno pracovat s $(2^i + 1)^d$ body,
+V nejméně příznivém scénáři je v iteracích $0, 1, \ldots, i$ nutno pracovat s~$(2^i + 1)^d$ body,
 kde $d$ je dimenze prostoru iniciálních podmínek. Algoritmus v mnoha případech
-ke svému výpočtu nevyžaduje takové množství bodů, expo\-nen\-ciál\-ní nárůst počtu
-potřebných bodů se však i přesto od určitě iterace za\-huš\-tě\-ní objeví. To je způsobeno
+ke svému výpočtu nevyžaduje takové množství bodů. Expo\-nen\-ciál\-ní nárůst počtu
+potřebných bodů se však i přesto od určité iterace za\-huš\-tě\-ní objeví. To je způsobeno
 zejména regiony prostoru iniciálních podmínek, kterými prochází hranice platnosti dané formule.
 
 Nutnost analyzovat exponenciální množštví trajektorií chování společně s
