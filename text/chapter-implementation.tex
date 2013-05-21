@@ -1,25 +1,26 @@
 \chapter{Implementace}\label{chapter:implementation}
-Následující kapitola se věnuje aplikaci Parasim, jejíž jsem hlavním spoluautorem.
+
+Tato kapitola se věnuje aplikaci Parasim, jejíž jsem hlavním spoluautorem.
 Tato aplikace implementuje algoritmus pro
 analýzu dynamických systémů zmíněný v sekci \ref{section:algorithm:updated}. Aplikace Parasim
-vznikla na základě prototypu dostupného v \cite{drazan2011}. Cílem prototypu je názorně
+vznikla na základě prototypu dostupného v diplomové práci Svena Dražana~\cite{drazan2011}. Cílem prototypu bylo ná\-zor\-ně
 zobrazit průběh výpočtu původního algoritmu. Uživateli se ukazuje, jakým způsobem
-se počítá vzdá\-le\-nost mezi trajektoriemi chování, kde je nutné zahušťovat a jak dopadlo
-ověření platnosti. Vzhledem k tomu, že prototyp například používá pouze jednoduchou metodu
-numerické simulace k nalezení trajektorií chování, není vhodné jej použít k analýze složitějších modelů.
+se počítá vzdá\-le\-nost mezi trajektoriemi chování, kde je nutné zahušťovat, a jak dopadlo
+ověření platnosti. Vzhledem k tomu, že prototyp například pro nalezení trajektorií chování používá pouze jednoduchou metodu
+numerické simulace, není vhodné jej použít k analýze slo\-ži\-těj\-ších modelů.
 
 V nové implementaci bylo oproti prototypu třeba zahrnout následující:
 
 \begin{enumerate}
-	\item	úprava algoritmu dle sekce \ref{section:algorithm:updated},
-	\item	paralelní výpočet ve sdílené nebo distribuované paměti,
-	\item	rozšiřitelnost, modularita a otevřenost k rozdílné implementaci již naimplementovaných částí,\label{item:features:extensibility}
+	\item	úprava algoritmu dle sekce \ref{section:algorithm:updated};
+	\item	paralelní výpočet ve sdílené nebo distribuované paměti;
+	\item	rozšiřitelnost, modularita a otevřenost k rozdílné implementaci již naimplementovaných částí;\label{item:features:extensibility}
 	\item	zobrazení výsledků analýzy pro vícedimenzionální prostory ini\-ciál\-ních podmínek.\label{item:features:visualisation}
 \end{enumerate}
 
 Tato práce se zabývá všemi zmíněnými body kromě bodu \ref{item:features:visualisation},
 který je však v Parasimu již také vyřešen. Vzhledem k monolitické implementaci prototypu
-nedošlo k jeho úpravám a rozšíření, ale vytvořila se od základu nová aplikace.
+nedošlo k jeho úpravám a rozšíření, ale byla vytvořena od základu nová aplikace.
 Bod \ref{item:features:extensibility} je důležitý z několika důvodů. Pro různé části algoritmu
 existuje více způsobů, jak je naimplementovat. Existuje například mnoho nástrojů umožňujících
 numerickou simulací na základě systému diferenciálních rovnic získat trajektorii chování.
@@ -35,15 +36,14 @@ dynamických systémů.
 
 \section{Architektura}
 
-Parasim je aplikace napsaná v Javě 7 složená z většího množství artefaktů pro
+Parasim je aplikace napsaná v programovacím jazyku Java verze 7 a skládá se z většího množství artefaktů pro
 sestavovací nástroj Maven. Zdrojové kódy jsou pod licencí GNU GPL verze 3~\cite{gpl} k dispozici
-v Git \cite{chacon2009} repozitáři \url{https://github.com/sybila/parasim}. Artefakty sestavené
-z poslední verze těchto zdrojových jsou publikovány do Maven repozitáře
-\url{http://repository-sybila.forge.cloudbees.com/snapshot/}, o což se stará veřejná
-instance nástroje Jenkins \cite{jenkins} \url{http://www.cloudbees.com/}. Artefakty
-vydaných verzí jsou k nalezení v Maven repozitáři \url{http://repository-sybila.forge.cloudbees.com/release}.
-Hlavní aplikaci Parasimu představuje artefakt \texttt{org.sybila.parasim.application:parasim}.
-Pou\-ži\-tí aplikace je popsáno v příloze \ref{appendix:usage}
+v Git \cite{chacon2009} repozitáři\footnote{\url{https://github.com/sybila/parasim}}. Artefakty sestavené
+z~poslední verze těchto zdrojových kódů jsou publikovány do Maven repozitáře \textit{snapshot}\footnote{\url{http://repository-sybila.forge.cloudbees.com/snapshot/}}, o což se stará veřejná
+instance nástroje Jenkins \cite{jenkins}\footnote{\url{http://www.cloudbees.com/}}. Artefakty
+vydaných verzí jsou k nalezení v Maven repozitáři \textit{release}\footnote{\url{http://repository-sybila.forge.cloudbees.com/release}}.
+Použití aplikace Parasim dostupné v podobě artefaktu \texttt{org.sybila.parasim.application:parasim}
+je popsáno v pří\-lo\-ze \ref{appendix:usage}.
 
 Jádro Parasimu tvoří artefakt \texttt{org.sybila.parasim:core}, který řídí ži\-vot\-ní
 cyklus všech modulů a zajišťuje základní funkcionalitu. To zajišťuje kontejner,
@@ -53,16 +53,16 @@ JSR-299 \cite{jsr299}. V žádném případě se nejedná o~implementaci tohoto 
 nýbrž jen o volnou inspiraci některými koncepty, které umožňují úplné oddělení rozhraní
 od implementace, lepší testovatelnost a práci s pamětí.
 
-Nejdůležitějším aspektem je použití kontextů, které mají různou délku a je možné je za\-no\-řo\-vat.
-Rozšíření pro jednotlivé kontexty nabízejí služby a~aplikace definuje na různých
-místech v~kódu závislosti na těchto službách. Kontejner se stará o to,
+Nejdůležitějším aspektem je použití kontextů, které mají různou délku a~kte\-ré je možné za\-no\-řo\-vat.
+Rozšíření pro jednotlivé kontexty nabízejí služ\-by. Aplikace definuje na různých
+místech v~kódu závislosti na těchto služ\-bách. Kontejner se stará o to,
 aby v případě požadavku na nějakou službu bylo zavoláno příslušné rozšíření,
 které ji poskytuje. Rozšíření vytvoří instanci služby a v případě vy\-pr\-še\-ní kontextu
-tuto instanci vhodným způsobem zničí.
+tuto instanci vhodným způ\-so\-bem zničí.
 
 Za vytvoření a zničení instance služby je tak zodpovědný autor rozšíření,
 který také definuje příslušná rozhraní. Aplikace není téměř žádným způ\-so\-bem závislá
-na implementaci rozhraní, a jednotlivé implementace lze tak jednoduše zaměňovat,
+na implementaci rozhraní, a jednotlivé implementace tak lze jednoduše zaměňovat,
 aniž bychom v~aplikačním kódu cokoliv mě\-ni\-li.
 
 \subsection{Životní cyklus}
@@ -150,7 +150,7 @@ znázorněn diagramem na obrázku \ref{figure:parasim:lifecycle}.
 \end{tikzpicture}}
 \end{center}
 \caption{Životní cyklus Parasimu. Zelené obdélníky představují události, které se propagují napříč rozšířeními.
-Šedými obdélníkymi je znázorněna základní funkcionalita. Čerchovaným ohraničením jsou vyznačeny části Java kódu.}
+Šedými obdélníky je znázorněna základní funkcionalita. Čerchovaným ohraničením jsou vyznačeny části Java kódu.}
 \label{figure:parasim:lifecycle}
 \end{figure}
 
@@ -181,9 +181,8 @@ public @interface Application {}
 \end{lstlisting}
 
 Když je k dispozici anotace rozsahu rozlišující kontext, je možné  vytvořit kontext
-nový, jak je ukázáno v ukázce kódu \ref{code:context}. Vývojář je zodpovědný za to,
-aby kontext zničil, když už jej nebude potřebovat, aby roz\-ší\-ře\-ním, která se nacházejí
-v tomto kontextu, umožnil uvolnit zdroje.
+nový, jak je ukázáno v ukázce kódu \ref{code:context}. Vývojář je zodpovědný za destrukci
+nepotřebné kontextu, aby roz\-ší\-ře\-ním, která se nacházejí v tomto kontextu, umožnil uvolnit zdroje.
 
 \begin{lstlisting}[label={code:context}, caption={Vytvoření kontextu}, style=Java]
 // vytvori kontext Scope1
@@ -199,26 +198,25 @@ context1.destroy();
 
 \subsection{Služby}
 
-Základní funkcionalitou jádra Parasimu je poskytovat instance služeb, které jsou
-vytvořeny pomocí rozšíření. Služby se definují pomocí rozhraní a může pro ně existovat
-více implementací. Aby byl Parasim schopen od sebe rozlišit jednotlivé implementace,
-používá kvalifikátory. Kva\-li\-fi\-ká\-tor je anotace, v jejíž deklaraci byla použita anotace
+Základní funkcionalitou jádra Parasimu je poskytovat instance služeb, kte\-ré jsou
+vytvořeny pomocí rozšíření. Služby se definují pomocí rozhraní a~mů\-že pro ně existovat
+více implementací. Aby byl Parasim schopen od sebe roz\-li\-šit jednotlivé implementace,
+používá kvalifikátory. Kva\-li\-fi\-ká\-tor je anotace, v~je\-jíž deklaraci byla použita anotace
 \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Qualifier.java}{\texttt{Qualifier}}.
 
 Pokud na daném místě aplikace není důležité, jaká implementace dané služby bude použita,
-případě není známo, jaké kvalifikátory jsou vůbec k dispozici, je možné použít kvalifikátor
-\href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Default.java}{\texttt{Default}}
-pro výchozí implementaci. Je na autorovi rozšíření, aby poskytl smysluplnou výchozí implementaci
+případně není známo, jaké kvalifikátory jsou vůbec k~dis\-po\-zi\-ci, je možné pro výchozí implementaci použít kvalifikátor
+\href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Default.java}{\texttt{Default}}. Je na autorovi rozšíření, aby poskytl smysluplnou výchozí implementaci
 poskytované služby.
 
 Příkladem vhodného použití kvalifikátorů je rozšíření poskytující
 vý\-počet robustnosti pro danou formuli nad danou trajektorii chování. Zde je možné zavést
-různé kvalikátory pro různé temporální logiky. Výchozí implementace takové služby
+různé kvalifikátory pro různé temporální logiky. Výchozí implementace takové služby
 by měla být schopna spočítat robustnost pro všechny podporované typy temporálních logik,
-Avšak je možné, že se v~takovéto implementaci bude nacházet méně efektivní algoritmus,
-případě analýza předložené formule, což zbrzdí výpočet.
+Je však možné, že se v~takovéto implementaci bude nacházet méně efektivní algoritmus
+či analýza předložené formule, což zbrzdí výpočet.
 
-\begin{lstlisting}[label={code:qualifier}, caption={Kvalikátor}, style=Java]
+\begin{lstlisting}[label={code:qualifier}, caption={Kvalifikátor}, style=Java]
 @Qualifier
 @Target({
 	ElementType.FIELD,
@@ -241,32 +239,32 @@ Enrichment enrichment = manager.resolve(
 		Default.class);
 \end{lstlisting}
 
-Parasim používá ještě jeden jednodušší typ služeb. Tyto služby jsou dostupné pouze
+Parasim používá ještě jeden, jednodušší typ služeb. Tyto služby jsou dostupné pouze
 pomocí manažera, nelze je od sebe odlišit pomocí kvalifikátoru a nejsou závislé na konextu.
 Manažer poskytuje všechny dostupné implementace daného rozhraní v jedné kolekci. Tento typ služeb
 primárně  slouží k ovlivňování cho\-vání rozšíření. Lze pomocí nich například
-poslouchat událostem z logování.
+naslouchat událostem z logování.
 
 \subsection{Rozšíření}
 
 Parasim je schopen načíst rozšíření, která jsou v době vytvoření manažera na \texttt{Java class path}.
-Všechna rozšíření zatím použitá v aplikaci byla přibalena do souboru JAR aplikace pomocí sestavovacího
+Všechna v aplikaci zatím použitá rozšíření byla přibalena do souboru JAR aplikace pomocí sestavovacího
 nástroje Maven, a proto jsou k dispozici bez dalšího nasta\-vo\-vá\-ní. Rozšíření musí obsahovat
 následující části:
 
 \begin{itemize}
-	\item	alespoń jednu třidu, která implementuje rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/spi/LoadableExtension.java}{LoadableExtension},
+	\item	alespoň jednu třídu, která implementuje rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/spi/LoadableExtension.java}{LoadableExtension};
 	\item	soubor \texttt{META-INF/services/org.sybila.parasim.core.spi.\\LoadableExtension} obsahující plné názvy všech tříd z daného roz\-ší\-ření implementující \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/spi/LoadableExtension.java}{LoadableExtension}, jeden název na jednom řád\-ku. 
 \end{itemize}
 
 Rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/spi/LoadableExtension.java}{LoadableExtension}
 obsahuje jedinou metodu, ve které je pře\-dán objekt pro registraci tříd rozšíření. Je možné
 registrovat služby ne\-zá\-vi\-slé na kontextu a tzv. pozorovatele, což jsou třídy poskytující
-služby a naslouchající událostem. Podrobnější příklad toho, jak rozšíření může vypadat,
+služby a~na\-slou\-cha\-jí\-cí událostem. Podrobnější příklad toho, jak rozšíření může vypadat,
 se nachází v příloze \ref{appendix:extension}. Tato sekce obsahuje pouze vysvětlení
 nej\-dů\-le\-ži\-těj\-ších konceptů.
 
-Již zmínění pozorovatelé jsou schopni pomocí metod označených anotací \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Provide.java}{\texttt{Provide}}
+Zmínění pozorovatelé jsou schopni pomocí metod označených anotací \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Provide.java}{\texttt{Provide}}
 poskytovat instance služeb. V deklaraci metody se mohou na\-chá\-zet parametry,
 které je manažer jádra Parasimu schopen vyhodnotit a injektovat. Tyto parametry
 lze označovat kvalifikátory. V případě, že není žádný kvalifikátor k dispozici,
@@ -277,8 +275,7 @@ poskytnutý objekt propagován jako událost do všech dostupných rozšíření
 že by byla služba požadována znovu. Výjimku tvoří poskytující metody, pro jejichž
 návratový typ nelze vytvořit proxy\footnote{Typickým příkladem typů, pro které nelze vytvořit proxy, jsou finální třídy.}.
 Takové poskytující metody jsou zavolány již během načítání rozšíření. Pokud v čase volání
-poskytující metody nelze najít hodnoty pro všechny její parametry, dojde k vyhození výjimky a
-pravděpodobně i k~pádu celé aplikace.
+poskytující metody nelze najít hodnoty pro všechny její parametry, dojde k vyhození výjimky a~prav\-dě\-po\-dob\-ně i k~pádu celé aplikace.
 
 \begin{lstlisting}[label={code:provide:required}, caption={První metoda poskytující službu \texttt{Functionality}}, style=Java]
 /**
@@ -312,7 +309,7 @@ public Functionality provideFunctionality(
 \end{lstlisting}
 
 Druhým typem metod v pozorovatelských třídách jsou metody na\-slou\-cha\-jí\-cí událostem.
-Aby bylo možné tyto metody rozlišit, je první parametr těchto metod je označen anotací \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Observes.java}{\texttt{Observes}}
+Aby bylo možné tyto metody rozlišit, je první parametr těchto metod označen anotací \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Observes.java}{\texttt{Observes}}
 a typ tohoto parametru určuje typ naslouchané události. Pro další parametry těchto metod platí
 stejná pravidla jako pro parametry poskytujících metod. Pro odeslání vlastních událostí
 je k dispozici služba \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/EventDispatcher.java}{\texttt{EventDispatcher}}.
@@ -326,8 +323,8 @@ samo o sobě bez toho, aby jej uživatel musel konfigurovat.
 
 Pro autory rozšíření je k dispozici služba \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/configuration/ParasimDescriptor.java}{\texttt{ParasimDescriptor}},
 která je schopná na základě názvu rozšíření vrátit hodnoty konfiguračních pro\-měn\-ných
-ve formě řetězců, dále služba \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/configuration/ExtensionDescriptorMapper.java}{\texttt{ExtensionDescriptorMapper}} schopná namapovat hodnoty konfiguračních pro\-měn\-ných
-do atributů u~objektu v Javě. Mapování umí automaticky převést řetězce
+ve formě řetězců a dále služba \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/configuration/ExtensionDescriptorMapper.java}{\texttt{ExtensionDescriptorMapper}} schopná namapovat hodnoty konfiguračních pro\-měn\-ných
+do atributů u~objektu v~jazyce Java. Mapování umí automaticky převést řetězce
 do nej\-pou\-ží\-va\-něj\-ších datových typů.
 
 Autor rozšíření tedy vytvoří konfigurační třídu s atributy, jejichž názvy se shodují
@@ -338,22 +335,22 @@ zpřístupnění konfigurace v~rozšíření je k dispozici v~příloze \ref{app
 Při užívání aplikace lze konfiguraci lze změnit dvěma způsoby:
 
 \begin{itemize}
-	\item	Pomocí systémové proměnné \texttt{parasim.config.file} v Javě je mož\-né nastavit cestu k XML souboru.
+	\item	Pomocí systémové proměnné \texttt{parasim.config.file} v~jazyce Java je mož\-né nastavit cestu k XML souboru.
 			Výchozí cesta k tomuto souboru je nastavena na \uv{parasim.xml}. Tento soubor
 			obsahuje pojmenované sekce a v těchto sekcích nastavení pro jednotlivé konfigurační
-			pro\-měn\-né. Názvy proměnných se shodují s názvy atributů konfiguračních objektů.
+			pro\-měn\-né. Názvy proměnných se shodují s názvy atributů kon\-fi\-gu\-rač\-ních objektů.
 
-	\item	Pro každou konfigurační proměnnou lze přepsat její hodnotu pomocí systémové
-			proměnné v Javě, jejíž název je \texttt{parasim.<název roz\-ší\-ření>.<název konfugurační proměnné>}.
-			Názvy on\-fi\-gu\-rač\-ních promměných i název rozšíření se zde uvádí v tečkové notaci, například pro atribut \texttt{timeUnit}
+	\item	Pro každou konfigurační proměnnou lze přepsat její hodnotu po\-mo\-cí systémové
+			proměnné v~jazyce Java, jejíž název je \texttt{parasim.<název roz\-ší\-ření>.<název konfugurační proměnné>}.
+			Názvy kon\-fi\-gu\-rač\-ních promměných i název rozšíření se zde uvádí v tečkové notaci, například pro atribut \texttt{timeUnit}
 			a rozšíření \texttt{example} se bude sys\-té\-mo\-vá proměnná nazývat \texttt{parasim.example.time.unit}.
 \end{itemize}
 
 Pokud je nutné nějakou část konfigurace zpřístupnit
 změnám nejen při startu aplikace, ale i při jejím běhu skrze systémové proměnné, je potřeba mít na paměti
 okamžik, ve kterém se vytváří konfigurační objekt. Jakmile je totiž již konfigurační objekt vytvořen,
-nelze hodnoty konfigurace jemu náležící změnit. Po změně systémové proměnné,
-je možné si znovunačtení konfiguračního objektu vynutit zničením příslušnoho kontextu
+nelze hodnoty konfigurace jemu náležící změnit. Po změně systémové proměnné
+je možné si znovunačtení konfiguračního objektu vynutit zničením příslušného kontextu
 a vy\-tvo\-ře\-ním nového. Na to však není vhodný aplikační kontext, protože jeho
 zničení prakticky znamená vypnutí aplikace.
 
@@ -377,16 +374,16 @@ Pokud je anotace použita s přiřazením \texttt{required=false}, výjimka se n
 Další části práce ukážou, jak je možné Parasim použít k distribovanému počítání.
 To je umožněno pomocí rozšíření pro vzdálený přístup, které zpří\-stup\-ňu\-je získání
 některých služeb nacházejících se v aplikačním kontextu jiného vzdá\-le\-né\-ho stroje.
-Na tomto stroji je nejprve nutné tuto funkcionalitu aktivovat skrze rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/remote/Loader.java}{\texttt{Loader.java}},
+Na stroji je nejprve nutné tuto funkcionalitu aktivovat skrze rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/remote/Loader.java}{\texttt{Loader.java}},
 jak je ukázáno ve zdrojovém kódu \ref{code:remote}. Ukázaný kód nastartuje server
-pro práci s \textit{Remote Method Invocation}~\cite{grosso2001} a na tento server vystaví \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/remote/Loader.java}{\texttt{Loader.java}}.
+pro práci s \textit{Remote Method Invocation}~\cite{grosso2001} (RMO) a na tento server vystaví \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/remote/Loader.java}{\texttt{Loader.java}}.
 
 \begin{lstlisting}[label={code:remote}, caption={Spuštění serveru}, style=Java]
 manager.resolve(Loader.class, Default.class)
 	   .load(Loader.class, Default.class);
 \end{lstlisting}
-Ostatní stroje jsou pak schopny vynutit si vystavení služeb z aplikačního kontextu
-tohoto stroje na tento server. Aby bylo možné službu vystavit, je nutné, aby implementovala
+Ostatní stroje jsou pak schopny vynutit si vystavení služeb z aplikač\-ní\-ho kontextu
+tohoto stroje na server pro RMI. Aby bylo možné službu vystavit, je nutné, aby implementovala
 rozhraní \texttt{java.rmi.Remote}. Jakmile je server na vzdáleném stroji aktivován,
 je možné s ním komunikovat podobně jako ve zdrojovém kódu \ref{code:host:control}.
 
@@ -409,13 +406,13 @@ služby se vyhodnocuje na straně vzdáleného stroje.
 
 Parasim obsahuje rozšíření pro snadnější provádění jistého druhu vý\-poč\-tu.
 Základní jednotku výpočtu zde představuje instance. Během průběhu po\-čí\-tá\-ní lze
-tuto instance rozdělit na více dalších a ty počítat nezávisle na sobě. Jednotlivé instance
+tuto instanci rozdělit na více dalších a ty počítat nezávisle na sobě. Jednotlivé instance
 se mohou dále dělit a vrací mezivýsledky, které je možné slučovat pomocí asociativní
 a komutativní operace. Jak přesně se výpočetní instance dělí a jak jsou mezivýsledky
 slučovány, určuje ten, kdo implementuje algoritmus.
 
 Důležitým aspektem však je, že se vývojář implementující algoritmus nemusí starat
-o způsob, jakým konkrétně budou výpočetní instance spočteny. To na druhou stranu vynucuje
+o způsob, jakým konkrétně budou výpočetní instance spoč\-te\-ny. To na druhou stranu vynucuje
 některá omezení, která musí vývojář při implementaci výpočtu dodržet.  Parasim zatím nabízí
 jednotné rozhraní pro počítání ve sdílené a~dís\-tri\-buo\-va\-né paměti.
 
@@ -428,32 +425,32 @@ kde se data po skončení mezivýpočtu po\-sí\-la\-jí mezi počítači po sí
 
 Z formálního hlediska již není kladen na datový typ výsledku žádný požadavek, nicméně
 je třeba mít na paměti, že se mezivýsledek v případě distribuovaného počítání
-serializuje a je mezi stroji posílán po síti, tudíž velikost mezivýsledků může velkou měrou
-ovlivnit výpočetní čas. Podobně i metoda pro slučování mezivýsledků by neměla být vý\-po\-čet\-ně
-příliš náročná, protože spojování výsledků má zpravidla na starost jedno vlákno, respektive
+serializuje a že je mezi stroji posílán po síti, tudíž velikost mezivýsledků může velkou měrou
+ovlivnit výpočetní čas. Podobně i~me\-to\-da pro slučování mezivýsledků by neměla být vý\-po\-čet\-ně
+příliš ná\-roč\-ná, protože spojování výsledků má zpravidla na starost jedno vlákno, respektive
 jeden stroj.
 
 \subsection{Reprezentace výpočtu}
 
 Jakýkoliv výpočet je v Parasimu definován jako třída implementující rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/Computation.java}{\texttt{Computation}}. Ve třídě vývojář
 implementuje algoritmus výpočtu za pomoci injektovaných služeb. V případě potřeby
-lze určit způsob, jakým se má instance zachovat ve chvíli, kdy již není za potřebí.
+lze určit způsob, jakým se má instance zachovat ve chvíli, kdy již není zapotřebí.
 
-V případě distribuovaného počítání se instance výpočtu může i ně\-ko\-lik\-rát posílat mezi stroji po sítí. Z toho důvodu
+V případě distribuovaného počítání se instance výpočtu může i ně\-ko\-lik\-rát posílat mezi stroji po sítí. Z tohoto důvodu
 je nutné, aby i třída definující výpočet byla serializovatelná. To v praxi znamená, že musí
 být seriazovatelné i hodnoty všech atributů, které nejsou injektovány. Bohužel chybová hláška z virtuálního stroje Javy
-není v případě, že třída nesplňuje podmínky serializovatelnosti, přílíš popisná, takže
-zejména tento typ chyb se velice špatně opravuje.
+není v případě, že třída nesplňuje podmínky serializovatelnosti, přílíš popisná.
+Zejména tento typ chyb se tedy velice špatně opravuje.
 
 \subsection{Životní cyklus výpočtu}
 
-Vstupním bodem pro spuštění výpočtu je služba \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/ComputationContainer.java}{\texttt{ComputationContainer}}. Tento kontejner rozhoduje
-rozhoduje, jaké použít prostředí pro výpočet na základě dostupné konfigurace a anotací.
+Vstupním bodem pro spuštění výpočtu je služba \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/ComputationContainer.java}{\texttt{ComputationContainer}}. Tento kontejner rozhoduje,
+jaké použít prostředí pro výpočet na základě dostupné konfigurace a dostupných anotací.
 Pomocí anotace \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/annotations/RunWith.java}{\texttt{RunWith}} lze zvolit mezi prostředím se sdílenou nebo distribuovanou pamětí. Pokud tato anotace
 není k dispozici, je použito výchozí prostředí, které lze předefinovat globálně v konfiguraci
 Parasimu.
 
-Jakmile kontejner provedl analýzu výpočetní instance, předává tuto instance dále
+Jakmile kontejner provedl analýzu výpočetní instance, předává tuto instanci dále
 ke zvolenému výpočetnímu prostředí, ve kterém se instance spustí. Toto prostředí
 vytvoří kontext výpočtu, který je sdílen napříč celým výpočtem na
 jednom stroji. Pozor, v případě prostředí s distribuovanou pamětí, se tento kontext
@@ -465,7 +462,7 @@ pro trajektorii chování její lokální robustnost.
 
 Pro každou výpočetní instanci je dále vytvořen další kontext, který již není sdílený
 s žádnou další instancí a jehož délka trvání může být  mnohem kratší než u výpočetního kontextu.
-Tento kontext je vhodný pro služby, které by v případě sdílení napříč více vláken musely
+Tento kontext je vhodný pro služby, které by v případě sdílení napříč více vlákny musely
 být synchronizovány. V Parasimu se v tomto kontextu nachází služba pro simulaci trajektorie
 chování, která pro tento účel používá proces nástroje GNU Octave \cite{eaton2008}. Není
 žádoucí, aby jeden proces nástroje GNU Octave byl sdílen více vlákny. 
@@ -475,7 +472,7 @@ instance použito obohacování zmíněné v sekci \ref{section:enrichment}. Až
 se instance výpočtu spustí. Do této chvíle se v kontejneru nenachází žádná souběžnost
 a vše je prováděno pouze sekvenčně. V~těle výpočtu však mohou být vytvářeny další instance výpočtu,
 a ty pak pomocí asynchronního volání služby \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/Emitter.java}{\texttt{Emitter}} emitovány do výpočetního prostředí, které je zodpovědné za jejich spuštění.
-Průběh počítání je tudíž podobný jako u modelu Fork/Join \cite{lea2000} uvedeného v Javě verze 7.
+Průběh počítání je tudíž podobný jako u modelu Fork/Join \cite{lea2000} uvedeného v~jazyce Java verze 7.
 
 \begin{figure}[H]
 \label{figure:computation:shared:memory}
@@ -601,20 +598,20 @@ Průběh počítání je tudíž podobný jako u modelu Fork/Join \cite{lea2000}
 	\end{scope}
 \end{tikzpicture}}
 \end{center}
-\caption{Schéma průběhu výpočtu ve sdílené paměti. Zelené obdelníky představují události,
-šedými obdelníkymi objekty a čerchovaně ohraničené jsou části Java kódu.}
+\caption{Schéma průběhu výpočtu ve sdílené paměti. Zelené obdélníky představují události,
+šedými obdélníky objekty a~čer\-cho\-va\-ným ohraničením jsou vyznačeny části Java kódu.}
 \end{figure}
 
 Jakmile je výpočetní instance s výpočtem hotová, je vrácen výsledek a~zničí se
 kontext spojený s touto instancí. Kontejner sbírá mezivýsledky a~postupně je slučuje
 s dalšími. Až svůj výpočet ukončí poslední instance, zničí se výpočetní kontext na
-všech použitých strojích. Konečný výsledek, případně i aktuální podoba sloučených
+všech použitých strojích. Konečný výsledek a~pří\-pad\-ně i aktuální podoba sloučených
 mezivýsledků je v~aplikaci k dispozici v podobě objektu \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/Future.java}{\texttt{Future}}.
 
 \subsection{Výpočetní prostředí}
 
 Jak již bylo řečeno, Parasim nabízí dva typy prostředí, ve kterém lze výpočet spustit.
-Výchozí prostředím, které bude použito bez jakéhokoliv na\-sta\-vo\-vá\-ní, je počítání ve sdílené paměti.
+Výchozím prostředím, které bude použito bez jakéhokoliv na\-sta\-vo\-vá\-ní, je počítání ve sdílené paměti.
 Toto prostředí využívá standardního způsobu nepřímé práce s vlákny ve virtuálním stroji Javy
 pomocí třídy implementující \texttt{java.util.concurrent.ExecutorService}.
 Instance té\-to třídy má k dispozici určité množství vláken, která jsou v~kapitole
@@ -622,11 +619,11 @@ Instance té\-to třídy má k dispozici určité množství vláken, která jso
 zpracování objekty implementující \texttt{java.util.concurrent.Callable}.
 
 Takto odeslané objekty \texttt{java.util.concurrent.Callable} již nelze získat zpět,
-což způsobuje drobné komplikace. Aby bylo možné model pro sdílenou paměť převyužít i pro prestředí s distribuovanou pamětí,
+což způsobuje drobné komplikace. Aby bylo možné model pro sdílenou paměť převyužít i pro prostředí s distribuovanou pamětí,
 je zapotřebí u\-mož\-nit balancovat výpočet napříč více stroji. V případě, že některý ze strojů není vytížený, kontejner zajistí,
-aby se na tento stroj přesunula instance výpočtu ze stroje více vytíženého. Z toho důvodu
+aby se na tento stroj přesunula instance výpočtu ze stroje více vytíženého. Z tohoto důvodu
 obsahuje Parasim mezivrstvu (třída \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-impl/src/main/java/org/sybila/parasim/computation/lifecycle/impl/common/Mucker.java}{\texttt{Mucker}}). Instance výpočtu jsou nejprve uloženy do fronty a objektu \texttt{java.util.concurrent.ExecutorService}
-jsou dále posílány z této fronty tak, aby dostupná vlánka byla co nejvíce vytížená.
+jsou dále posílány z této fronty tak, aby dostupná vlákna byla co nejvíce vytížená.
 Pokud dojde k přesouvání instancí výpočtu mezi stroji, jsou k~tomu využity instance z fronty daného stroje.
 
 Centrálním bodem výpočtu je třída implementující \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/MutableStatus.java}{\texttt{MutableStatus}}. Skrze tento bod se dorozumívají všechny objekty
@@ -639,7 +636,7 @@ implementujících rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.
 						\href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/Emitter.java}{\texttt{Emitter}}.
 
     \item[computing] 	Událost nastane ve chvíli, kdy je instance výpočtu z fronty vý\-poč\-tů poslána
-						vláknů k provedení a ještě před tím, než je pro instanci vytvořen příslušný kontext.
+						vláknům k~provedení a ještě před tím, než je pro instanci vytvořen příslušný kontext.
 
     \item[done] 		Událost nastane ve chvíli, kdy je instance výpočtu se svým výpočtem
 						hotova. Stane se tak ještě před tím, než je vrácen výsledek,
@@ -647,14 +644,14 @@ implementujících rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.
 
 	\item[finished]		Událost nastane ve chvíli, kdy již není k dispozici žádná instance výpočtu.
 	
-	\item[balanced]		Událost nastane ve chvíli, kdy dojde k přesunutí instance výpočtu z jednoho stroje na jiný,
+	\item[balanced]		Událost nastane ve chvíli, kdy dojde k přesunutí instance vý\-poč\-tu z jednoho stroje na jiný,
 						a to pouze na stroji, kam byla instance pře\-su\-nu\-ta.
 \end{description}
 
 V případě prostředí s distribuovanou pamětí je průběh výpočtu slo\-ži\-těj\-ší. Než začne samotný výpočet,
 je nutné na strojích, které chceme použít, spustit podporu pro vzdálený přístup
 zmíněný v sekci \ref{section:remote}. Na každém z~těch\-to strojů je výpočet zaregistrován
-pod náhodným identifikátorem a vytvoří se výpočetní kontext. V celém mechanismu se tedy  nacházejí dva typy strojů --
+pod náhodným identifikátorem a~vy\-tvo\-ří se výpočetní kontext. V celém mechanismu se tedy  nacházejí dva typy strojů --
 stroj, ze kterého byl výpočet iniciován (\textit{master}), a stroje, mezi které je distribuovaná práce (\textit{slave}).
 
 \begin{figure}[h!]
@@ -750,7 +747,7 @@ balancovat výpočetní instance napříč \textit{slave} stroji. K tomuto úče
 \subsection{Možná nastavení výpočtu}
 
 Jednotlivé výpočty se od sebe mohou velkou mírou lišit, a je proto vhodné, aby celý mechanismus
-počítání v Parasimu byl co nejsnáze nastavitelný. Jednou z věcí, která může výpočet ovlivnit, je pořadí,
+počítání v Parasimu byl co nejsnázeji nastavitelný. Jednou z věcí, která může výpočet ovlivnit, je pořadí,
 v jakém se jednotlivé instance budou počítat. Dalším důležitým faktorem může být výběr instance,
 která se přesune při balancování mezi méně a více vytíženým strojem. Tyto dva atributy se zdají být
 kritické pro implementaci uvažovaného algoritmu pro analýzu dynamického systému, protože obsahuje
@@ -764,7 +761,7 @@ stroje Javy se navíc menší využití paměti projeví i na výkonu \textit{Ga
 Pokud přesouváme jednu výpočetní instanci z jednoho stroje na druhý, je třeba si uvědomit,
 že každý z těchto strojů má již vybudovanou svoji cache. Cílem balancování je přesunout
 nejlépe takovou výpočetní instanci, která bude pracovat s trajektoriemi nenacházejícími
-se v cache zdrojového stroje. Výpočet takové instance bude na cílovém stroji trvat nejvíce tak dlouho jako
+se v cache zdrojového stroje. Výpočet takové instance bude na cílovém stroji trvat nejvíce tak dlou\-ho jako
 na stroji zdrojovém.
 
 Parasim k tomuto účelu nabízí rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/Selector.java}{\texttt{Selector}}, které z dané kolekce vybere jeden její prvek. Pomocí anotace \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/annotations/RunWith.java}{\texttt{RunWith}} lze nastavit třídu implementující toto rozhraní
@@ -784,7 +781,7 @@ s krátkým popisem. Možné způsoby konfigurace jsou k dispozici v příloze \
 
 	\item[computation-simulation] 		Rozšíření poskytuje numerickou simulaci. Pro se\-kven\-ci bodů vrátí
 										sekvenci trajektorií chování. Umožňuje rovněž již nasimulovanou trajektorii
-										chování prodloužit o zvolený čas. Současná implementace použivá volně dostupný
+										chování prodloužit o zvolený čas. Současná implementace používá volně dostupný
 										nástroj GNU Octave~\cite{eaton2008}. 
 
     \item[computation-cycledetection]	Rozšíření pro detekci cyklu na trajektorii cho\-vá\-ní. V současné
@@ -795,15 +792,15 @@ s krátkým popisem. Možné způsoby konfigurace jsou k dispozici v příloze \
 
     \item[computation-density]			Rozšíření dokáže určit vzdálenosi mezi hlavní trajektorií a sousedními trajektoriemi chování a na
 										základě této vzdá\-le\-nos\-ti zahustit prostor iniciálních podmínek. Obsahuje cache pro
-										již použité trajektorie. Z důvodu nepřesnosti při počítání s reálnými čísly v Javě se
+										již použité trajektorie. Z důvodu nepřesnosti při počítání s reálnými čísly v~jazyce Java
 										se jako klíč v této paměti používají souřadnice obsahující zlomky, jejichž jmenovatel
-										je mocninou čísla 2. Tento zlomek určuje v jaké části prostoru iniciálních podmínek,
+										je mocninou čísla 2. Tento zlomek určuje, v~jaké části prostoru iniciálních podmínek,
 										který je po celou dobu výpočtu stejně velký, se trajektorie chování nachází.
 
 	\item[computation-lifecycle]		Rozšíření poskytující již dříve zmíněný výpočetní model použitý v Parasimu. 
 
 \end{description}
 
-V současné době Parasim obsahuje více rozšíření, než je zde zmíněno. Nicméně tato rozšíření se vztahují ne k samotnému
+V současné době Parasim obsahuje více rozšíření, než je zde zmíněno. Nicméně tato rozšíření se nevztahují k samotnému
 algoritmu, ale spíše k~samotné aplikaci. Tato aplikace umí spravovat projekty s modely a nastavením
 pro analýzu. Také umožňuje výsledky analýzy zobrazovat a ukládat do souboru.
