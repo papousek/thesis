@@ -1,7 +1,7 @@
 \chapter{Pojmy a východiska}\label{chapter:preliminaries}
 
-Následující kapitola se věnuje základním pojmům nutným k~pochopení
-algoritmu pro analýzu dynamických systémů uvedeného v kapitole \ref{chapter:algorithm}
+Tato kapitola se věnuje základním pojmům nutným k~pochopení
+algoritmu pro analýzu dynamických systémů představeného dále v kapitole \ref{chapter:algorithm}
 a~kontextu, v jakém byl navržen. Jedná se zejména o popis reprezentace zkou\-ma\-ných
 modelů a požadovaných vlastností.
 
@@ -10,24 +10,24 @@ modelů a požadovaných vlastností.
 \section{Modelování}
 
 Před popisem samotného modelování pomocí obyčejných diferenciálních rovnic je
-nutné říci, co se od vytvářených modelů zpravidla očekává. Model zpro\-středko\-vá\-vá
-zjednodušený pohled na zkoumaný systém a umožňuje tím systém snáze pochopit a
+nutné říci, co se od vytvářených modelů zpravidla očekává. Model má zpro\-středko\-vat
+zjednodušený pohled na zkoumaný systém a umožnit tím systém snáze pochopit a
 případně předpovídat některá jeho chování. Fakt, že model je jen zjednodušením, znamená,
-že se vždy od reality liší a nabízí pouze jen některé aspekty chování zkoumaného
-systému. [str. 48]
+že se vždy od reality liší a~reflektuje jen některé aspekty chování zkoumaného
+systému~\cite[str. 48]{pelanek2012}.
 
 % Priklad modelu mapa, modelujeme problem ne system
 
-Jednoduchým příkladem modelu je mapa. Zřejmě nemůžeme očekávat od mapy, aby obsahovala
+Jednoduchým příkladem modelu je mapa. Zřejmě nemůžeme od mapy očekávat, aby obsahovala
 všechny aspekty zahrnuté ve skutečném světě. Svým způsobem je mapa již od počátku
 \uv{špatně}, nabízí pouze jistou abstrakci systému a může i zkreslovat náš pohled.
-Přesto nelze popírat její užitečnost. Na příkladu mapy si lze také ukázat pohled, že se
+Přesto nelze popírat její užitečnost. Z příkladu mapy je také zřejmé, že se
 nemodeluje systém, ale problém. Existuje celá řada druhů map od turistických, automap
-až po mapy podloží a každá z nich má svůj specifický účel. \cite[str. 47 -- 58]{pelanek2012}
+až po mapy podloží a každá z nich má svůj specifický účel~\cite[str. 47 -- 58]{pelanek2012}.
 
 Pro tuto práci jsou důležité modely, které lze simulovat. Model definuje pravidla, podle
-kterých se systém chová a simulace umožňuje se podívat na chování systému v čase, ať už
-diskrétním či spojitém. Pro simulaci je sa\-mozřej\-mě potřeba znát stav systému v~počátečním
+kterých se systém chová a simulace umožňuje podívat se na chování systému v čase, ať už
+diskrétním či spojitém. Pro účely simulace je sa\-mozřej\-mě potřeba znát stav systému v~počátečním
 čase, od kterého se jeho další chování odvíjí.
 
 \subsection{Modelování pomocí obyčejných diferenciálních rovnic}
@@ -54,13 +54,13 @@ kterou poskytují metody pro řešení problému výchozích podmínek~\cite{ise
 
 Tyto metody hledají aproximaci v diskrétním čase a chyba, s níž se vy\-po\-čí\-ta\-ná
 aproximace liší od skutečného řešení, je shora ohraničená uživatelem danou hodnotou.
-Fakt, že si může uživatel takto zvolit toleranci chy~by, je je jednou z nejdůležitějších
+Fakt, že si může uživatel takto zvolit toleranci chy\-by, je jednou z nejdůležitějších
 vlastností těchto metod. Nastavení chyby může samozřejmě v případě nízké tolerance
-a některých systémů vyústit ve výkonostní problémy.
+a některých systémů vyústit ve vý\-kon\-nost\-ní problémy.
 
 Jestliže je dána numerická metoda $\mathcal{M}_\epsilon(f, \mathbf{X}(t_0), \Delta t)$,
 kde $\epsilon$ je relativní chyba a $\Delta t$ požadovaný časový krok,
-pak zpravidla pracujeme ze sekvencí bodů danou předpisem \ref{eq:ode:aprox},
+pak zpravidla pracujeme se sekvencí bodů danou předpisem \ref{eq:ode:aprox},
 ve kterém $\tau$ představuje délku numerické simulace.
 
 \begin{align}
@@ -89,15 +89,15 @@ predátorů ($\gamma$) a schopnost reprodukce predátorů ($\delta$).
 \end{array}
 \end{align}
 
-Model je samozřejmě zjednodušením reality. V systému se nacházejí pouze dva druhy
-zvířat, bíložravá kořist a masožravý predátor. U kořisti se předpokládá bezproblémový
-přístup k potravě, a proto přirozeně příbívá. Naproti tomu reprodukce predátora je
+Model je samozřejmě zjednodušením reality. V systému se nachází pou\-ze dva druhy
+zvířat, bíložravá kořist a masožravý predátor. U kořisti se před\-po\-klá\-dá bezproblémový
+přístup k potravě, a proto přirozeně příbývá. Naproti tomu reprodukce predátora je
 závislá na přísunu masité potravy, tzn. množství kořisti v systému.
 
 I na tomto jednoduchém modelu je však možné pozorovat netriviální chování, o čemž se lze přesvědčit
 při pohledu na grafy  \ref{fig:lotkav:timeserie} a \ref{fig:lotkav:oscil}. Systém má
 tendenci oscilovat. Periodicky dochází k nárustu populace predátora, to vyústí v pokles
-populace kořisti, následně u predátorů v důsledku nedostatku potravy převáží úmrtnost nad reprodukcí,
+populace kořisti, následně u predátorů v důsledku nedostatku potravy převáží úmrtnost nad rozsahem reprodukce,
 množství kořisti opět naroste a tento cyklus se znovu opakuje.
 
 \begin{figure}[h!]
@@ -115,20 +115,20 @@ množství kořisti opět naroste a tento cyklus se znovu opakuje.
 Síla modelů a simulace se ukazuje být v tom, že tento druh informace získáme, aniž bychom prováděli
 experiment se skutečným systémem se  skutečnými liš\-ka\-mi a zajíci. Samozřejmě se na závěr neobejdeme
 bez validace výsledků simulace oproti realitě, ale tomu může předcházet velké množství
-experementů na počítači, které by jinak stály mnoho prostředků nebo by ani 
-nebyly uskutečnitelné. Za zmínku stojí například model popisující šíření nákazy
+experementů na počítači, které by v reálných podmínkách stály mnoho prostředků nebo by ani 
+nebyly uskutečnitelné. Za zmínku stojí na\-pří\-klad model popisující šíření nákazy
 populací~\cite{kermack1927}, což je téma, u něhož si opravdu lze jen těžko představit
-experimenty na reálném systému.
+experimentování na reálném systému.
 
 \subsection{Modelování chemických reakcí}
 
-Modelování pomocí obyčejných diferenciálních rovnic je natolik obecný a účinný nástroj,
+Modelování pomocí obyčejných diferenciálních rovnic je natolik obecný a~ú\-čin\-ný nástroj,
 že jej lze použít pro popis jevů z mnoha oblastí. Jednou z typických oblastí, kde
 se rovnice používají, jsou chemické reakce. Pro systém elementárních chemických reakcí
-lze za jistých předpokladů \cite{TODO} automatizovaně zkonstruovat systém diferenciálních rovnic,
+lze za jistých před\-po\-kla\-dů automatizovaně zkonstruovat systém diferenciálních rovnic,
 kde stavovými proměnnými jsou koncentrace jednotlivých látek. Elementárními che\-mic\-ký\-mi
-reakcemi se mají na mysli ty chemické reakce, u nichž dochází k přímé přeměně reaktantů
-v produkty bez reakčních mezikroků nebo je možné tyto mezikroky zanedbat \cite{horn1972}.
+reakcemi se rozumí ty chemické reakce, u nichž dochází k přímé přeměně reaktantů
+v produkty bez reakčních mezikroků nebo v jejichž pří\-pa\-dě je možné tyto mezikroky zanedbat \cite{horn1972}.
 Schémata \ref{eq:chemeq} ukazují, jak tento převod konkrétně vypadá pro jednotlivé
 elementární chemické reakce a specifickou kinetickou konstantu $k$. Koncentraci látky
 $\textrm{X}$ značíme $[\textrm{X}]$.
@@ -144,9 +144,9 @@ A + A \xrightarrow{k} AA	&\leadsto \frac{d[\textrm{A}]}{dt} = - 2k \cdot [\textr
 \end{array}
 \end{align}
 
-Pro obecné reakce abstrahující určitou kaskádu elementárních reakcí univerzální
-převod neexistuje. Zde je již nutné přihlédnout k typu reakce. Tím, že se
-zanedbají mezireakce s meziprodukty, může výsledný systém diferenciálních rovnic obsahovat
+Pro obecné reakce abstrahující určitou kaskádu elementárních reak\-cí univerzální
+převod neexistuje. Zde je již nutné přihlédnout k typu reakce. V~dů\-sled\-ku toho, že se
+zanedbají mezireakce s meziprodukty, může vý\-sled\-ný systém diferenciálních rovnic obsahovat
 méně proměnných a je tak snazší jej simulovat.
 
 Je vhodné poznamenat, že nástroj, který popisuje tato práce v~kapitole \ref{chapter:implementation},
@@ -158,22 +158,22 @@ ve formě systému diferenciálních rovnic.
 
 Aby bylo možné modely automatizovaně analyzovat, je nutné vyjadřovat se o jejich
 vlastnostech exatně. Jazyk, který je k tomuto účely nutné použít, musí být schopen 
-popsat chování systému v čase. V kontextu obyčejných a di\-fe\-ren\-ci\-ál\-ních rovnic je
+popsat chování systému v čase. V kontextu obyčejných di\-fe\-ren\-ci\-ál\-ních rovnic je
 chováním trajektorie, v případě simulace sekvence bodů s~časovým razítkem. Například u modelu
-popsaného v sekci \ref{section:lotkav} je vhodné popsat oscilaci populace kořisti
+uvedeného v~sekci \ref{section:lotkav} je vhodné popsat oscilaci populace kořisti
 nebo predátora. To lze provést tak, že budeme požadovat, aby množství jedinců
 daného druhu opakovaně pře\-sáh\-lo maximální a minimální mez. Jak konkrétně
 tento po\-ža\-da\-vek zformulovat, je ukázáno v následující části této kapitoly.
 
 K vyjádření vlastností nad lineárními běhy systémů se nejčastěji používá lieární
-temporální logika~\cite{strejcek2007} (\textit{linear temporal logic}, LTL), případě logiky z ní odvozené.
+temporální logika~\cite{strejcek2007} (\textit{linear temporal logic}, LTL), případně logiky z~ní odvozené.
 LTL u\-mož\-ňu\-je se zjednodušeně vyjadřovat o sta\-vech
-systému v čase formulacemi typu \uv{v budoucnu nastane \ldots}, \uv{vždy platí \ldots} apod.
+sys\-té\-mu v čase formulacemi typu \uv{v budoucnu nastane \ldots}, \uv{vždy platí \ldots} apod.
 Tato logika se definuje nad nekonečnými běhy, a proto je v~této práci použita temporální logika
 signálů~\cite{maler2004} (\textit{signal temporal logic}, STL) založená na temporální logice metrických intervalů~\cite{alur1996} (\textit{metric interval temporal logic}, MITL),
-která se od LTL liší zejména přidáním ča\-so\-vých intervalů u temporálních operátorů. Tím STL
-u\-mož\-ňu\-je formulovat výroky, které jsou částečně zá\-vis\-lé na čase, jako
-je například \uv{za hodinu až dvě nastane \ldots} \uv{za třicet minut bude celé
+která se od LTL liší zejména přidáním ča\-so\-vých intervalů u~temporálních operátorů. STL tedy
+u\-mož\-ňu\-je formulovat výroky, které jsou čás\-teč\-ně zá\-vis\-lé na čase, jako
+je například \uv{za hodinu až dvě nastane \ldots} či \uv{za třicet minut bude celé
 čtyři hodiny platit \ldots}.
 
 \subsection{Signál}
@@ -207,8 +207,8 @@ skládání funkcí $f \circ s_1 : \mathbb{T} \rightarrow \mathbb{D}'$, kde $f(\
 
 Je dobré si povšimnout, že definice signálu je konzistentní s tím, jak chápeme chování modelu,
 tedy jako trajektorii v $\mathbb{R}^n$, kde $n$ je počet sta\-vo\-vých proménných. Zároveň
-je třeba si však uvědomit, že výstupem numerické simulace není spojitá trajektorie, nýbrž pouze
-sekvence bodů s~ča\-so\-vým razítkem. Z praktických důvodu je dále v této kapitole tato sekvence
+je však třeba si uvědomit, že výstupem numerické simulace není spojitá trajektorie, nýbrž pouze
+sekvence bodů s~ča\-so\-vým razítkem. Z praktických důvodů je dále v této kapitole tato sekvence
 chá\-pá\-na jako po částech konstantní funkce.
 
 \begin{figure}[h!]
@@ -227,10 +227,10 @@ chá\-pá\-na jako po částech konstantní funkce.
 Důležitým aspektem zde použité logiky jsou uzavřené časové intervaly $I = [a, b]$, kde $a, b \in \mathbb{Q}_{\geq0}$,
 jimiž jsou omezeny všechny temporální operátory. Konečnost intervalů je jedním z rozdílů
 oproti klasické temporální logice metrických intervalů. Toto omezení je plně v souladu s tím,
-že modely porovnáváme s reálnými systémy, které pozorujeme konečný čas, a značně tento předpoklad
-zjedno\-du\-ší další analýzu.
+že modely porovnáváme s reálnými systémy, které pozorujeme konečný čas. Tento předpoklad značně
+zjedno\-du\-šuje další analýzu.
 
-Nechť $U = \{\mu_1, \mu_2, \mu_3, \ldots, \mu_k\}$ je množina efektivně vyčíslitelných funkcí
+Nechť $U = \{\mu_1, \mu_2, \mu_3, \ldots, \mu_k\}$ je množina efektivně vyčíslitelných funk\-cí
 $\mu_i: \mathbb{R}^n \rightarrow \{T, F\}$, které zpravidla odpovídají predikátům tvaru
 $f(\mathbf{X})~\geq~k$ nebo $f(\mathbf{X})~\leq~k$. Všimněme si, že nemá smysl v predikátech
 používat samotnou rovnost, protože numerická simulace vrací data s~určitou chybou.
@@ -245,7 +245,7 @@ ve kterém $p$ značí atomickou propozici.
 \end{align}
 
 Ze základních formulí lze odvodit další standardně používané výrokové a temporální operátory.
-Nejpožívanějšími jsou výrokový operátor $\vee$ a temporální operátory $\mathcal{F}$ a $\mathcal{G}$,
+Nejpoužívanějšími jsou výrokový operátor $\vee$ a temporální operátory $\mathcal{F}$ a $\mathcal{G}$,
 které intuitivně odpovídají už zmíněným výrokům \uv{v budoucnu nastane \ldots} a \uv{vždy platí \ldots}.
 
 \begin{align}\label{eq:stl:other}
@@ -270,7 +270,7 @@ Signál $s$ splňuje formuli $\varphi$ právě tehdy, když $(s, 0) \models \var
 \end{array}
 \end{align}
 
-Stojí za zmínku, že operátor $\mathcal{U}$ je zde definován s trochu jinou sé\-man\-ti\-kou
+Operátor $\mathcal{U}$ je zde definován s trochu jinou sé\-man\-ti\-kou,
 než je běžné. Požaduje se zde silnější podmínka -- aby existoval stav (čas),
 pro který platí obě vlastnosti $\varphi_1$ a $\varphi_2$, tedy aby existoval
 čas $t' \in [t + a, t + b]$ takový, že $(s, t') \models \varphi_1$
@@ -288,10 +288,10 @@ Standardní sémantika temporálních logik obecně neumožňuje ověření plat
 na konečných signálech kromě některých případů, jako je splněnost $\mathcal{F}\varphi$
 nebo nesplněnost $\mathcal{G}\varphi$, jejichž platnost může být ověřena v konečném čase.
 Tento problém naštěstí odpadá zavedením časových intervalů. I přesto však existují
-formule a signály, u kterých o platnosti rozhodnot nelze. Příkladem může být formule $F_{[a, b]}\varphi$
+formule a signály, u kterých o platnosti rozhodnout nelze. Příkladem může být formule $F_{[a, b]}\varphi$
 a signál o délce kratší než $b$.
 
-Z tohoto důvodu se definuje délka nezbytná k ověření platnosti dané formule nad daným signálem,
+Z tohoto důvodu se definuje délka nezbytná k ověření platnosti dané formule nad daným signálem
 opět induktivně.
 
 \begin{align}\label{eq:stl:min:length}
@@ -305,8 +305,8 @@ opět induktivně.
 
 \subsection{Příklad vlastnosti}\label{section:stl:example}
 
-Temporální logika signálů nám umožňuje formulovat celou řadu vlastností. Mezi ty
-nejznámnější a nejčastěji používané patří oscilace. Je dobré si u\-vě\-do\-mit, že oscilaci
+Temporální logika signálů umožňuje formulovat celou řadu vlastností. Me\-zi ty
+nejznámější a nejčastěji používané patří oscilace. Je dobré si u\-vě\-do\-mit, že oscilaci
 lze chápat mnoha různými způsoby. V~praxi se nevyplatí klást přísná omezení na přesnost
 periody, velikost amplitudy či přesnost stavu, kterým systém periodicky prochází. 
 
@@ -335,7 +335,7 @@ predikáty $[x] \geq k$ a $[x] \leq -k$, jejichž platnost lze vidět na obrázc
 \end{center}
 \end{figure}
 
-Jeden cyklus, lze popsat tak, že se hodnota sledované proměnné nachází nad horní mezí a zároveň někdy
+Jeden cyklus lze popsat tak, že se hodnota sledované proměnné nachází nad horní mezí a zároveň někdy
 v budoucnu klesne pod dolní mez, tedy $[x] \geq k \wedge \mathcal{F}_{[0, \frac{1}{2}]}[x] \leq -k$.
 Přidání operátoru $\mathcal{F}$ zajistí, že se v daném času do určité doby provede jeden oscilační cyklus,
 viz obrázek \ref{fig:stl:example:future:geq:limit:future:leq:limit}. To, že systém
@@ -352,4 +352,4 @@ Výsledná formule tedy vypadá následovně:
 Z uvedeného příkladu je zřejmě, že platnost formule nad daným signá\-lem
 lze ověřit algoritmem, jehož průběh bude kopírovat strukturu formule. Jak
 přesně ověřovací algoritmus vypadá, ukáže sekce \ref{section:robustness},
-která navíc lehce rozšíří vnímání pravdivosti jako takové.
+která navíc lehce rozšíří chápání pravdivosti jako takové.
