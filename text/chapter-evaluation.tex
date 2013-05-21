@@ -5,21 +5,21 @@ a jeho implementaci v rámci nástroje Parasim. Následující kapitola prezentu
 analýzy nad vybranými modely v různě nastaveném výpočetním prostředí se sdílenou a distribuovanou pamětí.
 Nejprve si ukážeme, jakým způsobem byly vybrány analyzované modely. Následuje popis těchto modelů
 a prezentace naměřených dat. Na\-mě\-ře\-ná data obsahují především
-výpočetní čas, který je nutný k provedení experimentu v~růz\-ných konfiguracích výpočetního
-prostředí. Na závěr se nachází interpretace mě\-ře\-ní.
+výpočetní čas, který byl nutný k provedení experimentu v~růz\-ných konfiguracích výpočetního
+prostředí. V závěru kapitoly se na\-chá\-zí interpretace mě\-ře\-ní.
 
 \section{Možné parametry}
 
 Průběh výpočtu popisovaného algoritmu pro analýzu dynamický systémů lze rozdělit do tří hlavních částí:
 
 \begin{enumerate}
-	\item	zahuštění inicialníhi prostoru požadovanými body, \label{item:density}
-	\item	získání trajektorií chování,\label{item:simulation}
+	\item	zahuštění inicialníhi prostoru požadovanými body; \label{item:density}
+	\item	získání trajektorií chování;\label{item:simulation}
 	\item	ověření dané vlastnosti nad nasimulovanými trajektoriemi. 
 \end{enumerate}
 
 Ukazuje se, že bod \ref{item:simulation} je výpočetně nejnáročnější, tvoří více než 90~\% výpočetního času a přímo závisí na 
-množství  trajektorií chování nutných k~analýze. Toto množství samozřejmě plyne z modelu, vlastnosti, perturbací.
+množství  trajektorií chování nutných k~analýze. Toto množství samozřejmě plyne z modelu, vlastnosti a nastavení perturbací.
 V algoritmu se nové trajektorie vytváří v bodu \ref{item:density}, který je parametrizován maximálním
 počtem provedených iterací zahuštění.
 
@@ -31,9 +31,9 @@ závisí na intervalech nacházejících se v ověřované formuli.
 Z pohledu vstupních dat experimentu se tedy nabízí následující parametry:
 
 \begin{enumerate}
-	\item	maximální počet iterací zahuštění,
-	\item	počet perturbovaných parametrů a proměnných,
-	\item	minimální délka trajektorie nutná k ověření dané vlastnosti,
+	\item	maximální počet iterací zahuštění;
+	\item	počet perturbovaných parametrů a proměnných;
+	\item	minimální délka trajektorie nutná k ověření dané vlastnosti;
 	\item	vlastnosti modelu ovlivňující zahušťování.
 \end{enumerate}
 
@@ -199,8 +199,8 @@ ze schématu \ref{eq:stl:lotkav:oscil}:
 
 Experimenty byly spuštěny v prostředí se sdílenou i distribuovanou pamětí s různým
 počtem dostupných procesorových jader, respektive strojů. Pro každé výpočetní vlákno
-Parasimu běží dva procesy nástroje Octave, který obstarává numerickou simulace. Při měření
-ve sdílené paměti byla aplikace parasim spouštěna s $n$ výpočetními vlákny na $2n$
+Parasimu běží dva procesy nástroje Octave, který obstarává numerickou simulaci. Při měření
+ve sdílené paměti byla aplikace Parasim spouštěna s $n$ výpočetními vlákny na $2n$
 procesorových jádrech.
 
 Na strojích pro prostředí s distribuovanou pamětí byla aplikace Parasim spouštěna se dvěma
@@ -211,7 +211,7 @@ s pamětí sdílenou. V obou prostředích měl vyrtuální stroj Javy k dispozi
 	\item[sdílená paměť: ]
 		 64 jader, 2.27 GHz; paměť 450 GB; Red Hat Enterprise Linux Server release 6.4; Java 1.7.0\_13-b20 (64 bit); Octave 3.4.3
 	\item[distribuovaná paměť]
-		4 jádra, 2.0 GHz; paměť 16 GB; Java 1.7.0\_13-b20 (64 bit); Octave 3.6.4
+		4 jádra, 2.0 GHz; paměť 16 GB; NixOS 0.2pre-git; Java 1.7.0\_13-b20 (64 bit); Octave 3.6.4
 \end{description}
 
 Kompletní výsledky měření pro všechny uvažované konfigurace modelů jsou k dispozici
@@ -219,15 +219,15 @@ v příloze \ref{appendix:measurement}. Ke každé konfiguraci jsou k dispozici 
 
 \begin{itemize}
 	\item	čas nutný k provedení analýzy v prostředí se sdílenou a distribuovanou pamětí,
-			pro názornost je v grafu červeně uvedeno ideální zrychlení,
+			pro názornost je v grafu červeně uvedeno ideální zrychlení;
 	\item	počet simulovaných hlavních trajektorií chování během analýzy, pro názornost je v grafu
-			uveden počet hlavních trajektorií, který by byl použit při naivním zahušťování odpovídajícímu
-			dané iteraci,
+			uveden počet hlavních trajektorií, který by byl použit při naivním zahušťování odpovídajícím
+			dané iteraci;
 	\item	množství neplatných přístupů do paměti v závislosti na počtu strojů v~dis\-tri\-buova\-ném prostředí,
-			tato pomáhá předejít po\-čí\-tá\-ní duplicitních trajektorií.
+			tato paměť pomáhá předejít po\-čí\-tá\-ní duplicitních trajektorií.
 \end{itemize}
 
-Experiment s modelem v konfiguraci \texttt{meyer91-common} byl spouštěn pouze v distribuovaném prostředí
+Experiment s modelem v konfiguraci \texttt{meyer91-common} byl spouštěn pouze v distribuovaném prostředí,
 a to minimálně na dvou strojích kvůli velkému množství trajektorií, se kterými je během analýzy nutno
 pracovat. Toto množství trajektorií je dáno počtem perturbovaných parametetrů.
 
@@ -235,11 +235,11 @@ pracovat. Toto množství trajektorií je dáno počtem perturbovaných paramete
 
 \subsection{Prostředí s distribuovanou pamětí}
 
-Při pohledu na grafy času nutného k provedění analýzy plyne, že implementace
+Při pohledu na grafy času nutného k provedení analýzy plyne, že implementace
 prostředí s distribuovanou pamětí pro jeden až šestnáct strojů šká\-lu\-je poměrně dobře. Výjimku tvoří
 Lorenzův systém s maximálním množ\-stvím iterací nastaveným na 8. Při takto nastavené analýze
 se prostor ini\-ci\-ál\-ních podmínek zahušťuje pouze v poměrně malém regionu a z toho důvodu se při
-malém množství iterací nestihne vytvořit dostatečné množství trajektorií tak, aby se plně
+malém množství iterací nestihne vytvořit dostatečné množ\-ství trajektorií tak, aby se plně
 vytížily všechny stroje. 
 
 \begin{figure}[h!]
@@ -258,12 +258,12 @@ Rozdělování práce mezi výpočetní jednotky vede k možnosti du\-pli\-cit\-
 a proto Parasim používá cache, ve které ukládá již dříve analyzované trajektorie.
 V prostředí s více stroji si každý počítač udržuje svou verzi paměti s již
 analyzovanými trajektoriemi. Jelikož je tato cache lokální, je možné, že při balancování
-výpočtu napříč stroji dojde k tomu, že se některe trajektorie analyzují vícekrát.
+výpočtu napříč stroji dojde k tomu, že se některé trajektorie analyzují vícekrát.
 
 V současné implementaci se dává přednost rychlému výběru instance výpočtu pro
 přesun kvůli balancování, protože se na výběr čeká v kritické sekci na hlavním
 počítači (master), skrze který je celý výpočet řízen. Sofistikovanější, ale časově
-náročnější výběr zvýšit čekací čas na komunikaci mezi výpočetními stroji a hlavním strojem.
+náročnější výběr zvýší čekací čas na komunikaci mezi výpočetními stroji a hlavním strojem.
 Ukazuje se, že podíl duplicitní práce u náročnějších modelů tvoří pouze zlomek výpočtu,
 na druhou stranu u menších analýz se může množství duplicitně počítaných trajektorií
 vyšplhat i na 15 \%. Je na zvážení, zda by se nevyplatilo používat časově náročnější
@@ -278,7 +278,7 @@ je vidět, že při srovnání použití jednoho a dvou výpočetních vláken d
 než dvojnásobnému zrychlení. To je pravděpodobně způsobeno množstvím vlá\-ken vytvořených
 aplikací Parasim a knihovnou pro komunikaci s aplikací Octave, kterých je více,
 než dokáže efektivně obsloužit daný počet jader. Tento \uv{over\-head} se
-při větším jader projevuje méně.
+při větším počtu jader projevuje méně.
 
 \subsection{Další pozorování}
 
@@ -302,7 +302,7 @@ U tohoto experimentu sice výsledek analýzy dopadne podobně jako u experimentu
 ale větší délka časového intervalu v analyzované vlastnosti je náchylnější na posun fází oscilace
 mezi jednotlivých trajektoriemi chování. Posun fáze vede k větší vzdálenosti trajektorií,
 a proto se prostor mezi nimi musí dále zahušťovat. Jak takový fázový posun může vypadat, ukazuje
-obrázek \ref{fig:phase:shift}
+obrázek \ref{fig:phase:shift}.
 
 Obrázek \ref{fig:meyer91:common:dist:iterations:primary:summary} u experimentu \texttt{meyer91-common} je lehce
 zkreslený nedokonalostí popisované heuristiky zahušťování, kdy blízkost dvou trajektorií vyústí v to,
