@@ -13,7 +13,7 @@ prostředí. V závěru kapitoly se na\-chá\-zí interpretace mě\-ře\-ní.
 Průběh výpočtu popisovaného algoritmu pro analýzu dynamický systémů lze rozdělit do tří hlavních částí:
 
 \begin{enumerate}
-	\item	zahuštění inicialníhi prostoru požadovanými body; \label{item:density}
+	\item	zahuštění iniciálního prostoru požadovanými body; \label{item:density}
 	\item	získání trajektorií chování;\label{item:simulation}
 	\item	ověření dané vlastnosti nad nasimulovanými trajektoriemi. 
 \end{enumerate}
@@ -62,7 +62,7 @@ která byla k analýze použita. Hodnoty parametrů jsou nastaveny na $\alpha = 
 	\label{image:lorenz84:result}
 	\includegraphics[width=0.48\textwidth]{../images/generated/lotkav-timeserie.pdf}
 }
-\caption{Pradátor a kořist}
+\caption{Predátor a kořist}
 \end{center}
 \end{figure}
 
@@ -205,7 +205,7 @@ procesorových jádrech.
 
 Na strojích pro prostředí s distribuovanou pamětí byla aplikace Parasim spouštěna se dvěma
 výpočetními vlákny a konfigurace těchto počítačů se lišily od počítače použitého pro prostředí
-s pamětí sdílenou. V obou prostředích měl vyrtuální stroj Javy k dispozici 4 GB paměti.
+s pamětí sdílenou. V obou prostředích měl virtuální stroj Javy k dispozici 4 GB paměti.
 
 \begin{description}
 	\item[sdílená paměť: ]
@@ -219,7 +219,8 @@ v příloze \ref{appendix:measurement}. Ke každé konfiguraci jsou k dispozici 
 
 \begin{itemize}
 	\item	čas nutný k provedení analýzy v prostředí se sdílenou a distribuovanou pamětí,
-			pro názornost je v grafu červeně uvedeno ideální zrychlení;
+			pro názornost je v grafu červeně uvedeno ideální zrychlení, které je odvozeno
+			z~času výpočtu s jedním výpočetním vláknem, respektive na jednom počítači\footnote{V případě, že výpočet s jedním výpočetním vláknem, respektive na jednom počítači trvá nepoměrně déle, může dojít k tomu, že v grafu vychází zrychlení větší než ideální.};
 	\item	počet simulovaných hlavních trajektorií chování během analýzy, pro názornost je v grafu
 			uveden počet hlavních trajektorií, který by byl použit při naivním zahušťování odpovídajícím
 			dané iteraci;
@@ -229,7 +230,7 @@ v příloze \ref{appendix:measurement}. Ke každé konfiguraci jsou k dispozici 
 
 Experiment s modelem v konfiguraci \texttt{meyer91-common} byl spouštěn pouze v distribuovaném prostředí,
 a to minimálně na dvou strojích kvůli velkému množství trajektorií, se kterými je během analýzy nutno
-pracovat. Toto množství trajektorií je dáno počtem perturbovaných parametetrů.
+pracovat. Toto množství trajektorií je dáno počtem perturbovaných parametrů.
 
 \section{Interpretace měření}
 
@@ -237,7 +238,7 @@ pracovat. Toto množství trajektorií je dáno počtem perturbovaných paramete
 
 Při pohledu na grafy času nutného k provedení analýzy plyne, že implementace
 prostředí s distribuovanou pamětí pro jeden až šestnáct strojů šká\-lu\-je poměrně dobře. Výjimku tvoří
-Lorenzův systém s maximálním množ\-stvím iterací nastaveným na 8. Při takto nastavené analýze
+Lorenzův systém s maximálním množ\-stvím iterací nastaveným na 8, což je vidět na grafu \ref{fig:lotkav:long:property:shared:time}. Při takto nastavené analýze
 se prostor ini\-ci\-ál\-ních podmínek zahušťuje pouze v poměrně malém regionu a z toho důvodu se při
 malém množství iterací nestihne vytvořit dostatečné množ\-ství trajektorií tak, aby se plně
 vytížily všechny stroje. 
@@ -306,7 +307,7 @@ obrázek \ref{fig:phase:shift}.
 
 Obrázek \ref{fig:meyer91:common:dist:iterations:primary:summary} u experimentu \texttt{meyer91-common} je lehce
 zkreslený nedokonalostí popisované heuristiky zahušťování, kdy blízkost dvou trajektorií vyústí v to,
-že se nezahustí poměrně velký prostor okolo nich. Kdyby v tomto prostoru k nějakému zahušťění došlo,
+že se nezahustí poměrně velký prostor okolo nich. Kdyby v tomto prostoru k nějakému zahuštění došlo,
 je možné, že by docházelo k~dalším iteracím zahuštění. Příkladem nedokonalého zahušťování je vý\-sle\-dek
 analýzy oscilace vápníku za použití perturbace parametrů $k_1$ a $k_2$ na obrázku \ref{fig:meyer91:analysis:wrong:density}.
 

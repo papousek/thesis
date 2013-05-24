@@ -2,7 +2,7 @@
 \usepackage{amsmath,amssymb,amsthm, amsfonts}
 \usepackage{booktabs}
 \usepackage{graphics}
-\usepackage[hang]{caption} 
+\usepackage{caption} 
 \usepackage[hang]{subfigure}
 \usepackage[pdftex]{graphicx}
 \usepackage[czech]{babel}
@@ -16,6 +16,7 @@
 \usepackage{algpseudocode}
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage{comment}
 \usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
     decorations.pathreplacing,decorations.pathmorphing,shapes,%
     matrix,shapes.symbols, decorations.markings}
@@ -124,12 +125,58 @@ Jan Papoušek
 \end{ThesisDeclaration}
 
 \begin{ThesisThanks}
+Děkuji vedoucímu své práce Davidu Šafránkovi za odborné vedení
+a~pos\-kyt\-nu\-tí cenných rad, Svenu Dražanovi za inspirativní konzultace, Tomáši Vejpustkovi za spolupráci 
+při implementaci nástroje Parasim a celé Laboratoři sys\-té\-mo\-vé biologie za poskytnutí
+technického zázemí.
+
+\vspace{0.5cm}
+\noindent
+Děkuji svým rodičum Janu a Evě Papouškovým za podporu, kterou mi poskytli během studia a vůbec v celém
+mém dosavadním životě. Děkuji své nastávající manželce Tereze Doležalové za naše dlouhé
+rozpravy formující mé životní směřování, jenž vy\-ústi\-lo nejen v tuto práci.
+
+\vspace{0.5cm}
+\noindent
+Bez Vás by tato práce nevznikla.
+
 \end{ThesisThanks}
 
 \begin{ThesisAbstract}
+Práce prezentuje algoritmus pro analýzu dynamických systémů zadaných pomocí soustavy
+obyčejných diferenciálních rovnic vzhledem k~cho\-vání charakterizovanému vlastností
+temporální logiky signálů. Výsled\-kem a\-na\-lý\-zy je představa o tom,
+jakým způsobem ovlivňují změny modelu jeho chování. Popisovaná metoda se zakládá
+na již existujícím algoritmu a výpoč\-tu lokální robustnosti.
+
+Algoritmus byl implementován v programovacím jazyce Java do podoby nástroje Parasim tak,
+aby analýzu bylo možno spustit v prostředí se sdílenou nebo distribuovanou pamětí.
+Výpočetní model a architektura nástroje umožňují komponenty odpovídající jednotlivým
+částem algoritmu snadno nahrazovat, případně použít tuto platformu pro jiný typ
+vý\-poč\-tu.
+
+Vlastnosti algoritmu a škálovatelnost implementace pro sdílenou i distribuovanou paměť
+byly ověřeny spuštěním analýzy nad vybranými modely.
+
+
+\begin{comment}
+The work presents an algorithm for the analysis of dynamic systems specified by the ordinary differential equations.
+The system behavior is characterized by the formula of signal temporal logic. The result of the analysis is the idea of
+how the changes affect the model's behavior. The described method is based on an existing algorithm and calculation of local robustnes.
+
+The algorithm has been implemented in the Java programming language into the tool called Parasim
+so that the analysis could be executed in an environment with shared or distributed memory.
+Computational model and tool architecture allow components corresponding to parts of the algorithm
+easy to replace, or use this platform to another type of calculation.
+
+Properties of the algorithm implementation and scalability for both shared and
+distributed memory has been verified by running analyzes on selected models.
+\end{comment}
+
 \end{ThesisAbstract}
 
 \begin{ThesisKeyWords}
+dynamický systém, soustava diferenciálních rovnic, STL, monitoring, analýza vlastnosti, robustnost
 \end{ThesisKeyWords}
 
 \MainMatter

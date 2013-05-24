@@ -1,7 +1,7 @@
 \chapter{Pojmy a východiska}\label{chapter:preliminaries}
 
 Tato kapitola se věnuje základním pojmům nutným k~pochopení
-algoritmu pro analýzu dynamických systémů představeného dále v kapitole \ref{chapter:algorithm}
+algorit\-mu pro analýzu dynamických systémů představeného dále v kapitole \ref{chapter:algorithm}
 a~kontextu, v jakém byl navržen. Jedná se zejména o popis reprezentace zkou\-ma\-ných
 modelů a požadovaných vlastností.
 
@@ -48,7 +48,7 @@ f(t, \mathbf{X})		 &= \big(f_0(t, \mathbf{X}), \ldots, f_n(t, \mathbf{X})\big)
 \end{align}
 
 Pro účely simulace není nutné znát úplné řešení této soustavy rovnic, ale postačuje pouze znalost
-vývoje systému od počatečního času $t_0$, kterému odpovídá počáteční stav $\mathbf{X}(t_0)$.
+vývoje systému od počátečního času $t_0$, kterému odpovídá počáteční stav $\mathbf{X}(t_0)$.
 V praxi se setkáváme s tím, že neznáme ani tento přesný vývoj, nýbrž pouze jeho aproximaci,
 kterou poskytují metody pro řešení problému výchozích podmínek~\cite{iserles1996}.
 
@@ -90,13 +90,13 @@ predátorů ($\gamma$) a schopnost reprodukce predátorů ($\delta$).
 \end{align}
 
 Model je samozřejmě zjednodušením reality. V systému se nachází pou\-ze dva druhy
-zvířat, bíložravá kořist a masožravý predátor. U kořisti se před\-po\-klá\-dá bezproblémový
-přístup k potravě, a proto přirozeně příbývá. Naproti tomu reprodukce predátora je
+zvířat, býložravá kořist a masožravý predátor. U kořisti se před\-po\-klá\-dá bezproblémový
+přístup k potravě, a proto přirozeně přibývá. Naproti tomu reprodukce predátora je
 závislá na přísunu masité potravy, tzn. množství kořisti v systému.
 
 I na tomto jednoduchém modelu je však možné pozorovat netriviální chování, o čemž se lze přesvědčit
 při pohledu na grafy  \ref{fig:lotkav:timeserie} a \ref{fig:lotkav:oscil}. Systém má
-tendenci oscilovat. Periodicky dochází k nárustu populace predátora, to vyústí v pokles
+tendenci oscilovat. Periodicky dochází k nárůstu populace predátora, to vyústí v pokles
 populace kořisti, následně u predátorů v důsledku nedostatku potravy převáží úmrtnost nad rozsahem reprodukce,
 množství kořisti opět naroste a tento cyklus se znovu opakuje.
 
@@ -115,7 +115,7 @@ množství kořisti opět naroste a tento cyklus se znovu opakuje.
 Síla modelů a simulace se ukazuje být v tom, že tento druh informace získáme, aniž bychom prováděli
 experiment se skutečným systémem se  skutečnými liš\-ka\-mi a zajíci. Samozřejmě se na závěr neobejdeme
 bez validace výsledků simulace oproti realitě, ale tomu může předcházet velké množství
-experementů na počítači, které by v reálných podmínkách stály mnoho prostředků nebo by ani 
+experimentů na počítači, které by v reálných podmínkách stály mnoho prostředků nebo by ani 
 nebyly uskutečnitelné. Za zmínku stojí na\-pří\-klad model popisující šíření nákazy
 populací~\cite{kermack1927}, což je téma, u něhož si opravdu lze jen těžko představit
 experimentování na reálném systému.
@@ -157,7 +157,7 @@ ve formě systému diferenciálních rovnic.
 \section{Vlastnosti modelovaných systémů}
 
 Aby bylo možné modely automatizovaně analyzovat, je nutné vyjadřovat se o jejich
-vlastnostech exatně. Jazyk, který je k tomuto účely nutné použít, musí být schopen 
+vlastnostech exaktně. Jazyk, který je k tomuto účely nutné použít, musí být schopen 
 popsat chování systému v čase. V kontextu obyčejných di\-fe\-ren\-ci\-ál\-ních rovnic je
 chováním trajektorie, v případě simulace sekvence bodů s~časovým razítkem. Například u modelu
 uvedeného v~sekci \ref{section:lotkav} je vhodné popsat oscilaci populace kořisti
@@ -165,7 +165,7 @@ nebo predátora. To lze provést tak, že budeme požadovat, aby množství jedi
 daného druhu opakovaně pře\-sáh\-lo maximální a minimální mez. Jak konkrétně
 tento po\-ža\-da\-vek zformulovat, je ukázáno v následující části této kapitoly.
 
-K vyjádření vlastností nad lineárními běhy systémů se nejčastěji používá lieární
+K vyjádření vlastností nad lineárními běhy systémů se nejčastěji používá lineární
 temporální logika~\cite{strejcek2007} (\textit{linear temporal logic}, LTL), případně logiky z~ní odvozené.
 LTL u\-mož\-ňu\-je se zjednodušeně vyjadřovat o sta\-vech
 sys\-té\-mu v čase formulacemi typu \uv{v budoucnu nastane \ldots}, \uv{vždy platí \ldots} apod.
@@ -180,7 +180,7 @@ je například \uv{za hodinu až dvě nastane \ldots} či \uv{za třicet minut b
 Pro účely vyjadřování se o chování modelu pomocí STL se zavádí pojem signálu~\cite{maler2004}.
 Zvolme si časovou doménu $\mathbb{T} = \mathbb{R}_{\geq 0}$ a signál konečné délky
 nad libovolnou doménou $\mathbb{D}$ jako parciální zobrazení $s: \mathbb{T} \rightarrow \mathbb{D}$.
-Definičním oborem tohoto zobrazení nechť je interval $l = [0, r)$, kde $r \in \mathbb{Q}_{\geq0}$ nazáváme
+Definičním oborem tohoto zobrazení nechť je interval $l = [0, r)$, kde $r \in \mathbb{Q}_{\geq0}$ nazýváme
 délkou signálu a značíme ji $|s| = r$. Pro všechna $t \geq r$ položíme $s[t] = \bot$. Takto definované
 signály lze sdružovat pomocí párovací funkce $||$.
 

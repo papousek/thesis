@@ -21,7 +21,7 @@ prostředí nebo extrémně vysoká nákaza šířící se ce\-lo\-svě\-to\-vou
 Nechť je dynamický systém $\mathcal{DS} = (\mathbf{X}, f(\mathbf{P}))$, kde $\mathbf{X} = (x_1, \ldots, x_n) \in \mathbb{R}^n$
 je vektor stavových proměnných a $\mathbf{P}  = (p_1, \ldots, p_m) \in \mathbb{R}^m$ je vektor parametrů. Dynamiku systému popisují obyčejné diferenciální
 rovnice $\frac{dx_i}{dt} = f_i(\mathbf{P})(\mathbf{X})$ a $f_i: \mathbb{R}^m \rightarrow (\mathbb{R}^n \rightarrow \mathbb{R}^n)$.
-Tento systém rovnic souhrnně označíme jednou rovnicí $\frac{d\mathbf{X}}{dt} = f(\mathbf{P})(\mathbf{X})$. Narozdíl
+Tento systém rovnic souhrnně označíme jednou rovnicí $\frac{d\mathbf{X}}{dt} = f(\mathbf{P})(\mathbf{X})$. Na rozdíl
 od obecného modelu zadaného pomocí systému obyčejných diferenciálních rovnic uvažujeme pouze autonomní systémy,
 tedy budeme předpokládat, že funkce stojící na pravé straně ne\-zá\-vi\-sí na čase, a proto je čas z definicí funkcí zcela vynechán.
 
@@ -35,7 +35,7 @@ parametrů $p_j$, a určují tak prostor iniciálních podmínek \cite[str. 23]{
 \end{align}
 
 Pro vektor $\mathbf{V} = (x_1, \ldots, x_n, p_1, \ldots, p_m) \in \mathcal{I}$ definujme projekční funkce $\pi_x(\mathbf{V}) = (x_1, \ldots, x_n)$
-a $\pi_p(\mathbf{V}) = (p_1, \ldots, p_m)$. Je-li dáná numerická metoda $\mathcal{M}_\varepsilon$,
+a $\pi_p(\mathbf{V}) = (p_1, \ldots, p_m)$. Je-li dána numerická metoda $\mathcal{M}_\varepsilon$,
 formule temporální logiky signálů $\varphi$, dynamický systém $\mathcal{DS}$
 a prostor iniciálních podmínek $\mathcal{I}$, pak řešeným problémem je najít
 části prostoru $\mathcal{S}, \mathcal{N} \subseteq \mathcal{I}$ takové, že platí
@@ -63,13 +63,13 @@ Původní algoritmus, na kterém staví tato práce vychází z velice důležit
 \uv{Většina řešení začínajících v iniciálních bodech blízko sebe zůstávají blízko sebe
 i v průběhu času~\cite[str. 25]{drazan2011}.} Předpokládá se tedy, že chování určená blízkými
 hodnotami z prostoru iniciálních podmínek mají i blízkou míru platnosti dané formule.
-Není tedy třeba zjišťovat chování pro všechny body prostoru inicálních podmínek,
+Není tedy třeba zjišťovat chování pro všechny body prostoru iniciálních podmínek,
 ale jen pro určitou množinu reprezentantů, pro kterou platí \cite[str. 25]{drazan2011}:
 
 \begin{enumerate}
-	\item	Chování blízké reprezentatovi zůstane blízké na celém časovém intervalu,
+	\item	Chování blízké reprezentantovi zůstane blízké na celém časovém intervalu,
 			na kterém je daná formule ověřována.
-	\item	Množina reprezenantů pokrývá celý prostor iniciálních podmínek.
+	\item	Množina reprezentantů pokrývá celý prostor iniciálních podmínek.
 \end{enumerate}
 
 Algoritmus do prostoru iniciálních podmínek vkládá body tak dlouho, dokud si trajektorie chování
@@ -79,7 +79,7 @@ zda z nich simulovaná chování splňují či nesplňují danou vlastnost. Tyto
 hranice regionů platnosti a neplatnosti se zvolenou přes\-nos\-tí~$\delta$.
 
 \begin{algorithm}
-\caption{Analýza prostoru inicálních podmínek}
+\caption{Analýza prostoru iniciálních podmínek}
 \label{algorithm:main:original}
 \begin{algorithmic}[1]
 \Require 	$\mathcal{DS} = (\mathbf{X}, f), \mathcal{I}, \varphi, \Delta t, \delta, \varepsilon$
@@ -107,7 +107,7 @@ hranice regionů platnosti a neplatnosti se zvolenou přes\-nos\-tí~$\delta$.
 \end{algorithmic}
 \end{algorithm}
 
-Je samozřejme otázkou, jakým způsobem konkrétně probíhá počáteční zahuštění prostoru
+Je samozřejmé otázkou, jakým způsobem konkrétně probíhá počáteční zahuštění prostoru
 iniciálních podmínek, co přesně obsahuje mno\-žina sousedů daného bodu a jak
 se změří vzdálenost dvou chování. Poslední zmí\-ně\-nou otázkou se podrobně zabývá diplomová práce Svena Dražana \cite{drazan2011}.
 Zbytek bude ještě rozveden v sekci \ref{section:algorithm:updated} společně s tím,
@@ -117,7 +117,7 @@ jak zvolit hodnotu $\delta$.
 
 Platnost formule lze chápat trochu šířeji než prosté \uv{platí}/\uv{neplatí}.
 Nemusíme se pouze ptát, zda dané chování splňuje danou formuli, otázku lze posunout dál.
-Jak moc dané chování splňuje danou formuli? Jak moc je vlastnost nesplňena? Pro účely
+Jak moc dané chování splňuje danou formuli? Jak moc je vlastnost nesplněna? Pro účely
 této práce zmíněné otázky zcela postačují, ale samozřejmě je možné požadovat ještě více.
 Odpověď lze kvantizovat a~zís\-kat tak představu o míře, s  jakou je daný systém robustní
 vůči změnám podmínek, teplot nebo koncentrací chemických látek.
@@ -317,11 +317,11 @@ důležitý pojem, nicméně nabízí užitečnou metriku k porovnávání model
 Nyní se vraťme k algoritmu pro analýzu dynamických systémů. V jeho původní podobě
 vystupuje parametr $\delta$, se kterým se porovnává vzdálenost hlavní trajektorie chování
 s trajektorií sousední, viz řádek \ref{algorithm:line:trajectory:delta}
-pseudokódu~\ref{algorithm:main:original}. Pro účely této práce je postačující již ukázaná
-definice vzdálenosti dvou trajektorií jako $\sigma(s_1, s_2) = {\displaystyle \sup_{t \in \mathbb{R}^{+}}} \{d(s_1(t), s_1(t))\}$,
+pseudokódu~\ref{algorithm:main:original}. Pro účely této práce je postačující již uvedená
+definice \ref{eq:signal:distance} vzdálenosti dvou trajektorií jako $\sigma(s_1, s_2) = {\displaystyle \sup_{t \in \mathbb{R}^{+}}} \{d(s_1(t), s_1(t))\}$,
 nicméně je samozřejmě mož\-né použít jiný předpis. Hodnota parametru $\delta$ je pro celý prostor
 chování stejná, což vede k podobnému zahuštění jak v~regionech prostoru iniciálních pod\-mí\-nek,
-kde dáná formule určitě platí, určitě neplatí, tak i v~regionech, kde se platnost formule mění.
+kde daná formule určitě platí, určitě neplatí, tak i v~regionech, kde se platnost formule mění.
 
 Pro zvýšení efektivity algoritmu je vhodné, aby pro regiony, kde je platnost formule již zřejmá,
 nedocházelo k dalšímu zahušťování a simulaci trajektorií chování. Naopak pro regiony, kterými prochází
@@ -336,7 +336,7 @@ právě tímto číslem.
 
 Na závěr této kapitoly je vhodné se ještě zmínit o způsobu, jakým jsou vybírány
 body pro iniciální zahuštění, případně další body poté, co se nějaká ze sousedních trajektorií
-chování vzdálila od hlavní trajektorie více, než přípouští napočítaná lokální 
+chování vzdálila od hlavní trajektorie více, než připouští napočítaná lokální 
 robustnost.
 
 \begin{figure}[H]
@@ -429,7 +429,7 @@ ke svému výpočtu nevyžaduje takové množství bodů. Expo\-nen\-ciál\-ní 
 potřebných bodů se však i přesto od určité iterace za\-huš\-tě\-ní objeví. To je způsobeno
 zejména regiony prostoru iniciálních podmínek, kterými prochází hranice platnosti dané formule.
 
-Nutnost analyzovat exponenciální množštví trajektorií chování společně s
+Nutnost analyzovat exponenciální množství trajektorií chování společně s
 výpočetní náročností numerické simulace vede k tomu, že analýza i po\-měr\-ně
 malých modelů může trvat nesmírně dlouho. Tato práce se snaží tento problém řešit
 distribucí výpočtu na více počítačích s využitím datového paralelismu.

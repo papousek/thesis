@@ -15,12 +15,12 @@ V nové implementaci bylo oproti prototypu třeba zahrnout následující:
 	\item	úprava algoritmu dle sekce \ref{section:algorithm:updated};
 	\item	paralelní výpočet ve sdílené nebo distribuované paměti;
 	\item	rozšiřitelnost, modularita a otevřenost k rozdílné implementaci již naimplementovaných částí;\label{item:features:extensibility}
-	\item	zobrazení výsledků analýzy pro vícedimenzionální prostory ini\-ciál\-ních podmínek.\label{item:features:visualisation}
+	\item	zobrazení výsledků analýzy pro více dimenzionální prostory ini\-ciál\-ních podmínek.\label{item:features:visualisation}
 \end{enumerate}
 
 Tato práce se zabývá všemi zmíněnými body kromě bodu \ref{item:features:visualisation},
 který je však v Parasimu již také vyřešen. Vzhledem k monolitické implementaci prototypu
-nedošlo k jeho úpravám a rozšíření, ale byla vytvořena od základu nová aplikace.
+nedošlo k jeho úpravám a rozšíření, ale byla vytvořena od zákla\-du nová aplikace.
 Bod \ref{item:features:extensibility} je důležitý z několika důvodů. Pro různé části algoritmu
 existuje více způsobů, jak je naimplementovat. Existuje například mnoho nástrojů umožňujících
 numerickou simulací na základě systému diferenciálních rovnic získat trajektorii chování.
@@ -163,7 +163,7 @@ aplikačního kontextu i do rozšíření kontextu rodičovského.
 Po vytvoření aplikačního kontextu následuje událost \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/event/ManagerStarted.java}{\texttt{ManagerStarting}},
 na kterou mohou reagovat rozšíření definovaná mimo jádro Parasimu. Jakmile aplikace skončí,
 je nutné ma\-na\-že\-ra zničit. Následuje vyvolání poslední u\-dá\-los\-ti, na kterou mohou reagovat načtená rozšíření, \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/event/ManagerStopping.java}{\texttt{ManagerStopping}}
-a zničení aplikačního konextu spojené s událostí \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/event/After.java}{After}, případně všech další dosud nezničených kontextů.
+a zničení aplikačního kontextu spojené s událostí \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/event/After.java}{After}, případně všech další dosud nezničených kontextů.
 
 \subsection{Kontexty}
 
@@ -182,7 +182,7 @@ public @interface Application {}
 
 Když je k dispozici anotace rozsahu rozlišující kontext, je možné  vytvořit kontext
 nový, jak je ukázáno v ukázce kódu \ref{code:context}. Vývojář je zodpovědný za destrukci
-nepotřebné kontextu, aby roz\-ší\-ře\-ním, která se nacházejí v tomto kontextu, umožnil uvolnit zdroje.
+nepotřebné kontextu, aby roz\-ší\-ře\-ním, která se na\-chá\-ze\-jí v tomto kontextu, umožnil uvolnit zdroje.
 
 \begin{lstlisting}[label={code:context}, caption={Vytvoření kontextu}, style=Java]
 // vytvori kontext Scope1
@@ -240,7 +240,7 @@ Enrichment enrichment = manager.resolve(
 \end{lstlisting}
 
 Parasim používá ještě jeden, jednodušší typ služeb. Tyto služby jsou dostupné pouze
-pomocí manažera, nelze je od sebe odlišit pomocí kvalifikátoru a nejsou závislé na konextu.
+pomocí manažera, nelze je od sebe odlišit pomocí kvalifikátoru a nejsou závislé na kontextu.
 Manažer poskytuje všechny dostupné implementace daného rozhraní v jedné kolekci. Tento typ služeb
 primárně  slouží k ovlivňování cho\-vání rozšíření. Lze pomocí nich například
 naslouchat událostem z logování.
@@ -341,8 +341,8 @@ Při užívání aplikace lze konfiguraci lze změnit dvěma způsoby:
 			pro\-měn\-né. Názvy proměnných se shodují s názvy atributů kon\-fi\-gu\-rač\-ních objektů.
 
 	\item	Pro každou konfigurační proměnnou lze přepsat její hodnotu po\-mo\-cí systémové
-			proměnné v~jazyce Java, jejíž název je \texttt{parasim.<název roz\-ší\-ření>.<název konfugurační proměnné>}.
-			Názvy kon\-fi\-gu\-rač\-ních promměných i název rozšíření se zde uvádí v tečkové notaci, například pro atribut \texttt{timeUnit}
+			proměnné v~jazyce Java, jejíž název je \texttt{parasim.<název roz\-ší\-ření>.<název konfigurační proměnné>}.
+			Názvy kon\-fi\-gu\-rač\-ních proměnných i název rozšíření se zde uvádí v tečkové notaci, například pro atribut \texttt{timeUnit}
 			a rozšíření \texttt{example} se bude sys\-té\-mo\-vá proměnná nazývat \texttt{parasim.example.time.unit}.
 \end{itemize}
 
@@ -350,13 +350,13 @@ Pokud je nutné nějakou část konfigurace zpřístupnit
 změnám nejen při startu aplikace, ale i při jejím běhu skrze systémové proměnné, je potřeba mít na paměti
 okamžik, ve kterém se vytváří konfigurační objekt. Jakmile je totiž již konfigurační objekt vytvořen,
 nelze hodnoty konfigurace jemu náležící změnit. Po změně systémové proměnné
-je možné si znovunačtení konfiguračního objektu vynutit zničením příslušného kontextu
+je možné si znovu načtení konfiguračního objektu vynutit zničením příslušného kontextu
 a vy\-tvo\-ře\-ním nového. Na to však není vhodný aplikační kontext, protože jeho
 zničení prakticky znamená vypnutí aplikace.
 
 \subsection{Obohacování}\label{section:enrichment}
 
-Aby nebylo nutné si na všech místech předávat instanci manežera, případně instance všech
+Aby nebylo nutné si na všech místech předávat instanci manažera, případně instance všech
 potřebných služeb, nabízí Parasim rozšiřitelný mechanismus obohacování objektů.
 To je umožněno pomocí služby \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/enrichment/Enrichment.java}{\texttt{Enrichment}}.
 Tato služba spouští objety na kontextu nezávislých služeb \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/spi/enrichment/Enricher.java}{\texttt{Enricher}}
@@ -365,13 +365,13 @@ na dané instanci, které ji dokáží různým způsobem vylepšit.
 Jádro Parasimu obsahuje dvě implementace rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/spi/enrichment/Enricher.java}{\texttt{Enricher}},
 které umožní zpřístupnit poskytující metody a atributy podobně jako u rozšíření 
 a které injektují služby do atributů. Za tímto účelem se používají již zmíněné anotace \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Provide.java}{\texttt{Provide}} a \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/annotation/Inject.java}{\texttt{Inject}}.
-Tyto anotace lze použít ve dvou nastaveních, v jednom nastavení bude při obohoacování
+Tyto anotace lze použít ve dvou nastaveních, v jednom nastavení bude při obohacování
 vyhozena výjimka, pokud poskytovaný případně injektovaný objekt není k dispozici.
 Pokud je anotace použita s přiřazením \texttt{required=false}, výjimka se nevyhodí.
 
 \subsection{Vzdálený přístup}\label{section:remote}
 
-Další části práce ukážou, jak je možné Parasim použít k distribovanému počítání.
+Další části práce ukážou, jak je možné Parasim použít k distribuovanému počítání.
 To je umožněno pomocí rozšíření pro vzdálený přístup, které zpří\-stup\-ňu\-je získání
 některých služeb nacházejících se v aplikačním kontextu jiného vzdá\-le\-né\-ho stroje.
 Na stroji je nejprve nutné tuto funkcionalitu aktivovat skrze rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/core/src/main/java/org/sybila/parasim/core/api/remote/Loader.java}{\texttt{Loader.java}},
@@ -418,7 +418,7 @@ jednotné rozhraní pro počítání ve sdílené a~dís\-tri\-buo\-va\-né pam�
 
 \subsection{Reprezentace výsledku}
 
-Třída reprezentující výsledek pro daný výpočet musí implementovat rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/model/core/src/main/java/org/sybila/parasim/model/Mergeable.java}{\texttt{Mergeable}}. Toto rozhraní si vynucuje krom uchování dat také definci komutativní
+Třída reprezentující výsledek pro daný výpočet musí implementovat rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/model/core/src/main/java/org/sybila/parasim/model/Mergeable.java}{\texttt{Mergeable}}. Toto rozhraní si vynucuje krom uchování dat také definici komutativní
 a asociativní operace pro slučování mezivýsledků. Sou\-čas\-ně je nezbytné, aby třída
 byla schopna serializace. Serializace je nezbytná pro výpočet v dis\-tri\-buo\-va\-né paměti,
 kde se data po skončení mezivýpočtu po\-sí\-la\-jí mezi počítači po síti.
@@ -438,8 +438,8 @@ lze určit způsob, jakým se má instance zachovat ve chvíli, kdy již není z
 
 V případě distribuovaného počítání se instance výpočtu může i ně\-ko\-lik\-rát posílat mezi stroji po sítí. Z tohoto důvodu
 je nutné, aby i třída definující výpočet byla serializovatelná. To v praxi znamená, že musí
-být seriazovatelné i hodnoty všech atributů, které nejsou injektovány. Bohužel chybová hláška z virtuálního stroje Javy
-není v případě, že třída nesplňuje podmínky serializovatelnosti, přílíš popisná.
+být serializovatelné i hodnoty všech atributů, které nejsou injektovány. Bohužel chybová hláška z virtuálního stroje Javy
+není v případě, že třída nesplňuje podmínky serializovatelnosti, příliš popisná.
 Zejména tento typ chyb se tedy velice špatně opravuje.
 
 \subsection{Životní cyklus výpočtu}
@@ -735,7 +735,7 @@ stroj, ze kterého byl výpočet iniciován (\textit{master}), a stroje, mezi kt
 \end{figure}
 
 
-Narozdíl od prostředí se sdílenou pamětí se zde nacházejí syn\-chro\-ni\-zač\-ní body dva.
+Na rozdíl od prostředí se sdílenou pamětí se zde nacházejí syn\-chro\-ni\-zač\-ní body dva.
 Výpočet na každém \textit{slave} stroji řídí lokální status, který skrze události volá příslušné objekty
 nutné k obsluze lokálního výpočtu. Tento lokální status ještě před tím, než zavolá naslouchající objekty
 implementující rozhraní \href{https://github.com/sybila/parasim/blob/2.0.0.Final/extensions/computation-lifecycle-api/src/main/java/org/sybila/parasim/computation/lifecycle/api/ProgressListener.java}{\texttt{ProgressListener}}, kontaktuje s příslušnou událostí vzdá\-le\-ný status nacházející se na stroji \textit{master}.
