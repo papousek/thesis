@@ -15,7 +15,7 @@ V nové implementaci bylo oproti prototypu třeba zahrnout následující:
 	\item	úprava algoritmu dle sekce \ref{section:algorithm:updated};
 	\item	paralelní výpočet ve sdílené nebo distribuované paměti;
 	\item	rozšiřitelnost, modularita a otevřenost k rozdílné implementaci již naimplementovaných částí;\label{item:features:extensibility}
-	\item	zobrazení výsledků analýzy pro více dimenzionální prostory ini\-ciál\-ních podmínek.\label{item:features:visualisation}
+	\item	zobrazení výsledků analýzy pro vícedimenzionální prostory ini\-ciál\-ních podmínek.\label{item:features:visualisation}
 \end{enumerate}
 
 Tato práce se zabývá všemi zmíněnými body kromě bodu \ref{item:features:visualisation},
@@ -350,7 +350,7 @@ Pokud je nutné nějakou část konfigurace zpřístupnit
 změnám nejen při startu aplikace, ale i při jejím běhu skrze systémové proměnné, je potřeba mít na paměti
 okamžik, ve kterém se vytváří konfigurační objekt. Jakmile je totiž již konfigurační objekt vytvořen,
 nelze hodnoty konfigurace jemu náležící změnit. Po změně systémové proměnné
-je možné si znovu načtení konfiguračního objektu vynutit zničením příslušného kontextu
+je možné si znovunačtení konfiguračního objektu vynutit zničením příslušného kontextu
 a vy\-tvo\-ře\-ním nového. Na to však není vhodný aplikační kontext, protože jeho
 zničení prakticky znamená vypnutí aplikace.
 
