@@ -16,7 +16,6 @@ state <- c(x = 10, y = 10)
 time <- seq(0, 100, by = 0.1)
 width <- 5
 height <- 4
-
  
 out <- as.data.frame(ode(func = lotkav, y = state, parms = pars, times = time))
 mar <- c(4, 4, 1, 1)
@@ -39,3 +38,10 @@ pdf("../images/generated/lotkav-analysis.pdf", width=width, height=height)
 par(mar = mar)
 parasim.plot.csv("../data/lotkav.csv", "prey", "predator", xlab="Prey", ylab="Predator", cex=0.2, use.3d=F)
 dev.off()
+
+for (i in 1:7) {
+	pdf(paste0("../images/generated/lotkav-analysis", i, ".pdf"), width=width, height=height)
+	par(mar = mar)
+	parasim.plot.csv(paste0("../data/lotkav-iteration-", i, ".csv"), "prey", "predator", xlab="Prey", ylab="Predator", cex=0.35, use.3d=F)
+	dev.off()
+}

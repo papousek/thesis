@@ -1,0 +1,360 @@
+\documentclass[xcolor=svgnames]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage{tikz}
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols, decorations.markings}
+
+\usetheme{Parasim} 
+
+\title[Parasim]{Analýza robustnosti spojitých dynamických systémů v distribuovaném prostředí}
+\author{Jan Papoušek}
+\institute{Masaryk University Brno}
+\date{\today}
+
+\begin{document}
+% --------------------------- SLIDE --------------------------------------------
+\frame[plain]{\titlepage}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Dynamické systémy}
+	\begin{center}
+		soustava diferenciálních rovnic
+
+		\bigskip
+		\bigskip
+
+		{\Huge$\frac{\textbf{y}}{dt} = f(\textbf{y})$}
+
+		\bigskip
+		$t \geq t_o, \textbf{y}(t_o) = y_0$
+	\end{center}	
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Chování dynamického systému}
+	\begin{center}
+		numerická simulace
+		
+		\bigskip
+		\bigskip
+		
+		{\large$t_{n+1} = t_n + h$}
+		
+		\bigskip
+		{\Huge$\textbf{y}_n \sim \textbf{y}(t_n)$}
+		
+		\bigskip
+		\bigskip
+		(trejektorie chování, signál)
+	\end{center}		
+\end{frame}
+% ------------------------------------------------------------------------------
+
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Chování dynamického systému}
+	\begin{center}
+		\includegraphics<1>[width=0.8\textwidth]{../images/generated/piecewise-constant-a.pdf}
+		\includegraphics<2>[width=0.8\textwidth]{../images/generated/piecewise-constant-b.pdf}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Vlastnost -- STL}
+	\begin{center}
+		{\Huge$U = \{\mu_1, \mu_2, \ldots, \mu_k\}$}
+
+		\bigskip
+		\bigskip
+		{\Large $\mu_i: \mathbb{R}^n \rightarrow \{T, F\}$}
+
+		\bigskip
+		\bigskip
+	
+		\visible<2->{
+			atomické propozice
+			
+			\bigskip
+			
+			{\Huge$P = \{1, \ldots, k\}$}
+		}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Vlastnost -- STL}
+	
+	\begin{center}
+		{\Large $\varphi := T~|~p~|~\neg\varphi~|~\varphi_1 \wedge \varphi_2~|~\varphi_1\mathbf{U}_{[a,b]}\varphi_2$}
+		
+		\visible<2->{
+			\bigskip
+			\hrule
+			\bigskip
+			
+			\begin{align*}\begin{array}{ll}
+				(\mathbf{y}, t)	\models p
+						&\Longleftrightarrow \mu_p(\mathbf{y}(t)) = T			\\
+				(\mathbf{y}, t) \models \neg \varphi
+						&\Longleftrightarrow (\mathbf{y}, t) \not\models \varphi	\\
+				(\mathbf{y}, t) \models \varphi_1 \wedge \varphi_2 
+						&\Longleftrightarrow (\mathbf{y}, t)  \models \varphi_1 \textrm{ a současně } (\mathbf{y}, t) \models \varphi_2 \\
+				(\mathbf{y}, t) \models \varphi_1 \mathbf{U}_{[a,b]} \varphi_2 
+						&\Longleftrightarrow \exists t' \in [t+a, t+b] . (\mathbf{y}, t') \models \varphi_2	\\
+						&~~~~~~\textrm{ a současně } \forall t'' \in [t, t'] . (\mathbf{y}, t'') \models \varphi_1
+			\end{array}\end{align*}
+		}
+		
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Vlastnost -- STL}
+	
+	\begin{center}
+		{\Large $\varphi_1 \mathbf{U}_{[a,b]} \varphi_2$}
+		
+		\bigskip
+
+		\begin{tikzpicture}
+			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
+			\node[main,label=below:t]		(t) {};
+			\node[main, right of=t, label=below:t', node distance=5.5cm]		(t2){};
+			\node[main, right of=t2, label=below:t+b, node distance=1.5cm]		(tb){};
+			\node[main, minimum size=1pt, right of=tb, node distance=3cm]		(end){};
+
+			\node at (3,0.3) {$\varphi_1$};
+
+			\begin{scope}[-, shorten <=1pt]	
+				\draw[green, very thick]	(t) -> (t2) node[above] {$\varphi_1 \wedge \varphi_2$}; 
+				\draw[black]		(t2) -> (end);
+			\end{scope}
+			\node[main, right of=t, label=below:t+a, node distance=4cm]		(ta){};
+		\end{tikzpicture}
+
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Vlastnost -- STL}
+	
+	\begin{center}
+		{\Large $\mathbf{F}_{[a,b]}\varphi$ ($T \mathbf{U}_{[a,b]} \varphi$)}
+		
+		\bigskip
+
+		\begin{tikzpicture}
+			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
+			\node[main,label=below:t]		(t) {};
+			\node[main, right of=t, fill=green, draw=green, label=below:t', node distance=5.5cm]		(t2){};
+			\node[main, right of=t2, label=below:t+b, node distance=1.5cm]		(tb){};
+			\node[main, minimum size=1pt, right of=tb, node distance=3cm]		(end){};
+			
+			\begin{scope}[-, shorten <=1pt]
+				\draw[black]	(t) -> (t2) node[above] {$\varphi$}; 
+				\draw[black]		(t2) -> (end);
+			\end{scope}
+			\node[main, right of=t, label=below:t+a, node distance=4cm]		(ta){};
+		\end{tikzpicture}
+
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+        \frametitle{Vlastnost -- STL}
+
+        \begin{center}
+                {\Large $\mathbf{G}_{[a,b]}\varphi$ ($\neg \mathbf{F}_{[a,b]} \neg \varphi$)}
+
+                \bigskip
+
+                \begin{tikzpicture}
+                        \tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
+                        \node[main,label=below:t]               (t) {};
+                        \node[main, right of=t, label=below:t+a, node distance=4cm]             (ta){};
+                        \node[main, right of=t, label=below:t+b, node distance=7cm]          (tb){};
+                        \node[main, minimum size=1pt, right of=tb, node distance=3cm]           (end){};
+
+			\node at (5.5,0.3) {$\varphi$};
+
+                        \begin{scope}[-, shorten <=1pt]
+                                \draw[black]    (t) -> (ta);
+				\draw[green, very thick] (ta) -> (tb); 
+                                \draw[black]            (tb) -> (end);
+                        \end{scope}  
+                \end{tikzpicture}
+
+        \end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Parametry}
+	$$\frac{dY_1}{dt}=\nu Y_1-\alpha Y_1 \cdot Y_2	\qquad	\frac{dY_2}{dt}=\alpha Y_1 \cdot Y_2-\mu Y_2$$
+	\begin{description}
+		\item[proměnné] ($Y_1$, $Y_2$) -- počáteční hodnoty
+		\item[koeficienty] ($\mu$, $\nu$, $\alpha$)
+	\end{description}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Cíl analýzy}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Lokální robustnost}
+	\begin{center}
+		{\Huge$U' = \{\mu'_1, \mu'_2, \ldots, \mu'_k\}$}
+
+		\bigskip
+		\bigskip
+		{\Large $\mu'_i: \mathbb{R}^n \rightarrow \mathbb{R}$}
+		
+		\visible<2->{\small
+		\bigskip
+		\hrule
+		\bigskip
+
+		\begin{align*}\begin{array}{ll}
+			\rho(p, \mathbf{y}, t)
+				&= \mu'_p(\mathbf{y}(t)) \\
+			\rho(\neg\varphi, \mathbf{y}, t)
+				&= - \rho(\varphi, \mathbf{y}, t) \\
+			\rho(\varphi_1 \wedge \varphi_2, \mathbf{y}, t)
+				&= \min\Big(\rho(\varphi_1, \mathbf{y}, t), \rho(\varphi_1, \mathbf{y}, t)\Big) \\
+			\rho(\varphi_1 \mathbf{U}_{[a, b]} \varphi_2, \mathbf{y}, t)
+				&= {\displaystyle \max_{t' \in [t + a, t + b]}} min\Big(\rho(\varphi_2, \mathbf{y}, t'), {\displaystyle\min_{t'' \in [t, t']}}\rho(\varphi_1, \mathbf{y}, t'')\Big)
+		\end{array}\end{align*}
+		}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Lokální robustnost}
+
+	\begin{center}
+		{\large $\mathbf{F}_{[0, \frac{1}{2}]}x \leq -k$} 
+		
+		\bigskip
+
+		\includegraphics<1>[width=0.7\textwidth]{../images/generated/robustness-example-future.pdf}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Průběh analýzy}
+
+	\begin{center}
+		\begin{tikzpicture}[node distance=2cm]
+			\draw[thin,color=black,dotted] (0,0) grid (4,4); 
+			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
+			\tikzstyle{neigh}=[circle,fill=white,minimum size=5pt,inner sep=0pt,draw=black]
+			\node[main, label=left:D] 				(D) {};
+			\node[neigh,right of=D, label=below:S] 	(S) {};
+			\node[main, right of=S, label=right:E] 	(E) {};
+			\node[neigh, above of=D, label=left:Q] 	(Q) {};
+			\node[main, right of=Q, label=above right:C] 	(C) {};
+			\node[neigh, right of=C, label=right:R]	(R) {};
+			\node[main, above of=Q, label=left:A] 	(A) {};
+			\node[neigh, right of=A, label=above:P] (P) {};
+			\node[main, right of=P, label=right:B] 	(B) {};
+
+			\begin{scope}[->, thick, shorten <=1pt] 
+				\draw	(A) -> (P);
+				\draw	(A) -> (Q);
+				\draw	(B) -> (P);
+				\draw	(B) -> (R);
+				\draw	(C) -> (P);
+				\draw	(C) -> (Q);
+				\draw	(C) -> (R);
+				\draw[label={[above]{$f(x)=x^2$}}]	(C) -> (S);
+				\draw	(D) -> (Q);
+				\draw	(D) -> (S);
+				\draw	(E) -> (S);
+				\draw	(E) -> (R);
+			\end{scope}
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Průběh analýzy}
+	\begin{center}
+		\begin{tikzpicture}[node distance=2cm]
+			\draw[thin,color=black,dotted] (0,0) grid (4,4); 
+			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
+			\tikzstyle{neigh}=[circle,fill=white,minimum size=5pt,inner sep=0pt,draw=black]
+			\node[main, label=left:D] 				(D) {};
+			\node[neigh,right of=D, label=below:S] 	(S) {};
+			\node[main, right of=S, label=right:E] 	(E) {};
+			\node[neigh, above of=D, label=left:Q] 	(Q) {};
+			\node[neigh, right of=Q, label=above right:C] 	(C) {};
+			\node[neigh, right of=C, label=right:R]	(R) {};
+			\node[main, above of=Q, label=left:A] 	(A) {};
+			\node[neigh, right of=A, label=above:P] (P) {};
+			\node[main, right of=P, label=right:B] 	(B) {};
+			
+			\node[main, label=above right:F] (F) at (2,1) {};
+			\node[neigh, label=above left:M] (M) at (1,1) {};
+			\node[neigh, label=above right:N] (N) at (3,1) {};
+			\begin{scope}[->, thick, shorten <=1pt] 
+				\draw	(F) -> (C);
+				\draw	(F) -> (N);
+				\draw	(F) -> (M);
+				\draw	(F) -> (S);
+			\end{scope}
+		\end{tikzpicture}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Průběh analýzy}
+	\begin{center}
+		\includegraphics<1>[width=0.8\textwidth]{../images/generated/lotkav-analysis1.pdf}
+		\includegraphics<2>[width=0.8\textwidth]{../images/generated/lotkav-analysis2.pdf}
+		\includegraphics<3>[width=0.8\textwidth]{../images/generated/lotkav-analysis3.pdf}
+		\includegraphics<4>[width=0.8\textwidth]{../images/generated/lotkav-analysis4.pdf}
+		\includegraphics<5>[width=0.8\textwidth]{../images/generated/lotkav-analysis5.pdf}
+		\includegraphics<6>[width=0.8\textwidth]{../images/generated/lotkav-analysis6.pdf}
+		\includegraphics<7>[width=0.8\textwidth]{../images/generated/lotkav-analysis7.pdf}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Implementace}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Systém rozšíření}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Výpočetní model}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Měření}
+\end{frame}
+% ------------------------------------------------------------------------------
+
+\end{document}

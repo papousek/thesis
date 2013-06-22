@@ -9,7 +9,7 @@ paper <- "special"
 
 pdf("../images/generated/piecewise-constant-a.pdf", width = width, height = height)
 par(mar = mar)
-plot(x, y, xlab = "Time", ylab = "Signal")
+plot(x, y, xlab = "Time", pch=19, ylab = "Signal")
 dev.off()
 
 
