@@ -30,3 +30,5 @@ images/generated: scripts/image-*.r
 		R --vanilla < "$$FILE"; \
 	done
 
+sync-hooks:
+	cp hooks/* .git/hooks/

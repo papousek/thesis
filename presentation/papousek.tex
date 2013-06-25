@@ -210,6 +210,9 @@
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Cíl analýzy}
+	\begin{center}
+		\includegraphics[width=.8\textwidth]{../images/generated/analysis-goal.pdf}
+	\end{center}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
@@ -259,6 +262,7 @@
 	\frametitle{Průběh analýzy}
 
 	\begin{center}
+		\only<1>{
 		\begin{tikzpicture}[node distance=2cm]
 			\draw[thin,color=black,dotted] (0,0) grid (4,4); 
 			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
@@ -288,13 +292,8 @@
 				\draw	(E) -> (R);
 			\end{scope}
 		\end{tikzpicture}
-	\end{center}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Průběh analýzy}
-	\begin{center}
+		}
+		\only<2>{
 		\begin{tikzpicture}[node distance=2cm]
 			\draw[thin,color=black,dotted] (0,0) grid (4,4); 
 			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
@@ -319,6 +318,7 @@
 				\draw	(F) -> (S);
 			\end{scope}
 		\end{tikzpicture}
+		}
 	\end{center}
 \end{frame}
 % ------------------------------------------------------------------------------
@@ -339,22 +339,303 @@
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Implementace}
+	\begin{center}
+		{\Huge \alert{parasim}}
+
+		\bigskip
+		nástroj pro paralelní simulaci a verifikaci
+	\end{center}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Systém rozšíření}
+	\begin{itemize}
+		\item<1->	\alert{jádro}
+				\begin{itemize}
+					\item	životní cyklus
+					\item	kontexty + služby
+					\item	jednotná konfigurace
+					\item	obohacování objektů
+					\item	vzdálený přístup
+				\end{itemize}
+
+		\item<2->	\alert{rozšíření}
+				\begin{itemize}
+					\item	numerická simulace
+					\item	výpočet robustnosti \only<3->{(2 implementace, Tomáš Vejpustek)}
+					\item	zahušťování
+					\item	výpočetní model
+					\item	vizualizace \only<3->{(Tomáš Vejpustek)}
+					\item	uživatelské rozhraní \only<3->{(Tomáš Vejpustek)}
+					\item	a další \ldots
+				\end{itemize}
+	\end{itemize}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Výpočetní model}
+
+	\begin{center}
+		abstrakce nad konkrétním výpočetním prostředím
+		
+		\bigskip
+		\hrule
+		\bigskip
+		\bigskip
+
+		{\large $\textrm{V} = V_1 \oplus V2 \oplus \ldots \oplus V_k$}	 
+	\end{center}
+
+	\begin{description}
+		\item[$V$]	konečný výsledek
+		\item[$V_i$]	mezivýsledky
+		\item[$\oplus$]	asociativní a komutativní operace spojování
+	\end{description}
+	
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Měření}
+	\frametitle{Výpočetní model}	
+
+	\begin{itemize}
+		\item<1->	2 výpočetní prostředí:
+				\begin{itemize}
+					\item	sdílená paměť
+					\item	distribuovaná paměť
+				\end{itemize}
+		\item<2->	výpočet má na starost kontejner $\longrightarrow$ výpočetní prostředí
+		\item<3->	na začátku 1 výpočetní instance
+		\item<4->	instance může kdykoliv vytvářet nové $\longrightarrow$ kontejner
+		\item<5->	kontejner sbírá výsledky z vypočtených instancí\\ $\longrightarrow$ konečný výsledek
+	\end{itemize}
 \end{frame}
 % ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Distribuované prostředí}
 
+	\begin{center}
+		\begin{tikzpicture}[node distance=3cm, text width=1.5cm, text centered]
+			\node[rectangle, rounded corners, draw=black!50, inner sep=0.1cm, text width=2cm, dashed] 	(master-package)	{
+				\begin{tikzpicture}\begin{scope}[text width=1.5cm]	
+					\node[rectangle]					(master-master)		{master};
+					\node[rectangle, fill=green!50, below of=master-master, node distance=0.5cm]	(master-parasim) 	{parasim};
+				\end{scope}\end{tikzpicture}
+			};
+			\node[rectangle, rounded corners, draw=black!50, inner sep=0.1cm, text width=2cm, dashed, below of=master-package] 	(slave-package1)	{
+				\begin{tikzpicture}\begin{scope}[text width=1.5cm]	
+					\node[rectangle]					(slave-slave)		{slave};
+					\node[rectangle, fill=green!50, below of=slave-slave, node distance=0.5cm]	(slave-parasim) 	{parasim};
+					\node[rectangle, fill=black!10, below of=slave-parasim, node distance=0.6cm]	(slave-queue)		{fronta};
+					\node[rectangle, fill=red!10, below of=slave-queue, node distance=0.6cm]	(slave-cpu1)		{CPU};
+					\node[rectangle, fill=red!10, below of=slave-cpu1, node distance=0.6cm]	(slave-cpu2)		{CPU};
+				\end{scope}\end{tikzpicture}
+			};
+			\node[rectangle, rounded corners, draw=black!50, inner sep=0.1cm, text width=2cm, dashed, left of=slave-package1] 	(slave-package2)	{
+				\begin{tikzpicture}\begin{scope}[text width=1.5cm]	
+					\node[rectangle]					(slave-slave)		{slave};
+					\node[rectangle, fill=green!50, below of=slave-slave, node distance=0.5cm]	(slave-parasim) 	{parasim};
+					\node[rectangle, fill=black!10, below of=slave-parasim, node distance=0.6cm]	(slave-queue)		{fronta};
+					\node[rectangle, fill=red!10, below of=slave-queue, node distance=0.6cm]	(slave-cpu1)		{CPU};
+					\node[rectangle, fill=red!10, below of=slave-cpu1, node distance=0.6cm]	(slave-cpu2)		{CPU};
+				\end{scope}\end{tikzpicture}
+			};
+			\node[rectangle, rounded corners, draw=black!50, inner sep=0.1cm, text width=2cm, dashed, right of=slave-package1] 	(slave-package3)	{
+				\begin{tikzpicture}\begin{scope}[text width=1.5cm]	
+					\node[rectangle]					(slave-slave)		{slave};
+					\node[rectangle, fill=green!50, below of=slave-slave, node distance=0.5cm]	(slave-parasim) 	{parasim};
+					\node[rectangle, fill=black!10, below of=slave-parasim, node distance=0.6cm]	(slave-queue)		{fronta};
+					\node[rectangle, fill=red!10, below of=slave-queue, node distance=0.6cm]	(slave-cpu1)		{CPU};
+					\node[rectangle, fill=red!10, below of=slave-cpu1, node distance=0.6cm]	(slave-cpu2)		{CPU};
+				\end{scope}\end{tikzpicture}
+			};
+			\begin{scope}[<->, thick, shorten <=1pt]
+				\draw	(master-package) -> (slave-package1);
+				\draw	(master-package) -> (slave-package2);	
+				\draw	(master-package) -> (slave-package3);
+			\end{scope}	
+		\end{tikzpicture}
+	\end{center}
+
+	\vspace{-1cm}
+	
+	\begin{center}{\small
+	\begin{columns}[t]
+		\begin{column}{.49\textwidth}
+			\begin{itemize}
+				\item	vytvoření instance
+				\item	začátek výpočtu instance
+				\item	konec výpočtu instance
+			\end{itemize}
+		\end{column}
+		\begin{column}{.49\textwidth}
+			\begin{itemize}
+				\item	balancováno
+				\item	konec výpočtu	
+			\end{itemize}
+		\end{column}
+	\end{columns}
+	}\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Počet potřebných primárních bodů}
+
+	\begin{columns}[2]
+		\begin{column}{0.5\textwidth}
+			\begin{center}
+				\textbf{Lorenz 84}
+
+				\includegraphics[width=\textwidth]{../images/generated/lorenz84-iterations-shared-iterations-primary-summary.pdf}
+			\end{center}
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			\begin{center}
+				\textbf{Lotka-Volterra}
+
+				\includegraphics[width=\textwidth]{../images/generated/lotkav-iterations-shared-iterations-primary-summary.pdf}
+			\end{center}
+		\end{column}
+	\end{columns}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Škálovatelnost}
+
+	\begin{columns}[2]
+		\begin{column}{0.5\textwidth}
+			\begin{center}
+				\textbf{Lorenz 84}
+
+				\includegraphics[width=\textwidth]{../images/generated/lorenz84-iterations-dist-time.pdf}
+			\end{center}
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			\begin{center}
+				\textbf{Lotka-Volterra}
+
+				\includegraphics[width=\textwidth]{../images/generated/lotkav-iterations-dist-time.pdf}
+			\end{center}
+		\end{column}
+	\end{columns}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Závěr}
+	\begin{itemize}
+		\item	rozšíření algoritmu pro analýzu dynamických systémů o lokální robustnost
+		\item	implementace v nástroji Parasim
+		\item	paralelizace ve sdílené a distribuované paměti
+		\item	velký důraz na rozšiřitelnost
+	\end{itemize}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\begin{center}
+		{\Huge Otázky}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Balancování}
+	\begin{center}
+		{\large
+			$\textrm{busy} \geq \textsc{Busy\_Bound}$
+		 	
+			$\wedge$
+			
+			$\textrm{idle} \leq \textsc{Idle\_Bound}$
+			
+			$\wedge$
+			
+			$\textrm{busy} \geq K \cdot \textrm{idle}$
+		}
+
+		\bigskip
+		\hrule
+		\bigskip
+
+		balancuje se instace s nejvyšší úrovní zahuštění
+
+		\bigskip
+
+		alternativou je instance s nejnižším cache hit\\
+		(výpočetně náročnější)
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Podíl numerické simulace na času výpočtu (90 \%)}
+	\begin{center}
+		jvisualvm (odhad) / vlastní rozšíření
+		\includegraphics[width=.8\textwidth]{../images/jvisualvm.png}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Globální robustnost}
+	\begin{center}
+		aktuálně vypnuté z důvodu výkonu
+
+		\bigskip
+
+		\begin{tikzpicture}[node distance=2cm]
+			\draw[thin,color=black,dotted] (0,0) grid (4,4); 
+			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
+			\tikzstyle{neigh}=[circle,fill=white,minimum size=5pt,inner sep=0pt,draw=black]
+
+			\node[main, label=above:A]	(A)	at (2,2)	{};
+			\node[main, label=above:O]	(A)	at (2,3)	{};
+			\node[main, label=above:P]	(P)	at (3,2)	{};
+			\node[main, label=above:Q]	(Q)	at (2,1)	{};
+			\node[main, label=above:R]	(R)	at (1,2)	{};
+
+			\begin{scope}[-]
+				\draw	(1,1) -> (3,3);
+				\draw	(1,3) -> (3,1);
+				\draw	(2,0) -> (4,2);
+				\draw	(4,2) -> (2,4);
+				\draw	(2,4) -> (0,2);
+				\draw	(0,2) -> (2,0);
+			\end{scope}
+		\end{tikzpicture}
+
+		\bigskip
+
+		\only<1>{$f(A) = \frac{R_A + f(O) + f(P) + f(Q) + f(R)}{5}$}
+		\only<2>{$f(A) = \frac{R_A + \sum_{i=1}^{|N|}f(N_i) + (2d - |N|) \cdot R_A}{1 + 2d}$}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Kritická místa aplikace a možná vylepšení I}
+	
+	\begin{itemize}
+		\item	numerická simulace (nyní GNU Octave)
+		\item	plná podpora SBML
+		\item	možnost navázat na předchozí výpočty
+		\item	vizualizace pro více parametrů
+		\item	refaktorování za účelem výpočtu globální robustnosti
+	\end{itemize}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Kritcká místa a možná vylepšení II}
+	\begin{center}
+		\includegraphics[width=.8\textwidth]{../images/generated/meyer91-analysis-wrong-density.pdf}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
 \end{document}
