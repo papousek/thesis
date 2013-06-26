@@ -73,6 +73,9 @@
 		\bigskip
 		{\Large $\mu_i: \mathbb{R}^n \rightarrow \{T, F\}$}
 
+		\medskip
+		{$(y_i \geq k)$}
+		
 		\bigskip
 		\bigskip
 	
@@ -92,7 +95,7 @@
 	
 	\begin{center}
 		{\Large $\varphi := T~|~p~|~\neg\varphi~|~\varphi_1 \wedge \varphi_2~|~\varphi_1\mathbf{U}_{[a,b]}\varphi_2$}
-		
+
 		\visible<2->{
 			\bigskip
 			\hrule
@@ -144,61 +147,6 @@
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Vlastnost -- STL}
-	
-	\begin{center}
-		{\Large $\mathbf{F}_{[a,b]}\varphi$ ($T \mathbf{U}_{[a,b]} \varphi$)}
-		
-		\bigskip
-
-		\begin{tikzpicture}
-			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
-			\node[main,label=below:t]		(t) {};
-			\node[main, right of=t, fill=green, draw=green, label=below:t', node distance=5.5cm]		(t2){};
-			\node[main, right of=t2, label=below:t+b, node distance=1.5cm]		(tb){};
-			\node[main, minimum size=1pt, right of=tb, node distance=3cm]		(end){};
-			
-			\begin{scope}[-, shorten <=1pt]
-				\draw[black]	(t) -> (t2) node[above] {$\varphi$}; 
-				\draw[black]		(t2) -> (end);
-			\end{scope}
-			\node[main, right of=t, label=below:t+a, node distance=4cm]		(ta){};
-		\end{tikzpicture}
-
-	\end{center}
-\end{frame}
-% ------------------------------------------------------------------------------
-
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-        \frametitle{Vlastnost -- STL}
-
-        \begin{center}
-                {\Large $\mathbf{G}_{[a,b]}\varphi$ ($\neg \mathbf{F}_{[a,b]} \neg \varphi$)}
-
-                \bigskip
-
-                \begin{tikzpicture}
-                        \tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
-                        \node[main,label=below:t]               (t) {};
-                        \node[main, right of=t, label=below:t+a, node distance=4cm]             (ta){};
-                        \node[main, right of=t, label=below:t+b, node distance=7cm]          (tb){};
-                        \node[main, minimum size=1pt, right of=tb, node distance=3cm]           (end){};
-
-			\node at (5.5,0.3) {$\varphi$};
-
-                        \begin{scope}[-, shorten <=1pt]
-                                \draw[black]    (t) -> (ta);
-				\draw[green, very thick] (ta) -> (tb); 
-                                \draw[black]            (tb) -> (end);
-                        \end{scope}  
-                \end{tikzpicture}
-
-        \end{center}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
 	\frametitle{Parametry}
 	$$\frac{dY_1}{dt}=\nu Y_1-\alpha Y_1 \cdot Y_2	\qquad	\frac{dY_2}{dt}=\alpha Y_1 \cdot Y_2-\mu Y_2$$
 	\begin{description}
@@ -219,43 +167,23 @@
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Lokální robustnost}
-	\begin{center}
-		{\Huge$U' = \{\mu'_1, \mu'_2, \ldots, \mu'_k\}$}
+	\begin{columns}[2]
+		\column{.35\textwidth}
+		\begin{center}
+			{\large$U' = \{\mu'_1, \mu'_2, \ldots, \mu'_k\}$}
 
-		\bigskip
-		\bigskip
-		{\Large $\mu'_i: \mathbb{R}^n \rightarrow \mathbb{R}$}
+			\medskip
+			{\large $\mu'_i: \mathbb{R}^n \rightarrow \mathbb{R}$}
 		
-		\visible<2->{\small
-		\bigskip
-		\hrule
-		\bigskip
+			\medskip
+			{$(y_i - k)$}
+		\end{center}
 
-		\begin{align*}\begin{array}{ll}
-			\rho(p, \mathbf{y}, t)
-				&= \mu'_p(\mathbf{y}(t)) \\
-			\rho(\neg\varphi, \mathbf{y}, t)
-				&= - \rho(\varphi, \mathbf{y}, t) \\
-			\rho(\varphi_1 \wedge \varphi_2, \mathbf{y}, t)
-				&= \min\Big(\rho(\varphi_1, \mathbf{y}, t), \rho(\varphi_1, \mathbf{y}, t)\Big) \\
-			\rho(\varphi_1 \mathbf{U}_{[a, b]} \varphi_2, \mathbf{y}, t)
-				&= {\displaystyle \max_{t' \in [t + a, t + b]}} min\Big(\rho(\varphi_2, \mathbf{y}, t'), {\displaystyle\min_{t'' \in [t, t']}}\rho(\varphi_1, \mathbf{y}, t'')\Big)
-		\end{array}\end{align*}
-		}
-	\end{center}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Lokální robustnost}
-
-	\begin{center}
-		{\large $\mathbf{F}_{[0, \frac{1}{2}]}x \leq -k$} 
-		
-		\bigskip
-
-		\includegraphics<1>[width=0.7\textwidth]{../images/generated/robustness-example-future.pdf}
-	\end{center}
+		\column{.65\textwidth}
+		\begin{center}
+			\includegraphics<1>[width=0.95\textwidth]{../images/generated/tube.pdf}
+		\end{center}
+	\end{columns}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
@@ -325,15 +253,9 @@
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Průběh analýzy}
+	\frametitle{Ukázka}
 	\begin{center}
-		\includegraphics<1>[width=0.8\textwidth]{../images/generated/lotkav-analysis1.pdf}
-		\includegraphics<2>[width=0.8\textwidth]{../images/generated/lotkav-analysis2.pdf}
-		\includegraphics<3>[width=0.8\textwidth]{../images/generated/lotkav-analysis3.pdf}
-		\includegraphics<4>[width=0.8\textwidth]{../images/generated/lotkav-analysis4.pdf}
-		\includegraphics<5>[width=0.8\textwidth]{../images/generated/lotkav-analysis5.pdf}
-		\includegraphics<6>[width=0.8\textwidth]{../images/generated/lotkav-analysis6.pdf}
-		\includegraphics<7>[width=0.8\textwidth]{../images/generated/lotkav-analysis7.pdf}
+		\includegraphics[width=0.8\textwidth]{../images/generated/lotkav-analysis7.pdf}
 	\end{center}
 \end{frame}
 % ------------------------------------------------------------------------------
@@ -361,14 +283,14 @@
 					\item	vzdálený přístup
 				\end{itemize}
 
-		\item<2->	\alert{rozšíření}
+		\item<1->	\alert{rozšíření}
 				\begin{itemize}
 					\item	numerická simulace
-					\item	výpočet robustnosti \only<3->{(2 implementace, Tomáš Vejpustek)}
+					\item	výpočet robustnosti
 					\item	zahušťování
 					\item	výpočetní model
-					\item	vizualizace \only<3->{(Tomáš Vejpustek)}
-					\item	uživatelské rozhraní \only<3->{(Tomáš Vejpustek)}
+					\item	vizualizace
+					\item	uživatelské rozhraní
 					\item	a další \ldots
 				\end{itemize}
 	\end{itemize}
@@ -407,10 +329,10 @@
 					\item	sdílená paměť
 					\item	distribuovaná paměť
 				\end{itemize}
-		\item<2->	výpočet má na starost kontejner $\longrightarrow$ výpočetní prostředí
-		\item<3->	na začátku 1 výpočetní instance
-		\item<4->	instance může kdykoliv vytvářet nové $\longrightarrow$ kontejner
-		\item<5->	kontejner sbírá výsledky z vypočtených instancí\\ $\longrightarrow$ konečný výsledek
+		\item<1->	výpočet má na starost kontejner $\longrightarrow$ výpočetní prostředí
+		\item<1->	na začátku 1 výpočetní instance
+		\item<1->	instance může kdykoliv vytvářet nové $\longrightarrow$ kontejner
+		\item<1->	kontejner sbírá výsledky z vypočtených instancí\\ $\longrightarrow$ konečný výsledek
 	\end{itemize}
 \end{frame}
 % ------------------------------------------------------------------------------
@@ -530,7 +452,7 @@
 \begin{frame}
 	\frametitle{Závěr}
 	\begin{itemize}
-		\item	rozšíření algoritmu pro analýzu dynamických systémů o lokální robustnost
+		\item	algoritmus pro analýzu dynamických systémů rozšířený o~lokální robustnost
 		\item	implementace v nástroji Parasim
 		\item	paralelizace ve sdílené a distribuované paměti
 		\item	velký důraz na rozšiřitelnost
@@ -616,6 +538,32 @@
 		\only<1>{$f(A) = \frac{R_A + f(O) + f(P) + f(Q) + f(R)}{5}$}
 		\only<2>{$f(A) = \frac{R_A + \sum_{i=1}^{|N|}f(N_i) + (2d - |N|) \cdot R_A}{1 + 2d}$}
 	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Systém rozšíření}
+	\begin{itemize}
+		\item<1->	\alert{jádro}
+				\begin{itemize}
+					\item	životní cyklus
+					\item	kontexty + služby
+					\item	jednotná konfigurace
+					\item	obohacování objektů
+					\item	vzdálený přístup
+				\end{itemize}
+
+		\item<1->	\alert{rozšíření}
+				\begin{itemize}
+					\item	numerická simulace
+					\item	výpočet robustnosti \only<1->{(2 implementace, Tomáš Vejpustek)}
+					\item	zahušťování
+					\item	výpočetní model
+					\item	vizualizace \only<1->{(Tomáš Vejpustek)}
+					\item	uživatelské rozhraní \only<1->{(Tomáš Vejpustek)}
+					\item	a další \ldots
+				\end{itemize}
+	\end{itemize}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
