@@ -5,7 +5,7 @@ height <- 4
 
 pdf("../images/generated/analysis-goal.pdf", width=width, height=height)
 par(mar = mar)
-plot(0:100, 0:100, col="white", xlab="Prey", ylab="Predator")
+plot(0:100, 0:100, col="white", xlab=expression(paste(Y[1], "(0)")), ylab=expression(paste(Y[2], "(0)")))
 x <- c(seq(from=0.01, to=0.99, by=0.01), 1:100)
 y <- 50/x
 temp <- c()

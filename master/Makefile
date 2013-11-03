@@ -29,6 +29,3 @@ images/generated: scripts/image-*.r
 		echo "Executing $$FILE"; \
 		R --vanilla < "$$FILE"; \
 	done
-
-sync-hooks:
-	cp hooks/* .git/hooks/

@@ -6,7 +6,7 @@
     decorations.pathreplacing,decorations.pathmorphing,shapes,%
     matrix,shapes.symbols, decorations.markings}
 
-\usetheme{Parasim} 
+\usetheme{Parasim}
 
 \title[Parasim]{Analýza robustnosti spojitých dynamických systémů v distribuovaném prostředí}
 \author{Jan Papoušek}
@@ -30,7 +30,7 @@
 
 		\bigskip
 		$t \geq t_o, \textbf{y}(t_o) = y_0$
-	\end{center}	
+	\end{center}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
@@ -38,19 +38,19 @@
 	\frametitle{Chování dynamického systému}
 	\begin{center}
 		numerická simulace
-		
+
 		\bigskip
 		\bigskip
-		
+
 		{\large$t_{n+1} = t_n + h$}
-		
+
 		\bigskip
 		{\Huge$\textbf{y}_n \sim \textbf{y}(t_n)$}
-		
+
 		\bigskip
 		\bigskip
 		(trejektorie chování, signál)
-	\end{center}		
+	\end{center}
 \end{frame}
 % ------------------------------------------------------------------------------
 
@@ -75,15 +75,15 @@
 
 		\medskip
 		{$(y_i \geq k)$}
-		
+
 		\bigskip
 		\bigskip
-	
+
 		\visible<2->{
 			atomické propozice
-			
+
 			\bigskip
-			
+
 			{\Huge$P = \{1, \ldots, k\}$}
 		}
 	\end{center}
@@ -92,7 +92,7 @@
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Vlastnost -- STL}
-	
+
 	\begin{center}
 		{\Large $\varphi := T~|~p~|~\neg\varphi~|~\varphi_1 \wedge \varphi_2~|~\varphi_1\mathbf{U}_{[a,b]}\varphi_2$}
 
@@ -100,30 +100,30 @@
 			\bigskip
 			\hrule
 			\bigskip
-			
+
 			\begin{align*}\begin{array}{ll}
 				(\mathbf{y}, t)	\models p
 						&\Longleftrightarrow \mu_p(\mathbf{y}(t)) = T			\\
 				(\mathbf{y}, t) \models \neg \varphi
 						&\Longleftrightarrow (\mathbf{y}, t) \not\models \varphi	\\
-				(\mathbf{y}, t) \models \varphi_1 \wedge \varphi_2 
+				(\mathbf{y}, t) \models \varphi_1 \wedge \varphi_2
 						&\Longleftrightarrow (\mathbf{y}, t)  \models \varphi_1 \textrm{ a současně } (\mathbf{y}, t) \models \varphi_2 \\
-				(\mathbf{y}, t) \models \varphi_1 \mathbf{U}_{[a,b]} \varphi_2 
+				(\mathbf{y}, t) \models \varphi_1 \mathbf{U}_{[a,b]} \varphi_2
 						&\Longleftrightarrow \exists t' \in [t+a, t+b] . (\mathbf{y}, t') \models \varphi_2	\\
 						&~~~~~~\textrm{ a současně } \forall t'' \in [t, t'] . (\mathbf{y}, t'') \models \varphi_1
 			\end{array}\end{align*}
 		}
-		
+
 	\end{center}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Vlastnost -- STL}
-	
+
 	\begin{center}
 		{\Large $\varphi_1 \mathbf{U}_{[a,b]} \varphi_2$}
-		
+
 		\bigskip
 
 		\begin{tikzpicture}
@@ -135,8 +135,8 @@
 
 			\node at (3,0.3) {$\varphi_1$};
 
-			\begin{scope}[-, shorten <=1pt]	
-				\draw[green, very thick]	(t) -> (t2) node[above] {$\varphi_1 \wedge \varphi_2$}; 
+			\begin{scope}[-, shorten <=1pt]
+				\draw[green, very thick]	(t) -> (t2) node[above] {$\varphi_1 \wedge \varphi_2$};
 				\draw[black]		(t2) -> (end);
 			\end{scope}
 			\node[main, right of=t, label=below:t+a, node distance=4cm]		(ta){};
@@ -174,7 +174,7 @@
 
 			\medskip
 			{\large $\mu'_i: \mathbb{R}^n \rightarrow \mathbb{R}$}
-		
+
 			\medskip
 			{$(y_i - k)$}
 		\end{center}
@@ -193,7 +193,7 @@
 	\begin{center}
 		\only<1>{
 		\begin{tikzpicture}[node distance=2cm]
-			\draw[thin,color=black,dotted] (0,0) grid (4,4); 
+			\draw[thin,color=black,dotted] (0,0) grid (4,4);
 			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
 			\tikzstyle{neigh}=[circle,fill=white,minimum size=5pt,inner sep=0pt,draw=black]
 			\node[main, label=left:D] 				(D) {};
@@ -206,7 +206,7 @@
 			\node[neigh, right of=A, label=above:P] (P) {};
 			\node[main, right of=P, label=right:B] 	(B) {};
 
-			\begin{scope}[->, thick, shorten <=1pt] 
+			\begin{scope}[->, thick, shorten <=1pt]
 				\draw	(A) -> (P);
 				\draw	(A) -> (Q);
 				\draw	(B) -> (P);
@@ -224,7 +224,7 @@
 		}
 		\only<2>{
 		\begin{tikzpicture}[node distance=2cm]
-			\draw[thin,color=black,dotted] (0,0) grid (4,4); 
+			\draw[thin,color=black,dotted] (0,0) grid (4,4);
 			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
 			\tikzstyle{neigh}=[circle,fill=white,minimum size=5pt,inner sep=0pt,draw=black]
 			\node[main, label=left:D] 				(D) {};
@@ -236,11 +236,11 @@
 			\node[main, above of=Q, label=left:A] 	(A) {};
 			\node[neigh, right of=A, label=above:P] (P) {};
 			\node[main, right of=P, label=right:B] 	(B) {};
-			
+
 			\node[main, label=above right:F] (F) at (2,1) {};
 			\node[neigh, label=above left:M] (M) at (1,1) {};
 			\node[neigh, label=above right:N] (N) at (3,1) {};
-			\begin{scope}[->, thick, shorten <=1pt] 
+			\begin{scope}[->, thick, shorten <=1pt]
 				\draw	(F) -> (C);
 				\draw	(F) -> (N);
 				\draw	(F) -> (M);
@@ -302,13 +302,13 @@
 
 	\begin{center}
 		abstrakce nad konkrétním výpočetním prostředím
-		
+
 		\bigskip
 		\hrule
 		\bigskip
 		\bigskip
 
-		{\large $\textrm{V} = V_1 \oplus V2 \oplus \ldots \oplus V_k$}	 
+		{\large $\textrm{V} = V_1 \oplus V2 \oplus \ldots \oplus V_k$}
 	\end{center}
 
 	\begin{description}
@@ -316,12 +316,12 @@
 		\item[$V_i$]	mezivýsledky
 		\item[$\oplus$]	asociativní a komutativní operace spojování
 	\end{description}
-	
+
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Výpočetní model}	
+	\frametitle{Výpočetní model}
 
 	\begin{itemize}
 		\item<1->	2 výpočetní prostředí:
@@ -343,13 +343,13 @@
 	\begin{center}
 		\begin{tikzpicture}[node distance=3cm, text width=1.5cm, text centered]
 			\node[rectangle, rounded corners, draw=black!50, inner sep=0.1cm, text width=2cm, dashed] 	(master-package)	{
-				\begin{tikzpicture}\begin{scope}[text width=1.5cm]	
+				\begin{tikzpicture}\begin{scope}[text width=1.5cm]
 					\node[rectangle]					(master-master)		{master};
 					\node[rectangle, fill=green!50, below of=master-master, node distance=0.5cm]	(master-parasim) 	{parasim};
 				\end{scope}\end{tikzpicture}
 			};
 			\node[rectangle, rounded corners, draw=black!50, inner sep=0.1cm, text width=2cm, dashed, below of=master-package] 	(slave-package1)	{
-				\begin{tikzpicture}\begin{scope}[text width=1.5cm]	
+				\begin{tikzpicture}\begin{scope}[text width=1.5cm]
 					\node[rectangle]					(slave-slave)		{slave};
 					\node[rectangle, fill=green!50, below of=slave-slave, node distance=0.5cm]	(slave-parasim) 	{parasim};
 					\node[rectangle, fill=black!10, below of=slave-parasim, node distance=0.6cm]	(slave-queue)		{fronta};
@@ -358,7 +358,7 @@
 				\end{scope}\end{tikzpicture}
 			};
 			\node[rectangle, rounded corners, draw=black!50, inner sep=0.1cm, text width=2cm, dashed, left of=slave-package1] 	(slave-package2)	{
-				\begin{tikzpicture}\begin{scope}[text width=1.5cm]	
+				\begin{tikzpicture}\begin{scope}[text width=1.5cm]
 					\node[rectangle]					(slave-slave)		{slave};
 					\node[rectangle, fill=green!50, below of=slave-slave, node distance=0.5cm]	(slave-parasim) 	{parasim};
 					\node[rectangle, fill=black!10, below of=slave-parasim, node distance=0.6cm]	(slave-queue)		{fronta};
@@ -367,7 +367,7 @@
 				\end{scope}\end{tikzpicture}
 			};
 			\node[rectangle, rounded corners, draw=black!50, inner sep=0.1cm, text width=2cm, dashed, right of=slave-package1] 	(slave-package3)	{
-				\begin{tikzpicture}\begin{scope}[text width=1.5cm]	
+				\begin{tikzpicture}\begin{scope}[text width=1.5cm]
 					\node[rectangle]					(slave-slave)		{slave};
 					\node[rectangle, fill=green!50, below of=slave-slave, node distance=0.5cm]	(slave-parasim) 	{parasim};
 					\node[rectangle, fill=black!10, below of=slave-parasim, node distance=0.6cm]	(slave-queue)		{fronta};
@@ -377,14 +377,14 @@
 			};
 			\begin{scope}[<->, thick, shorten <=1pt]
 				\draw	(master-package) -> (slave-package1);
-				\draw	(master-package) -> (slave-package2);	
+				\draw	(master-package) -> (slave-package2);
 				\draw	(master-package) -> (slave-package3);
-			\end{scope}	
+			\end{scope}
 		\end{tikzpicture}
 	\end{center}
 
 	\vspace{-1cm}
-	
+
 	\begin{center}{\small
 	\begin{columns}[t]
 		\begin{column}{.49\textwidth}
@@ -397,7 +397,7 @@
 		\begin{column}{.49\textwidth}
 			\begin{itemize}
 				\item	balancováno
-				\item	konec výpočtu	
+				\item	konec výpočtu
 			\end{itemize}
 		\end{column}
 	\end{columns}
@@ -472,13 +472,13 @@
 	\begin{center}
 		{\large
 			$\textrm{busy} \geq \textsc{Busy\_Bound}$
-		 	
+
 			$\wedge$
-			
+
 			$\textrm{idle} \leq \textsc{Idle\_Bound}$
-			
+
 			$\wedge$
-			
+
 			$\textrm{busy} \geq K \cdot \textrm{idle}$
 		}
 
@@ -494,16 +494,16 @@
 		(výpočetně náročnější)
 	\end{center}
 \end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Podíl numerické simulace na času výpočtu (90 \%)}
-	\begin{center}
-		jvisualvm (odhad) / vlastní rozšíření
-		\includegraphics[width=.8\textwidth]{../images/jvisualvm.png}
-	\end{center}
-\end{frame}
-% ------------------------------------------------------------------------------
+%% ------------------------------------------------------------------------------
+%% --------------------------- SLIDE --------------------------------------------
+%\begin{frame}
+%	\frametitle{Podíl numerické simulace na času výpočtu (90 \%)}
+%	\begin{center}
+%		jvisualvm (odhad) / vlastní rozšíření
+%		\includegraphics[width=.8\textwidth]{../images/jvisualvm.png}
+%	\end{center}
+%\end{frame}
+%% ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Globální robustnost}
@@ -513,7 +513,7 @@
 		\bigskip
 
 		\begin{tikzpicture}[node distance=2cm]
-			\draw[thin,color=black,dotted] (0,0) grid (4,4); 
+			\draw[thin,color=black,dotted] (0,0) grid (4,4);
 			\tikzstyle{main}=[circle,fill=black,minimum size=5pt,inner sep=0pt, draw=black]
 			\tikzstyle{neigh}=[circle,fill=white,minimum size=5pt,inner sep=0pt,draw=black]
 
@@ -569,7 +569,7 @@
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Kritická místa aplikace a možná vylepšení I}
-	
+
 	\begin{itemize}
 		\item	numerická simulace (nyní GNU Octave)
 		\item	plná podpora SBML
