@@ -1,18 +1,4 @@
 #!/bin/bash
-
-# This script uploads master thesis PDF file to the server
-
-if [ "$MASTER_THESIS" != "skip" ]; then
-	LAST_COMMIT=`git log -1 HEAD | grep "commit " | sed  's/\<commit\>//g' | tr -d ' '`;
-	HASH=${LAST_COMMIT:1:10};
-	TIMESTAMP=`date +%Y-%m-%d_%H-%M`;
-	cd master;
-	make thesis;
-	make presentation/papousek.pdf;
-	scp text/thesis.pdf xpapous1@anna.fi.muni.cz:public_html/thesis-${TIMESTAMP}-${HASH}.pdf;
-	scp presentation/papousek.pdf xpapous1@anna.fi.muni.cz:public_html/slides-${TIMESTAMP}-${HASH}.pdf;
-	cd -;
-else
-	echo "--- skipping master thesis";
-fi
+cd phd;
+make publish;
 
