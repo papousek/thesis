@@ -48,7 +48,7 @@ simplified by Equation \ref{eq:forgetting} where the parameter $s$ stands for th
 P_{recall} = e^{-\frac{t}{s}}
 \end{align}
 
-In addition to forgetting there are three other effects influecing the ability to memorize facts:
+In addition to forgetting there are three other effects influencing the ability of memorizing facts:
 
 \begin{description}
 	\item[repetition] The recall probability is higher with the larger number of student-task
@@ -98,13 +98,13 @@ In addition to forgetting there are three other effects influecing the ability t
 \subsection{ACT-R}
 
 To describe aspects of interaction between students and tasks requiring memorizing one can use a method
-introduced by \cite{Pavlik2005} which is based on Adaptive Control of Thouht -- Rational (ACT-R) model.
+introduced by \cite{Pavlik2005} which is based on \textit{Adaptive Control of Thouht -- Rational} (ACT-R) model.
 ACT-R consists of a skill $\theta$ assigned to each student and a difficulty $\tau$ and discrimination $s$
 assigned to each task. The model assumes a student solving tasks in times $t_1, \ldots, t_n$ in past and
 predicts  a recall probability $P_{recall}$. It doesn't distinguish between correct and incorrect solutions.
 
 \begin{align}
-P_{recall}(\tau) = \frac{1}{1 + e^{\frac{\tau - \theta}{s}}}
+P_{recall}(\theta) = \frac{1}{1 + e^{\frac{\tau - \theta}{s}}}
 \end{align}
 
 \begin{figure}[H]
@@ -179,9 +179,46 @@ d_i(\theta_{i-1}) = c \cdot e^{\theta_{i-1}} + a
 The student's skill for the first solving sessing is set to $-\infty$, so the $a$ parameter defines
 value for $d_1$. The $c$ stands for the decay scale parameter.
 
-
 \subsection{SAM}
 
+Besides ACT-R there is also \textit{Search of Associative Memory} (SAM)~\cite{Raaijmakers2003, Raaijmakers1981}, general theory of retrieval
+from long term memory combining associative network models and random search models.
+
+The original SAM model assumes the information is stored in memory traces/images containing memorized item,
+associative and contextual information. The theory also works with short-term buffer and long-term
+storage. During the retrieval process is based on retrieval cues such as words, category names
+and contextual cues. The probability of successful retrieval depends on strengths of the retrieval
+cues associated to the given image (usually the strength is derived from the length of time an
+item has been studied).
+
+Let $(Q_j, I_i)$ stand for the strength of association between cue $Q_j$ and image $I_i$. Activation
+$V(i)$ of image $I_i$ for the set of cues $Q_1,\ldots, Q_m$ is given by:
+
+\begin{align}
+V(i) = \prod_{j=1}^m S(Q_m, I_i)
+\end{align}
+
+The probability of sampling $P_s(i)$ the given image $I_i$ in the context of the set of
+images $I_1, \ldots, I_n$ is given by:
+
+\begin{align}
+P_s(i) = \frac{V(i)}{\sum_{j=1}^{n}}
+\end{align}
+
+Sampling an image allows recovery of some information:
+
+\begin{align}
+P_r(i) = 1 - e^{-\sum_{j=1}^mS\left(Q_j, I_i\right)}
+\end{align}
+
+Combining the probability of sampling and the probability of recovery the probability of retrieval
+can be defined as:
+
+\begin{align}
+P_{recall} = \left(1 - \left(1 - P_s(i)\right)^{L_{max}}\right) \cdot P_r(i)
+\end{align}
+
+{\textbf{TODO}}
 
 \bibliographystyle{plain}
 \nocite{*}
