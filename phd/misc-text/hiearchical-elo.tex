@@ -66,19 +66,19 @@ we assume:
 
 Let $TI(p)$ indicates whether the place is time-invalid to be asked as a question ($True$ or $False$), e.g. the place has been asked in the last 3 minutes.
 
-Let $\Psi_{target}$ is a target probability of correct answer for the question containing the recommended place. The following function is defined:
+Let $\Psi_{target}$ is a target probability of a correct answer for the question containing the recommended place. The following function is defined:
 
 \begin{align}
-Dev(s, p, \Psi_{target}) = \frac{\left|\Psi_{target} - \Psi(K_{sp})\right|}{\left|\Psi_{target} - \frac{1}{2} + sign\left(\Psi_{target} - \Psi(K_{sp})\right) \cdot \frac{1}{2}\right|}
+Dev(s, p, \Psi_{target}) = \frac{\left|\Psi_{target} - \Psi(K_{sp})\right|}{\left|\Psi_{target} - \frac{1}{2} + \textrm{sign}\left(\Psi_{target} - \Psi(K_{sp})\right) \cdot \frac{1}{2}\right|}
 \end{align}
 
 The place $p$ where $\left(TI(p), Dev(s, p, \Psi_{target})\right)$ is minimal for student $s$ and
-probability $\Psi_{target}$ is recommended.
+probability $\Psi_{target}$ is recommended to be asked.
 
 Number of options $K$ for the question containing the recommended place is determined as follows:
 
 \begin{align}
-K = \min\left(K_{max}, min\left(\frac{1}{2}, \frac{\Psi_{target} - \Psi(K_{sp})}{1 - \Psi(K_{sp})}\right)^{-1}\right)
+K = \min\left(K_{max}, \textrm{round}\left(\min\left(\frac{1}{2}, \frac{\Psi_{target} - \Psi(K_{sp})}{1 - \Psi(K_{sp})}\right)^{-1}\right)\right)
 \end{align}
 
 \end{document}
