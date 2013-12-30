@@ -1,0 +1,84 @@
+\documentclass[a4paper]{article}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb,amsthm, amsfonts}
+\usepackage{tikz}
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{comment}
+\usepackage{pgfplots}
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols, decorations.markings}
+
+\title{Hiearchical Elo implemented in \url{www.slepemapy.cz}}
+
+\begin{document}
+\maketitle
+
+\section{Hiearchical Elo}
+
+Simplication: no account for spacing ect, for timing information, uncertainty
+
+\paragraph{Assumptions/data} $K_{sp}$ -- knowledge of a student a place; logit of probability
+of correct answer, i.e., probability of a correct answer of student $s$, place $p$ (open
+question) is:
+
+\begin{align}
+P_{sp} = \Psi(K_{sp}) = \frac{1}{1 + e^{-K_{sp}}}
+\end{align}
+
+And for question type with k choices:
+
+\begin{align}
+P_{sp} = \frac{1}{k} + \left(1 - \frac{1}{k}\right) \cdot \Psi(K_{sp})
+\end{align}
+
+We assume that knowledge of students and places is correlated, specifically,
+we assume:
+
+\begin{itemize}
+	\item	$G_s$ -- global knowledge of a student (of a given subject)
+	\item	$D_p$ -- differenceculty of a place (average knowledge of a given fact)
+	\item	$K_{sp}$ -- $G_s - D_p$
+\end{itemize}
+
+\paragraph{Estimation procedure (Elo style)} $\alpha_1$, $\alpha_2$ are constants (suitable values to be found).
+
+\begin{itemize}
+	\item	initialize everything to zeros
+	\item for all answers: student $s$, place $p$, correctness $c$
+		\begin{itemize}
+			\item	if this is the first answer for $s$, $p$:
+				\begin{itemize}
+					\item	set $K_{sp} \gets G_s - D_p$
+					\item	update $G_s \gets G_s + \alpha_1 \cdot (c - P_{sp})$
+					\item	update $D_p \gets D_p - \alpha_1 \cdot (c - P_{sp})$
+				\end{itemize}
+			\item	update $K_{sp} \gets K_{sp} + \alpha_2 \cdot (c - P_{sp})$
+		\end{itemize}
+\end{itemize}
+
+\section{Recommendation}
+
+Let $TI(p)$ indicates whether the place is time-invalid to be asked as a question ($True$ or $False$), e.g. the place has been asked in the last 3 minutes.
+
+Let $\Psi_{target}$ is a target probability of correct answer for the question containing the recommended place. The following function is defined:
+
+\begin{align}
+Dev(s, p, \Psi_{target}) = \frac{\left|\Psi_{target} - \Psi(K_{sp})\right|}{\left|\Psi_{target} - \frac{1}{2} + sign\left(\Psi_{target} - \Psi(K_{sp})\right) \cdot \frac{1}{2}\right|}
+\end{align}
+
+The place $p$ where $\left(TI(p), Dev(s, p, \Psi_{target})\right)$ is minimal for student $s$ and
+probability $\Psi_{target}$ is recommended.
+
+Number of options $K$ for the question containing the recommended place is determined as follows:
+
+\begin{align}
+K = \min\left(K_{max}, min\left(\frac{1}{2}, \frac{\Psi_{target} - \Psi(K_{sp})}{1 - \Psi(K_{sp})}\right)^{-1}\right)
+\end{align}
+
+\end{document}
