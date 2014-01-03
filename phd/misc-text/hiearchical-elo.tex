@@ -64,7 +64,7 @@ we assume:
 
 \section{Recommendation}
 
-Let $TI(p)$ indicates whether the place is time-invalid to be asked as a question ($True$ or $False$), e.g. the place has been asked in the last 3 minutes.
+Let $TI(s, p)$ indicates whether the place $p$ is time-invalid to be asked as a question ($True$ or $False$) for the given student $s$, e.g. the place has been asked in the last 3 minutes.
 
 Let $\Psi_{target}$ is a target probability of a correct answer for the question containing the recommended place. The following function is defined:
 
@@ -72,7 +72,7 @@ Let $\Psi_{target}$ is a target probability of a correct answer for the question
 Dev(s, p, \Psi_{target}) = \frac{\left|\Psi_{target} - \Psi(K_{sp})\right|}{\left|\Psi_{target} - \frac{1}{2} + \textrm{sign}\left(\Psi_{target} - \Psi(K_{sp})\right) \cdot \frac{1}{2}\right|}
 \end{align}
 
-The place $p$ where $\left(TI(p), Dev(s, p, \Psi_{target})\right)$ is minimal for student $s$ and
+The place $p$ where $\left(TI(s, p), Dev(s, p, \Psi_{target})\right)$ is minimal for student $s$ and
 probability $\Psi_{target}$ is recommended to be asked.
 
 Number of options $K$ for the question containing the recommended place is determined as follows:
