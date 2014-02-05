@@ -1,41 +1,81 @@
+LATEX=pdflatex -interaction batchmode
+BIBTEX=bibtex
+
+MISC_TEX=$(shell find misc-text -name '*.tex')
+PRESENTATION_TEX=$(shell find presentation -name '*.tex')
+
+
+###############################################################################
+# Build
+###############################################################################
+
+build-all: build-misc build-presentation
+
+build-misc: $(foreach FILE, $(MISC_TEX), target/misc-text/$(shell basename $(FILE) '.tex').pdf)
+
+build-presentation: $(foreach FILE, $(PRESENTATION_TEX), target/presentation/$(shell basename $(FILE) '.tex').pdf)
+
+
+###############################################################################
+# General
+###############################################################################
+
 target:
 	mkdir -p target;
 
-target/bibliography.bib: target
+target/bibliography.bib: bibliography/*.bib | target
 	bibtool -s bibliography/*.bib > target/bibliography.bib;
 
-target/build:
-	mkdir -p target/build; \
-	cp -r misc-text target/build; \
-
-target/clone: target
-	LOCAL_REPO=`pwd`/..; \
-	cd target; \
-	git clone "$$LOCAL_REPO" clone;
-
-target/misc-text: target/build target/bibliography.bib
-	ln -s ../../bibliography.bib target/build/misc-text/bibliography.bib; \
-	cd target/build/misc-text; \
-	for FILE in *.tex; do \
-		BASEFILE=`basename $$FILE .tex`; \
-		echo "processing $$BASEFILE"; \
-		pdflatex "$$BASEFILE"; \
-		bibtex "$$BASEFILE"; \
-		pdflatex "$$BASEFILE"; \
-		pdflatex "$$BASEFILE"; \
-	done; \
-	cd ../../; \
-	mkdir misc-text; \
-	cp build/misc-text/*.pdf misc-text;
+target/%/bibliography.bib: target/bibliography.bib | target/$*
+	rm -rf target/$*/bibliography.bib; \
+	ln -s `pwd`/target/bibliography.bib target/$*/bibliography.bib;
 
 clean:
 	rm -rf target;
 
-publish: target/clone
-	cd target/clone/phd; \
-	make clean; \
-	make target/misc-text; \
-	TIMESTAMP=`date +%Y-%m-%d_%H-%M`; \
-	ssh xpapous1@anna.fi.muni.cz -t "rm -rf public_html/thesis-phd; mkdir -p public_html/thesis-phd; rm -rf public_html/theis-phd-$$TIMESTAMP; mkdir -p public_html/thesis-phd-$$TIMESTAMP"; \
-	scp -r target/misc-text xpapous1@anna.fi.muni.cz:public_html/thesis-phd; \
-	ssh xpapous1@anna.fi.muni.cz -t "cp -r public_html/thesis-phd/* public_html/thesis-phd-$$TIMESTAMP";
+
+###############################################################################
+# Misc. text
+###############################################################################
+
+target/misc-text: misc-text/* | target
+	cp -r misc-text target;
+
+target/misc-text/%.pdf: misc-text/$** target/misc-text/bibliography.bib | target/misc-text
+	cd target/misc-text; \
+	${LATEX} $*; \
+	${BIBTEX} $*; \
+	${LATEX} $*; \
+	${LATEX} $*; \
+	for FILE in `ls --ignore=*.pdf | grep $*`; do \
+		echo $$FILE; \
+		rm -rf "$$FILE"; \
+	done;
+
+
+###############################################################################
+# Presentation
+###############################################################################
+
+target/beamer-theme:
+	cd target; \
+	git clone git@github.com:proso/beamer-theme.git;
+
+target/presentation: | target/beamer-theme
+	set -x; \
+	cp -r presentation target; \
+	cd target/presentation; \
+	for FILE in `ls ../beamer-theme/theme/`; do \
+		ln -s ../beamer-theme/theme/$$FILE $$FILE; \
+	done;
+
+target/presentation/%.pdf: misc-text/$** target/presentation/bibliography.bib | target/presentation
+	cd target/presentation; \
+	${LATEX} $*; \
+	${BIBTEX} $*; \
+	${LATEX} $*; \
+	${LATEX} $*; \
+	for FILE in `ls --ignore=*.pdf | grep $*`; do \
+		echo $$FILE; \
+		rm -rf "$$FILE"; \
+	done;
