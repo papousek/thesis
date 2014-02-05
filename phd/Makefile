@@ -39,7 +39,12 @@ clean:
 ###############################################################################
 
 target/misc-text: misc-text/* | target
-	cp -r misc-text target;
+	cp -r misc-text target; \
+	cd target/misc-text; \
+	for FILE in `ls ../../templates/`; do \
+		rm -rf $$FILE; \
+		ln -s ../../templates/$$FILE $$FILE; \
+	done;
 
 target/misc-text/%.pdf: misc-text/$** target/misc-text/bibliography.bib | target/misc-text
 	cd target/misc-text; \
