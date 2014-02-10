@@ -3,17 +3,21 @@ BIBTEX=bibtex
 
 MISC_TEX=$(shell find misc-text -name '*.tex')
 PRESENTATION_TEX=$(shell find presentation -name '*.tex')
+PAPER_TEX=$(shell find paper -name '*.tex')
+
 
 
 ###############################################################################
 # Build
 ###############################################################################
 
-build-all: build-misc build-presentation
+build-all: build-misc build-presentation build-paper
 
 build-misc: $(foreach FILE, $(MISC_TEX), target/misc-text/$(shell basename $(FILE) '.tex').pdf)
 
 build-presentation: $(foreach FILE, $(PRESENTATION_TEX), target/presentation/$(shell basename $(FILE) '.tex').pdf)
+
+build-paper: $(foreach FILE, $(PAPER_TEX), target/paper/$(shell basename $(FILE) '.tex').pdf)
 
 
 ###############################################################################
@@ -48,6 +52,30 @@ target/misc-text: misc-text/* | target
 
 target/misc-text/%.pdf: misc-text/$** target/misc-text/bibliography.bib | target/misc-text
 	cd target/misc-text; \
+	${LATEX} $*; \
+	${BIBTEX} $*; \
+	${LATEX} $*; \
+	${LATEX} $*; \
+	for FILE in `ls --ignore=*.pdf | grep $*`; do \
+		echo $$FILE; \
+		rm -rf "$$FILE"; \
+	done;
+
+
+###############################################################################
+# Papers
+###############################################################################
+
+target/paper: paper/* | target
+	cp -r paper target; \
+	cd target/paper; \
+	for FILE in `ls ../../templates/`; do \
+		rm -rf $$FILE; \
+		ln -s ../../templates/$$FILE $$FILE; \
+	done;
+
+target/paper/%.pdf: paper/$** target/paper/bibliography.bib | target/paper
+	cd target/paper; \
 	${LATEX} $*; \
 	${BIBTEX} $*; \
 	${LATEX} $*; \
