@@ -102,7 +102,7 @@ target/presentation: | target/beamer-theme
 		ln -s ../beamer-theme/theme/$$FILE $$FILE; \
 	done;
 
-target/presentation/%.pdf: misc-text/$** target/presentation/bibliography.bib | target/presentation
+target/presentation/%.pdf: presentation/$** target/presentation/bibliography.bib | target/presentation
 	cd target/presentation; \
 	${LATEX} $*; \
 	${BIBTEX} $*; \
