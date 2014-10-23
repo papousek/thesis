@@ -1,0 +1,172 @@
+\documentclass[a4paper]{article}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb,amsthm, amsfonts}
+\usepackage{tikz}
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{comment}
+\usepackage{pgfplots}
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols, decorations.markings}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+
+\section{Motivation}
+
+\begin{itemize}
+	\item	Trying to minimizing number of under-practiced and over-practiced attempts.
+	\item	Case studies \cite{cen2007over,yudelson2013estimating}. In
+		\cite{cen2007over} more than 50\% of practices deteced as over-practiced.
+		Some hard problems had less practices than the easiest one.
+	\item	Master-treshold can be viewed as a parameter that controls the relative
+		frequency of under-practiced (FP) and over-practiced attempts (FN)
+		\cite{fancsali2013optimal}. Tutors should be conservative, over-practice is
+		better than under-practice.
+	\item	There is some low acceptable number of attempts after the knowledge is
+		acquired -- \textbf{lag} \cite{fancsali2013optimal}.
+	\item	Typical experiments are (1) simulated; (2) apply "better" model to the
+		old data find the over-practiced attempts.
+\end{itemize}
+
+\section{Bayesian Knowledge Tracing}
+
+\begin{itemize}
+	\item	Typical master-treshold is set to $P(L) > 0.95$.
+\end{itemize}
+
+\subsection{Robustness of BKT \cite{fancsali2013optimal}}
+
+They quantify the notions of "lag", \textbf{acceptable lag} is:
+
+\begin{quotation}
+The number of consecutive correct opportunities required to take a
+student from the theoretical minimum probability of knowledge, for each skill,
+to the mastery threshold probability.
+\end{quotation}
+
+Three experiments with simulated users (14 skills) and different tresholds (75\%, 90\%, 95\% and 98\%):
+\begin{itemize}
+	\item	best case (users simulated with the same parameters as the model),
+	\item	worst case \#1 (users simulated by the parameters mischmatched to the model),
+	\item	worst case \#2 (users simulated by the heterogeneous parameters).
+\end{itemize}
+
+Observations:
+\begin{itemize}
+	\item	histogram of medians of number of over-practiced attempts per skill,
+	\item	proportion of students with pre-mature mastery jugment,
+	\item	proportion of students with over-practice (really low number of attempts)
+\end{itemize}
+
+Results:
+\begin{itemize}
+	\item	98\% mastery treshold probability leads to pre-mature mastery judgment for
+		under 5\% of students per skill for majority of students.
+	\item	broader patterns (e.g., that using $P(T) > 0.8$ leads to more false
+		positives) seem to emerge and should be studied further.
+\end{itemize}
+
+Notes:
+\begin{itemize}
+	\item	They count median of number of over-practice attampts, under-practice
+		is somehow ignored. Maybe the \textit{expected time to mastery} from
+		\cite{lee2012impact} could be used.
+\end{itemize}
+
+\subsection{Metrics \cite{pardos2013towards}}
+
+They define \textbf{moment of learning MAD}:
+\begin{quotation}
+Moment of learning MAD is the average absolute difference of number of skill
+application opportunities between the moment when the internal state of the
+generating skill model switched to learned state and the moment when the
+probability of the skill being in a learned state reaches 0.95 (a traditionally
+used threshold in the area of intelligent tutoring systems). A perfect model
+would have a moment of learning MAD of 0. The larger the moment of learning MAD
+is the worse the model prediction of model of learning is.
+\end{quotation}
+
+\begin{itemize}
+	\item	Model fitting against a specific metric, how does the metric incluences
+		the model behaviou according to mastery learning detection?
+	\item	Simulated experiment.
+\end{itemize}
+
+There are 3 experiments:
+\begin{itemize}
+	\item	Which metrics correlates best with accuracy of moment of learning predicton?
+	\item	How often is the ground truth model the best at prediction performance
+		according to the various metrics?
+	\item Do the parameter sets that are not predicted well by ground truth share
+		a common pattern? (RMSE, log-likelihood)
+		\begin{itemize}
+			\item	The larger the learning rate of a simulated skill is,
+				the higher the rank of the ground model is. The $P(L_0)$ has only a
+				small effect.
+		\end{itemize}
+\end{itemize}
+
+Results:
+\begin{itemize}
+	\item	AUC should not be used to determine the relative goodness of models
+		based on prediction performance if the underlying goal is to rank models
+		based on knowledge estimation goodness. Metrics like recall and F-measure
+		ought to be adopted in place of AUC for these purposes.
+	\item	high learning rate and low slip in the generating parameters can prove
+		difficult for mastery prediction
+\end{itemize}
+
+Notes:
+\begin{itemize}
+	\item	Paper is focused on over-practice attempts, under-practice is ignored.
+\end{itemize}
+
+\subsection{iBKT \cite{lee2012impact}}
+
+\begin{itemize}
+	\item	BKT with global parameters replaced by iBKT where all parameters are per student.
+	\item	Fitting is done via \textbf{expectation maximization} method alternately
+		fixing some set of parameters and improvin the other one.
+\end{itemize}
+
+They define \textbf{expected time to mastery} in time $t$ for student $i$, $EO_i(P_i(L_t))$:
+
+$$
+EO_i(P_i(L_t)) = 0\textrm{, if } P_i(L_t_ > d
+$$
+
+$$
+EO_i(P_i(L_t)) = 1 + P(correct|P_i(L_t)) \cdot EO_i(P_i(L_{t + 1}|correct)) + P(wrong|P_i(L_t)) \cdot EO_i(P_i(L_{t + 1}|wrong))
+$$
+
+\begin{itemize}
+	\item	Each path has a probability $P_{path}$, if $P_{path} < \epsilon$, path is dropped.
+	\item	Relatively small data: 265 students who did problems on 10 or more skills.
+	\item	Comparing BKT and iBKT against expected number of practice opportunities.
+\end{itemize}
+
+Results:
+\begin{itemize}
+	\item	There is significant spread in the required amount of practice for different students.
+	\item	Over 50 students in the given dataset would expect to do twice as many
+		problems if the population parameters are used to assess mastery learning.
+		compared to using the individuals's parameters.
+\end{itemize}
+
+\section{Learning Curves \cite{fancsali2013simulated}}
+\begin{itemize}
+	\item	Lurning curves are deformed by leaving of users with mastery learning level.
+	\item	They suggest a method where the attempts of left users are simulated
+		according to BKT.
+\end{itemize}
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+\end{document}
