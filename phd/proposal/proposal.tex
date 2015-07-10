@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{graphics}
 \thesissetup{
 	faculty=fi,
 	title=Adaptive Practice of Facts,
@@ -47,42 +48,221 @@ the educational process. This allows
 	\item	when we build a widely used system for practice
 \end{itemize}
 
-\chapter{State of the Art}
-
-\section{Memory and Models}
+\paragraph{literature}
 
 \begin{itemize}
-	\item spacing effect~\cite{ostrow2015blocking,maass2015how,kornell2008learning,kornell2010spacing}
-	\item flashcards (\textbf{TODO})~\cite{kornell2014focusing,bjork2013self,kornell2008optimising,kornell2009optimising}
-	\item distractors~\cite{little2015optimizing}
-	\item learning and forgetting curves~\cite{streeter2015mixture}
-		\begin{itemize}
-			\item ~
-		\end{itemize}
-	\item recall vs. recognition
-	\item BKT, IRT, \ldots
+	\item self-testing is an effective strategy that may boost student
+		performance~\cite{bjork2013self}
+	\item high performers may not need to use repeptition and low performers may
+		not be motivated~\cite{bjork2013self}
+	\item overconfidence~\cite{bjork2013self, kornell2008optimising}
+	\item learning process involves making continual assesment and decisions, such
+	as what should be studied next and how it should be studied, whether the
+	learning that will support later access to some information, concept or
+	procedure has been achieved, whether what one has recalled is correct, and so
+	on and on~\cite{bjork2013self}
+	\item inner vs. outer loop~\cite{koedinger2013new}
 \end{itemize}
 
+\chapter{State of the Art}
+
+Development a fully adaptive system providing a practice of facts requires
+insights from a few from the first point of view different areas. This chapter
+describes state of the art in these areas starting from psychology and
+cognitive science to student modelling, controlling the practice itself,
+evaluation and concrete systems.
+
+\section{Memory and Learning of Facts}
+
+The common way to learn facts whether online or offline is using
+flashcards~\cite{kornell2008optimising}. A flashcard has two sides, the first
+side represents a given term we want to learn and the second one its
+explanation, e.g. translation or image describing it.  During one practice
+session a sequence of flashcards is presented, so firstly we look at one side
+trying to say what is on the second side and then check whether our answer is
+correct. This really simple setup has a few parameters needed to be considered:
+
+\begin{enumerate}
+	\item How many flashcards should be available in one practice session?
+	\item What is their optimal order?
+	\item Should we drop some flashcards out of the practice if we think we already know it?
+	\item Should we gradually add flashcards with new terms and how?
+	\item How many time should we repeat the practice?
+	\item What is the optimal time space between individual presentations of one flashcard?
+\end{enumerate}
+
+\subsection{Spacing Effect}
+\label{section:spacing_effect}
+ll of the mentioned questions relate to the \emph{spacing
+effect} and \emph{forgetting curves} originally discovered by Hermann
+Ebbinghaus~\cite{ebbinghaus1885spacing}~(as cited
+in~\cite{pavlik2005practice}). When the terms are practiced with more time
+space between individual presentations, it reduces our performance during the
+practice itself, but in long term it has a positive impact on our
+learning~\cite{maass2015how, kornell2009optimising}. This is in the opposite of
+usual preparation of students before exams when they prefer \emph{massed
+repetition} (also known as \emph{cramming}), intensive work to absorb large
+volume of knowledge in short time period.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=.6\textwidth]{figure/forgetting_curves}
+		\caption{Forgetting curve introduced by Ebbinghaus is given by a
+			formula $R = e^{-\frac{t}{S}}$, where $R$ stands for the memory retention, $t$
+			for the time and $S$ for the relative strength of memory. Ebbinghaus
+			found realized that when the information is reminded again, it strengthens
+			not only the memory, but also also reduces the forgetting rate. This phenomenon
+			is called \emph{overlearning}.
+			\textbf{TODO}}
+	\end{center}
+\end{figure}
+
+In the context of computerized adaptive practice we should look at the spacing
+effect from two different points of view. In the first case we want to control
+it within one session. Here we have full control over it and we work with
+seconds, minutes or hours (maximally). With a fixed number of items for
+practice we regulate the spacing by modifying the sequence of practiced items,
+e.g. more blocking or iterleaving version of
+practice~\cite{ostrow2015blocking}, with variable set of items we can also
+decide which items do not have to be practiced
+anymore~\cite{kornell2008optimising} or which new items can be included.
+Current research shows that in this specific case lies great potential, because
+the sequencing has a big impact of the learning
+performance~\cite{ostrow2015blocking} and people are not able effectively judge
+which items are already learned~\cite{kornell2008optimising} and which ones
+should be practiced~\cite{kornell2014focusing}.
+
+In the second case we plan the practice over more
+sessions~\cite{kang2014retrieval}. Ideally a system should decide when the
+session starts and when it ends. Of course this decision is made by a user,
+not by a system. We can only motivate users to practice regularly, e.g. every
+day similarly how it is done by Duolingo (a system for learning
+languages)~\cite{garcia2013learning}. This regularity allows us to strengthen
+knowledge of already learned items and itroduce new ones.
+
+\subsection{Models Overview}
+
+\paragraph{Rasch Model} is known as the one-parameter logistic model in item
+response theory (\textbf{TODO: CITE}). It assumes the student's knowledge about
+an item is constant and can be expressed as a skill parameters $\theta$. Also
+each item is assigned by a difficulty parameter $b$. Having these parameters
+the probability of correct answer is given by the logistic function:
+
+\begin{align}
+P(correct|\theta,b) = \frac{1}{1 + e^{-(\theta - b)}}
+\end{align}
+
+Parameters of this model are usually estimated from data using the joint
+maximum likelihood estimation~\cite{de2008theory}. In online environment it is
+useful to update the parameters on the fly. For this purpose we can inspire by
+Elo rating system~\cite{elo1978rating} originally devised for chess rating and
+look at a student's answer on an item as match between the student and
+the item~\cite{papousek2014adaptive}. If our estimation is based only on the
+first interactions between students and items, the algorithm works for constant
+skills and difficulties, although the original Elo system assumes learning (changing skill).
+
+\paragraph{Bayesian Knowledge Tracing} is usually used model for
+learning~\cite{van2013properties}. It models student's knowledge in a hidden
+Markov model as a latent variable. In its basic version the variable is binary
+(either learned or unlearned), but generally it can has more levels. The model
+has four parameters: probability the given is initially learned, probability of
+learning based on one step, probability of wrong answer when the skill is
+learned (slip), and probability of correct answer when the skill is not learned
+(guess). Skill estimation is updated using a Bayes rule using observed answer.
+Several extensionis of this model can be found, e.g.
+forgetting~\cite{qiu2010does} or slightly different point of view using mixture
+of learning curves~\cite{streeter2015mixture}.
+
+\paragraph{Performance Factor Analysis} is another logistic
+model~\cite{pavlik2009performance}, but in contrast with the Rasch model it
+handles learning. The skill is represented as a linear combination of the
+item's difficulty ($\beta$) and the number of past success ($s$) and failures
+($f$) of the given student.
+
+\begin{align}
+P(correct|\beta,s, f) = \frac{1}{1 + e^{-(\beta + \gamma s + \delta f)}}
+\end{align}
+
+where $\gamma$ stands for the change of the skill associated with correct
+answer and $\delta$ stands for the same in case of incorrect answer.
+
+\bigskip
+
+\noindent
+In many areas of learning of facts people enter the tutoring system with varied
+prior knowledge, e.g. vocabulary or geography. A system needs to quickly assess
+what a user knows to be able to adaptively provide appropriate content. This
+feature is often missing in several systems and the user is forced to go through
+a lot of useless content. Our recent work~\cite{papousek2014adaptive} simlarly
+to~\cite{khajah2014integrating} combines a model assuming a constant skill with
+another one for learning to handle this phenomenon.  But this should go even
+further and models should also provide different
+learning~\cite{pelanek2015modeling} and forgetting rate for different items.
+A model using a mixture of individual learning curves implememted within
+Duolingo~\cite{streeter2015mixture} already covers some of these aspects, but
+they do not give much attention to prior knowledge and ignore spacing effect.
+On the other side studies dealing with spacing effect are usually based on
+observations in laboratory with artifical conditions, e.g.  people learn
+generally uknown terms to prevent prior knowledge~\cite{kang2014retrieval} or
+there is no corrective-feedback given during retriaval
+practice~\cite{landauer1978optimum}~(as cited in~\cite{kang2014retrieval}) and
+it is questionable how all their insights will work within an online system.
+
 \section{Practice Control}
+
+As we already presented in the previous sections we focus on \emph{inner loop}
+of user's practice~\cite{koedinger2013new}, mainly within one session, that
+is sequencing of items presented to a user. The considered area of learning
+of facts doesn't provide sufficiently complex tasks to deal with \emph{outer
+loop} (e.g. hints)~\cite{koedinger2013new} and we think it is enough. The
+practice itself consists of a sequence of multiple-choice and open-ended
+questions and we have to decide not only which item should be practiced, but
+also whether and how many options the question should have and in case of
+multiple-choice questions which items should be used as distractors. Sequencing
+should also take into account spacing effect described in
+section~\ref{section:spacing_effect}.
+
+\subsection{Sequencing}
+
+By seqencing the items presented to a user for practice we balance between two
+states: \emph{over-practice} and \emph{under-practice}. In the first case we
+practice an already learned item and we waste user's time. In the second one we
+stop practicing an item which is not learned yet and we will not give her a
+chance learn it completely. When a system tries to avoid over-practiced
+attempts, there is high chance that under-practice increases and vice versa.
+How this phenomenon is importent is presented in a study~\cite{cen2007over}
+where its authors reported that analysing historical data they detected more
+than $50\%$ out of practice attempts as over-practiced.
+
+In a lot of used systems a general approach for sequencing the items for
+practice is based on labelling from an expert~(\textbf{TODO: CITE}). The
+experts defines knowledge components for the given domain and prerequisites
+among them. There are techniques helping the ex\-perts~\cite{niznan2014using} or
+completely replace them by a computer~\cite{boros2013automatic}. However, these
+techniques are rarely used. Each component is a set of items and generally one
+item can be included within more components. We can practice items belonging to
+one component as long as the given user has mastered its prerequisites, but not
+the component itself. The mastery is detected by a model predicting the user's
+performance and we say that the user masters the knowledge component when the
+predicted probability the user learned the component exceeds the \emph{mastery
+threshold} which is usually set to~$95\%$. Mastery threshold can be viewed as
+parameter controlling the relative frequency of under-practiced and
+over-practiced attempts~\cite{fancsali2013optimal}.
+
+\subsection{Questions}
 
 \begin{itemize}
 	\item over-practice
 		\begin{itemize}
-			\item Trying to minimize a number of under-practiced and over-practiced attempts.
-			\item In \cite{cen2007over} more than 50\% of practices detected as
-				over-practiced. Some hard problems had less practices then the easiest
-				one.
-			\item Master-threshold can be viewed as a parameter that controls the
-				relative frequency of under-practiced (FP) and over-practiced (FN)
-				attempts~\cite{fancsali2013optimal}.
 			\item There is some low acceptable number of attempts after the knowledge
 				is acquired - \textbf{lag}~\cite{fancsali2013optimal}.
 			\item Typical master-threshold is set to $P(L) > 0.95$.
 		\end{itemize}
 	\item zone of proximal development~\cite{lee2005signifying}
-	\item inner vs. outer loop~\cite{koedinger2013new}
 	\item theories of intrinsic motivation~\cite{habgood2011motivating}
 	\item instructional design methodologes~\cite{luckin2001designing}
+	\item distractors~\cite{little2015optimizing}
+	\item free recall, recognition, cued recall, serial recall
 \end{itemize}
 
 \section{Systems}
@@ -109,7 +289,7 @@ the educational process. This allows
 \chapter{Aims of the Thesis}
 
 The main aim of the thesis is to design and evaluate several techniques of
-learning factographical knowledge via practice of multiple choice questions in
+learning of factographical knowledge via practice of multiple choice questions in
 online environment. Although the work is focused on the practice of geography,
 the found results will be easily appliable to other similar domains like
 vocabulary.
@@ -144,6 +324,13 @@ vocabulary.
 \section{Future Publications}
 
 \chapter{Achieved results}
+
+\begin{itemize}
+	\item system for adaptive practice of geography~\cite{papousek2014adaptive}
+	\item evaluation of the system with respect to user's motivation~\cite{papousek2015impact}
+	\item feedback loop~\cite{niznan2015exploring}
+	\item analysis of response time~\cite{papousek2015analysis}
+\end{itemize}
 
 \bibliographystyle{plain}
 \bibliography{proposal}
