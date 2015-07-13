@@ -4,6 +4,8 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{graphics}
+\usepackage{caption}
+\usepackage{subcaption}
 \thesissetup{
 	faculty=fi,
 	title=Adaptive Practice of Facts,
@@ -235,30 +237,106 @@ where its authors reported that analysing historical data they detected more
 than $50\%$ out of practice attempts as over-practiced.
 
 In a lot of used systems a general approach for sequencing the items for
-practice is based on labelling from an expert~(\textbf{TODO: CITE}). The
-experts defines knowledge components for the given domain and prerequisites
-among them. There are techniques helping the ex\-perts~\cite{niznan2014using} or
-completely replace them by a computer~\cite{boros2013automatic}. However, these
-techniques are rarely used. Each component is a set of items and generally one
-item can be included within more components. We can practice items belonging to
-one component as long as the given user has mastered its prerequisites, but not
-the component itself. The mastery is detected by a model predicting the user's
-performance and we say that the user masters the knowledge component when the
-predicted probability the user learned the component exceeds the \emph{mastery
-threshold} which is usually set to~$95\%$. Mastery threshold can be viewed as
-parameter controlling the relative frequency of under-practiced and
-over-practiced attempts~\cite{fancsali2013optimal}.
+practice is based on labelling from an expert. The experts defines knowledge
+components for the given domain and prerequisites among them. There are
+techniques helping the ex\-perts~\cite{niznan2014using} or completely replace
+them by a computer~\cite{boros2013automatic}. However, these techniques are
+rarely used. Each component is a set of items and generally one item can be
+included within more components. We can practice items belonging to one
+component as long as the given user has mastered its prerequisites, but not the
+component itself. This edge of knowledge is also known as the \emph{zone of
+proximal development}~\cite{lee2005signifying}.
+
+The mastery is detected by a model predicting user's performance and we say
+that the user masters the knowledge component when the predicted probability
+the user learned the component exceeds the \emph{mastery threshold} which is
+usually set to~$95\%$. Mastery threshold can be viewed as parameter controlling
+the relative frequency of under-practiced and over-practiced
+attempts~\cite{fancsali2013optimal}. Since our model needs data about a user
+to make estimation, there is some low acceptable number of attempts after the
+enowledge is acquired. This \emph{lag} studied in more detail
+in~\cite{fancsali2013optimal}, but the study is limited for \emph{Bayesian
+knowledge tracing} only.
+
+Similar approach is presented in~\cite{lopes2015multi}, where the system relies
+on~\emph{multi-armed bandits}, a technique generally being able to explore
+space of different parameters or strategies with respect to a given scoring
+function. The authors define a structure of activites and pre-conditions
+analogical to knowledge components and prerequisites and introduce two
+algorithms optimizing user's learning. The first one is independent on any
+model estimating user's performance, the second one uses it. Both of them take
+information from experts and measure user's learning online based on progress
+of the user's performance. The exact measure is defined as:
+
+\begin{align}
+	r = \sum^{t}_{k = t - \frac{d}{2}} \frac{C_k}{\frac{d}{2}} - \sum^{t - \frac{d}{2}}_{k = t - d} \frac{C_k}{d - \frac{d}{2}}
+\end{align}
+
+where $C_k = 1$ if the exercise at time $k$ was solved correctly. At time $t$,
+the measure compares the success of the last $\frac{d}{2}$ samples with the
+$\frac{d}{2}$ previous samples. Learning can estimated by this way thanks to
+the fact, the system measures and improves the user's performance at the same
+time. We show in section~\ref{section:evaluation} this is not always true in
+some kind of systems.
+
+In some cases the approach using a graph of prerequisites makes sense, e.g.
+in algebra we have a strong structure of prerequisites among the knowledge
+components (addition and multiplication) and the choice of an item (exercise)
+from the knowledge component is not so important, if we know that all
+prerequisites for the given component are mastered. On the other hand in case
+of a system for learning of vocabulary, individual items are independent, so we
+have one item per knowledge component. Of course we can build a structure of
+categories and prerequisites, but they represent a recommended study plan
+rather than necessity. When a user enters the system, she can theoretically
+start practicing anything.
+
+In~\cite{papousek2014adaptive} and~\cite{papousek2015impact} we present an
+approach mainly based on target difficulty. We assume we have already
+estimation of user's performance for each item available in our system,
+together with other descriptive information like number of interactions with
+the given item, last time when the user interacted with it and so on. Since the
+estimation is based only on historical data we do not need any expert's input.
+On the other side we are fully dependent on the choice of target difficulty and
+although there are studies about it~\cite{lomas2013optimizing,
+lomas2014optimizing,jansen2013influence,papousek2015impact}, further research
+has to be done in this area. Several systems has this parameter set
+arbitrarily, e.g.  75\% chance of correct
+answer~\cite{klinkenberg2011computer}.
+
+As we present in section~\ref{section:spacing_effect}, learning of facts highly
+releates to time and spacing effect. From this point of view the  schedule of
+practice was already studied~\cite{pavlik2008schedule}, but in different
+context, which is in laboratory with low number of items and without any prior
+knowledge. Figure~\ref{figure:practice_progress} shows how the spacing effect
+relates to the content of practice and number of practiced items.
+
+\begin{figure}
+	\begin{subfigure}[b]{.5\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{figure/practice_progress_a}
+		\caption{high spacing}
+		\label{figure:practice_progress_a}
+	\end{subfigure}
+	\begin{subfigure}[b]{.5\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{figure/practice_progress_b}
+		\caption{low spacing}
+		\label{figure:practice_progress_b}
+	\end{subfigure}
+	\caption{Visualization of practice with different spacing, each column
+		corresponds to an item, each row represents a discrete time unit. Black
+		boxes stands for practice attempts.}
+	\label{figure:practice_progress}
+\end{figure}
 
 \subsection{Questions}
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=.5\textwidth]{figure/options_vs_spacing}
+	\end{center}
+\end{figure}
 
 \begin{itemize}
-	\item over-practice
-		\begin{itemize}
-			\item There is some low acceptable number of attempts after the knowledge
-				is acquired - \textbf{lag}~\cite{fancsali2013optimal}.
-			\item Typical master-threshold is set to $P(L) > 0.95$.
-		\end{itemize}
-	\item zone of proximal development~\cite{lee2005signifying}
 	\item theories of intrinsic motivation~\cite{habgood2011motivating}
 	\item instructional design methodologes~\cite{luckin2001designing}
 	\item distractors~\cite{little2015optimizing}
@@ -274,6 +352,7 @@ over-practiced attempts~\cite{fancsali2013optimal}.
 \end{itemize}
 
 \section{Evaluation}
+\label{section:evaluation}
 
 \begin{itemize}
 	\item only student model and its accuracy~\cite{pelanek2014brief}
