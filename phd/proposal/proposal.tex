@@ -8,7 +8,7 @@
 \usepackage{subcaption}
 \thesissetup{
 	faculty=fi,
-	title=Adaptive Practice of Facts,
+	title=Adaptive Practice of Facts Using Multiple-Choice Questions,
 	type=r,
 	author=Jan Papou\v{s}ek,
 	advisor=Radek Pel\'{a}nek
@@ -55,7 +55,7 @@ the educational process. This allows
 \begin{itemize}
 	\item self-testing is an effective strategy that may boost student
 		performance~\cite{bjork2013self}
-	\item high performers may not need to use repeptition and low performers may
+	\item high performers may not need to use repetition and low performers may
 		not be motivated~\cite{bjork2013self}
 	\item overconfidence~\cite{bjork2013self, kornell2008optimising}
 	\item learning process involves making continual assesment and decisions, such
@@ -165,8 +165,7 @@ skills and difficulties, although the original Elo system assumes learning (chan
 
 \paragraph{Bayesian Knowledge Tracing} is usually used model for
 learning~\cite{van2013properties}. It models student's knowledge in a hidden
-Markov model as a latent variable. In its basic version the variable is binary
-(either learned or unlearned), but generally it can has more levels. The model
+Markov model as a binary latent variable (either learned or unlearned). The model
 has four parameters: probability the given is initially learned, probability of
 learning based on one step, probability of wrong answer when the skill is
 learned (slip), and probability of correct answer when the skill is not learned
@@ -330,18 +329,48 @@ relates to the content of practice and number of practiced items.
 \end{figure}
 
 \subsection{Questions}
-\begin{figure}
+
+Assume we have already picked an item for practice which correspons to a
+flashcard with two sides $A$ and $B$. We must specify a direction of the final
+question (whether we ask for the side $A$ or $B$), e.g. in case of vocabulary
+the first direction leads to an ability of understanding to foreign language
+and the second one to an ability of expressing of ideas in it. In both ways we
+want to achieve so-called \emph{cued recall}~(\textbf{TODO: cite}).
+
+Once we select a direction we must decide whether the question will be
+open-ended or how many options it will have. Using the options we allow a user
+to guess the correct answer, so we make the question easier.
+Figure~\ref{figure:options_vs_spacing} shows how the number of options relates
+to difficulty of the final question together with spacing which is controlled
+by sequencing. If our only goal is to make the difficulty of user's practice
+appropriate, it is not clear which combination of spacing and number of options
+we should use.
+
+\begin{figure}[h]
 	\begin{center}
 		\includegraphics[width=.5\textwidth]{figure/options_vs_spacing}
 	\end{center}
+	\caption{Graph illustrating how difficulty depends on spacing and number of
+		options. Darker background color means more difficult practice.}
+	\label{figure:options_vs_spacing}
 \end{figure}
 
-\begin{itemize}
-	\item theories of intrinsic motivation~\cite{habgood2011motivating}
-	\item instructional design methodologes~\cite{luckin2001designing}
-	\item distractors~\cite{little2015optimizing}
-	\item free recall, recognition, cued recall, serial recall
-\end{itemize}
+The next issue is how exactly should be the options themselves be chosen. We
+assume too easy options made the guess probability so high, a user wouldn't be
+motivated to learn anything. The impact of competitivness of options has been
+studied in~\cite{little2015optimizing}. The study contains two experiments
+where the first one does not include feedback about the correctness of user's
+answer, so its results can be hardly applied within an application where the
+feedback is present. And based on the second experiment where the feedback was
+included, competitive options seem to be the better choice. However the
+experiment was very limited, so this phenomenon is worth further investigation.
+
+The second aspect related to the competitivness of the options is repeating the
+same mistakes. Authors in~\cite{marsh2007memorial} describe experiments where
+wrong answer in the final test are correlated to wrong answer within a
+preparation phase where multiple-choice question were used. These observation
+should be definitely taken into account when the options are built within an
+adaptive system for practice.
 
 \section{Systems}
 
