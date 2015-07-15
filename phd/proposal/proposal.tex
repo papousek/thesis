@@ -72,6 +72,7 @@ the educational process. This allows
 	procedure has been achieved, whether what one has recalled is correct, and so
 	on and on~\cite{bjork2013self}
 	\item inner vs. outer loop~\cite{koedinger2013new}
+	\item instructional policies~\cite{rollinson2015predictive}
 \end{itemize}
 
 \chapter{State of the Art}
@@ -152,7 +153,7 @@ knowledge of already learned items and itroduce new ones.
 
 \subsection{Models Overview}
 
-\paragraph{Rasch Model} is known as the one-parameter logistic model in item
+\paragraph*{Rasch Model} is known as the one-parameter logistic model in item
 response theory (\textbf{TODO: CITE}). It assumes the student's knowledge about
 an item is constant and can be expressed as a skill parameters $\theta$. Also
 each item is assigned by a difficulty parameter $b$. Having these parameters
@@ -171,7 +172,7 @@ the item~\cite{papousek2014adaptive}. If our estimation is based only on the
 first interactions between students and items, the algorithm works for constant
 skills and difficulties, although the original Elo system assumes learning (changing skill).
 
-\paragraph{Bayesian Knowledge Tracing} is usually used model for
+\paragraph*{Bayesian Knowledge Tracing} is usually used model for
 learning~\cite{van2013properties}. It models student's knowledge in a hidden
 Markov model as a binary latent variable (either learned or unlearned). The model
 has four parameters: probability the given is initially learned, probability of
@@ -182,7 +183,7 @@ Several extensionis of this model can be found, e.g.
 forgetting~\cite{qiu2010does} or slightly different point of view using mixture
 of learning curves~\cite{streeter2015mixture}.
 
-\paragraph{Performance Factor Analysis} is another logistic
+\paragraph*{Performance Factor Analysis} is another logistic
 model~\cite{pavlik2009performance}, but in contrast with the Rasch model it
 handles learning. The skill is represented as a linear combination of the
 item's difficulty ($\beta$) and the number of past success ($s$) and failures
@@ -263,9 +264,13 @@ attempts~\cite{fancsali2013optimal}. Since our model needs data about a user
 to make estimation, there is some low acceptable number of attempts after the
 enowledge is acquired. This \emph{lag} studied in more detail
 in~\cite{fancsali2013optimal}, but the study is limited for \emph{Bayesian
-knowledge tracing} only.
+knowledge tracing} only. Another \emph{when-to-stop} policy is based on the
+expected improvement~\cite{rollinson2015predictive}. When the system expects
+the improvement below a given threshold in some knowledge component, it stops
+practicing it. Low expected improvement indicates already mastered domain or
+the user is unable to master it.
 
-Similar approach is presented in~\cite{lopes2015multi}, where the system relies
+Similar approach is presented in~\cite{lopes2015multi}. It relies
 on~\emph{multi-armed bandits}, a technique generally being able to explore
 space of different parameters or strategies with respect to a given scoring
 function. The authors define a structure of activites and pre-conditions
@@ -375,7 +380,7 @@ experiment was very limited, so this phenomenon is worth further investigation.
 
 The second aspect related to the competitivness of the options is repeating the
 same mistakes. Authors in~\cite{marsh2007memorial} describe experiments where
-wrong answer in the final test are correlated to wrong answer within a
+wrong answer in the final test are correlated to wrong answers within a
 preparation phase where multiple-choice question were used. These observation
 should be definitely taken into account when the options are built within an
 adaptive system for practice.
