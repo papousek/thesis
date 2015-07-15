@@ -388,15 +388,75 @@ adaptive system for practice.
 \section{Evaluation}
 \label{section:evaluation}
 
+Any effort to improve any kind of intelligent tutoring system would be useless
+if we were not able to measure some of its features. Design of these
+adaptive systems and choice of their parameters are really difficult and then
+their adaptive behavior is hard to predict, so it is crucial to be sure they
+meet our expectations. Generally we want to improve user's learning, but due to
+the fact the systems are often used during user's free time, we must also
+ensure user's willingness to use the system. How these things can relate to each
+other is studied in~\cite{lomas2013optimizing}.
+
+Since a lot of systems collect data about user's performance and their
+behaviour is based on models predicting the performance, its natural to
+evaluate new models using the historical data with respect to accuracy. We can
+also try to find whether the bahaviour of the system would change, if it used a
+different model. The second possibility is to deploy a new feature, collect new
+data and then see what has changed. This way is really expensive, because we
+spend user's time for testing of our system instaed of learning something. We
+also risk negative impact on users. The last way how to examine our ideas is to
+use synthetic data. Generating synthetic data is cheap, there is no risk, but
+we must work with a lot of assumptions which can limit us.
+
+\subsection{Historical Data}
+
+Typical data about user's performance contains a list of solved tasks and
+binary information whether the user's solution was correct ($1$) or incorrect
+($0$). A model predicting user's performance returns values from the interval
+$[0, 1]$. Based on this we can fit a new model on a subset of data a test its
+predictions compared to the rest of data. From the viewpoint of accuracy there
+is a set of more or less appropriate metrics depending on the fact whether an
+absolute or relative value of the prediction is important, which is more deeply
+described in~\cite{pelanek2014brief}.  From a practical point of view the
+accuracy is not the only important aspect of the predictive
+model~\cite{huang2015framework}. It also gives us deeper insight into a domain.
+Regarding this it is useful the given model holds some of the key assumptions,
+e.g. a user's knowledge increases with each exercise or while fitting its
+parameters converges to similar values regardless division of the data.
+
+Similar area to adaptive systems for practice are recommender systems, e.g. for
+books or movies. These systems also work with predictive models to serve
+appropriate content to their users. There are
+studies~\cite{cremonesi2010performance} how the accuracy of a model relates to
+behavior of a recommender system as a whole using only historical data. It
+would be nice to have the same for educational systems. Something similar is
+presented in~\cite{yudelson2015small} where the authors quantify saved user's
+time to get mastery in case of a better model. However it is questionable how
+valuable these observations are. In an extreme case, a model predicting $100\%$
+performance would be the best from this point of view, but it is not definitely
+helpful.
+
+\subsection{New Data}
+
+Classical approach to examine the impact of the given system on the user's
+behaviour is to follow the \emph{pre-test} $\rightarrow$ \emph{intervention}
+$\rightarrow$ \emph{post-test} experiment design~(\textbf{TODO: cite}). Usually
+the researchers has a full control over the participants, often in laboratory,
+but also in online envrinment where the participants are motivated to finish
+the whole experiment by money, e.g. in~\cite{maass2015how}. In test phases they
+are assesed with respect to a measured property and the intervention phase they
+use the system for the given amount of time. Although
+
+\subsection{Synthetic Data}
+
+
+A lot of intelligent tutoring systems relies on a model predicting user's performance.
 \begin{itemize}
-	\item only student model and its accuracy~\cite{pelanek2014brief}
-	\item saved time for getting mastery~\cite{yudelson2015small}
 	\item combination of historical data and simulation~\cite{gonzalez2015your}
 	\item exploring the interaction loop using synthetic data~\cite{niznan2015exploring}
 	\item learning vs. time spent in a system~\cite{lomas2013optimizing, monterrat2015player},
 	\item online multivariate (AB) testing~\cite{lomas2013optimizing,liu2014towards,stamper2012rise}
 	\item multi-armed bandits~\cite{liu2014trading,lopes2015multi}
-	\item recommender systems: model performance vs. impact~\cite{cremonesi2010performance}
 	\item debugging/tunning techniques for adaptive learning systems
 		\begin{itemize}
 			\item system behavior is hard to predict
