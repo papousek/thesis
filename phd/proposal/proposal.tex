@@ -445,32 +445,69 @@ the researchers has a full control over the participants, often in laboratory,
 but also in online envrinment where the participants are motivated to finish
 the whole experiment by money, e.g. in~\cite{maass2015how}. In test phases they
 are assesed with respect to a measured property and the intervention phase they
-use the system for the given amount of time. Although
+use the system for the given amount of time. Although this approach is very
+helpful and brings a lot of interesting observations, it does not scale.
+
+In online environment we need to periodically deploy new features and
+test them only on a subset of users, before we publish them
+completely~\footnote{This process is also known as \emph{canary deployment}.}
+.Doing this kind of online A/B testing opens new possibilities to
+us~\cite{stamper2012rise}, we can collect large volume of data and make a
+cycle of hypothesis testing faster. Unfortunately users in online environment
+enter and quit a system anytime, so we can hardly adopt a method of
+pre/post-testing. From this reason many studies are focused only on measuring
+time a user spent in a system or number of
+interactions~\cite{papousek2015impact,monterrat2015player}
+rather than improvement in her performance.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=.7\textwidth]{figure/interaction_loop}
+	\end{center}
+	\caption{Schema illustrating the interaction loop between student model and
+		question construction~\cite{niznan2015exploring}.}
+	\label{figure:interaction_loop}
+\end{figure}
+
+On the other side authors in~\cite{lomas2013optimizing} analyze both the time
+and the performance via fitting learning curves on collected data, but it is
+not clear whether the data are not influenced by the collection (higher error
+tolerance can naturally lead to higher error rate and it does not say anything
+about learning).  Our system for practicing of geography is aimed at a
+predefined success rate~\cite{papousek2014adaptive}, so we can not simply use
+the collected data to measure the user's performance. Although the interaction loop
+shown on Figure~\ref{figure:interaction_loop} is present in many systems, it is
+usually ignored.
+
+Another interesting issue is how exactly we should perform the online
+experiments to maximize the amount of retrieved information and minimize
+experimental time~\cite{liu2014towards}. Here is great potential in techniques
+like multi-armed bandits~\cite{liu2014trading} which can be used to
+automatically optimize values for parameters of the practice over populations
+of users.
 
 \subsection{Synthetic Data}
 
+Using simulated learners we easily generate synthetic data. The assumptions for
+simulation are usually derived from real traffic. We know the ground truth, how
+difficult items are, when a learner mastered a knowledge component and so on.
+This allows us to investigate issues which could not be otherwise, like
+detection of mastery~\cite{fancsali2013optimal}, learning
+curves~\cite{fancsali2013simulated} or the interaction between a model
+predicting user's performance and a system as a
+whole~\cite{niznan2015exploring}. In~\cite{niznan2015exploring} we assume that
+the optimal practice is given by a set of practiced items using a model with an
+access to the ground truth and we compare practiced items with other models to
+this one. Authors in~\cite{lopes2015multi} also use simulated learners before
+the experiments with real people and state the practice should be personalized
+which leads to varied practice sequencies. More diversity is in data, better
+system is.
 
-A lot of intelligent tutoring systems relies on a model predicting user's performance.
-\begin{itemize}
-	\item combination of historical data and simulation~\cite{gonzalez2015your}
-	\item exploring the interaction loop using synthetic data~\cite{niznan2015exploring}
-	\item learning vs. time spent in a system~\cite{lomas2013optimizing, monterrat2015player},
-	\item online multivariate (AB) testing~\cite{lomas2013optimizing,liu2014towards,stamper2012rise}
-	\item multi-armed bandits~\cite{liu2014trading,lopes2015multi}
-	\item debugging/tunning techniques for adaptive learning systems
-		\begin{itemize}
-			\item system behavior is hard to predict
-			\item it is easy to make a mistake
-			\item it is difficult to tune parameters of practice
-			\item how can we make it easier?
-		\end{itemize}
-	\item appropriate measures of user's progress
-		\begin{itemize}
-			\item success
-			\item coverage
-			\item diversity~\cite{lopes2015multi}
-		\end{itemize}
-\end{itemize}
+Experiments with synthetic data are limited by the assumptions we have for the
+simulated learners. On the other hand, fewer assumptions we want to bring lead
+to simpler experiments, e.g. in our study we did not want to assume anything
+about learning, so our simulated practice does not contain repeated
+interactions with the same item.
 
 \chapter{Aims of the Thesis}
 
