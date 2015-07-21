@@ -6,6 +6,7 @@
 \usepackage{graphics}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{numprint}
 \thesissetup{
 	faculty=fi,
 	title=Computerized Adaptive Practice of Facts Using Multiple-Choice Questions,
@@ -41,7 +42,7 @@ following work we deal with memorizing facts, e.g. vocabulary, location of
 countries in geography or terms in anatomy. The tasks can be understood as
 atomic without any intermidiate steps, so the inner loop is not so important
 for us. The practice as we understand it consists of answering of
-multiple-choice and open-ended questions, interleaved with a~feedback on the
+multiple-choice and open questions, interleaved with a~feedback on the
 correctness.
 
 Based on the recent research~\cite{bjork2013self} self-testing is a~good
@@ -241,7 +242,7 @@ of user's practice~\cite{vanlehn2006behavior}, mainly within one session, that
 is sequencing of items presented to a user. The considered area of learning
 of facts doesn't provide sufficiently complex tasks to deal with \emph{inner
 loop} (e.g. hints)~\cite{vanlehn2006behavior} and we think it is enough. The
-practice itself consists of a sequence of multiple-choice and open-ended
+practice itself consists of a sequence of multiple-choice and open
 questions and we have to decide not only which item should be practiced, but
 also whether and how many options the question should have and in case of
 multiple-choice questions which items should be used as distractors. Sequencing
@@ -367,7 +368,7 @@ and the second one to an ability of expressing of ideas in it. In both ways we
 want to achieve so-called \emph{cued recall}~(\textbf{TODO: cite}).
 
 Once we select a direction we must decide whether the question will be
-open-ended or how many options it will have. Using the options we allow a user
+open or how many options it will have. Using the options we allow a user
 to guess the correct answer, so we make the question easier.
 Figure~\ref{figure:options_vs_spacing} shows how the number of options relates
 to difficulty of the final question together with spacing which is controlled
@@ -563,12 +564,141 @@ the found results will be easily appliable to other similar domains.
 
 \chapter{Achieved results}
 
-\begin{itemize}
-	\item system for adaptive practice of geography~\cite{papousek2014adaptive}
-	\item evaluation of the system with respect to user's motivation~\cite{papousek2015impact}
-	\item feedback loop~\cite{niznan2015exploring}
-	\item analysis of response time~\cite{papousek2015analysis}
-\end{itemize}
+\section{System for Adaptive Practice of Geography}
+
+We have implemented an adaptive system providing adaptive practice of geography
+facts available at~\url{www.slepemapy.cz}~\cite{papousek2014adaptive}. It
+estimates user's and based on the estimation it asks questions of suitable
+difficulty. These questions are open or multiple-choice with from 2 to 6
+options, they are of 2 different directions ("Where is Germany?" or "What is
+the name of the highlighted country"), see
+figure~\ref{figure:example_question}. The questions are then answered using
+"outline map". After a sequence of 10 answers the system shows to user a
+feedback on her success.  Users can also access a visualization of their
+knowledge using an open learner model.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{figure/slepemapy_spain_highlighted}
+		\caption{An example of a question asked by \url{www.slepemapy.cz}.}
+		\label{figure:example_question}
+	\end{center}
+\end{figure}
+
+The design of our system is decomposed into 3 steps and each step is handled
+independently. More detailed description is available
+in~\cite{papousek2014adaptive, papousek2015impact}.
+
+\begin{enumerate}
+	\item \emph{Estimation of prior knowledge}. The system tries to estimate the
+		probability a user $u$ knows an item $i$ before the first question
+		about this item. The estimate is based on previous answers of the user $u$
+		and on answers of other users about the item $i$.
+	\item \emph{Estimation of current knowledge}. In this case the system
+		estimates the probability a user $u$ knows an item $i$ based on the
+		estimation of prior knowledge and a sequence of previous answers of the
+		user $u$ about the item $i$.
+	\item \emph{Question construction}. Based on the estimation of user's
+		knowledge and other additional information the system constructs suitable
+		question for the given user.
+\end{enumerate}
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{figure/response_time}
+		\caption{Response times and probability that the (next) answer is correct~\cite{papousek2015analysis}.}
+		\label{figure:response_time}
+	\end{center}
+\end{figure}
+
+The system is available for free without any need of registration. However we
+offer possibility of signing up to help our system with tracking user's
+history. However we do not collect any information about the identity of users
+(e.g. sex or age). So far we collected more than \numprint{11000000} answers
+from more than \numprint{100000} (mostly czech) users. Monthly we collect $\pm$
+\numprint{1000000} answers from \numprint{10000} users. The traffic is lower at
+weekends and during holidays, which indicates the system is used by students
+from schools. This hypothesis is also supported by the traffic analysis during
+one day~\cite{stanislav2015factual}. There are peaks in traffic corresponding
+to lessons at schools in Czech Republic.
+
+The collected data set serves as an interesting input for further research
+within Adaptive Learning Group\footnote{\url{www.fi.muni.cz/adaptivelearning}},
+e.g.~\cite{pelanek2015modeling} modeling students' memory or
+\cite{niznan2015student} modeling prior knowledge.
+Figure~\ref{figure:response_time} shows the relationship of response time and
+correctness of an answer, e.g. in case of the wrong answer longer response time
+leads to higher probability the next answer will be correct. On the other side
+in case of correct answers, it is exactly the opposite. This observation could be
+used to improve a model for current knowledge.
+
+\section{Impact of Adaptivity}
+
+In~\cite{papousek2015impact} we analyze the impact of adaptivity of our system
+on user's behaviour. We mainly focus on the time spent in the system expressed
+by the number of answers per user. We performed online AB experiment to eximine
+the role of the designed algorithm for question construction and its
+parameters. As we describe in section~\ref{section:practice_control} for the
+question constuction we firstly need to select an appropriate item and secondly
+we choose number of options and options themselves.
+
+In the first experiment we compare our approach to algorithms where at least
+one of these two steps is random. We found out that both parts of the algorithm
+are important. Using random version of the first or the second part leads to
+the similar results as in case of the completely random algorithm.
+
+Since the selection of an appropriate item for practice is based on the target
+difficulty, we performed the second exmperiment to find the optimal value for
+this parameter. Unfortunately we were not able to find any significant
+difference for different values of target difficulty with respect to the number
+of answers per user. This is probably caused by the fact that users can choose
+different practice contexts (maps) and for different contexts our system
+behaves differently, e.g in case of European countries the system can not
+provide sufficiently difficult practice for some users and on the other side
+for African countries there is sometimes a problem to pick sufficiently easy
+questions. Based on this we look not on the target difficulty with respect to
+the number of answers, but on the real difficulty with respect to self-reported
+perception\footnote{We ask users to evaluate the practice after $30$, $70$,
+$120$ and $200$ answers, whether it is "Too difficult", "Appropriate" or "Too
+easy".}. Using heuristics based on IP address we also detect in-school users
+and compare them to out-of-school users. For analysis we divide users according
+to their success to buckets and for each bucket we compute the percentage of
+"Too difficult", "Appropriate" and "Too easy" records, see
+figure~\ref{figure:feedback_by_success}.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{figure/feedback_by_success_overview}
+		\caption{Explicit feedback given by students according to their previous
+			real success rate. ~\cite{papousek2015impact}.}
+		\label{figure:feedback_by_success}
+	\end{center}
+\end{figure}
+
+The target difficulty is not constant in our system, we adjust it based on the
+user's history. For successful users we make the practice more difficult, for
+less successful the practice will be easier. This adjustment would make the
+choice of the target difficulty less important, so we were interested whether
+it has a positive impact on users. The last experiment shows that the group
+having the adjustment enabled answers more questions than the group without it.
+
+\section{Interaction Loop}
+
+Since we adaptively collect the data, we analyze it and then we try to improve
+the system using the acquired insights, we have to take into account the
+interaction shown on figure~\ref{figure:interaction_loop}.
+In~\cite{niznan2015exploring} we investigate this interaction loop and a role of
+small differences in predictive accuracy using synthetic data.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=\textwidth]{figure/noise_vs_intersection_number_of_answers}
+		\caption{Size of the intersection with the optimal practiced set of items and RMSE
+			depending on Guassian noise in optimal model (left side). Distribution of answers over
+			the items based on the given model (right side).~\cite{niznan2015exploring}.}
+		\label{figure:feedback_by_success}
+	\end{center}
+\end{figure}
 
 \bibliographystyle{plain}
 \bibliography{proposal}
