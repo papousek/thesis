@@ -562,7 +562,7 @@ the found results will be easily appliable to other similar domains.
 
 \section{Future Publications}
 
-\chapter{Achieved results}
+\chapter{Achieved Results}
 
 \section{System for Adaptive Practice of Geography}
 
@@ -688,17 +688,37 @@ Since we adaptively collect the data, we analyze it and then we try to improve
 the system using the acquired insights, we have to take into account the
 interaction shown on figure~\ref{figure:interaction_loop}.
 In~\cite{niznan2015exploring} we investigate this interaction loop and a role of
-small differences in predictive accuracy using synthetic data.
+small differences in predictive accuracy using synthetic data. We generate data
+using the ground truth model simulating usage of simplified question
+construction algorithm. There are 200 items and 5000 students available in the
+system and each student practices 50 items. Each item is practiced by the given
+student at most once.
 
 \begin{figure}[h]
 	\begin{center}
 		\includegraphics[width=\textwidth]{figure/noise_vs_intersection_number_of_answers}
 		\caption{Size of the intersection with the optimal practiced set of items and RMSE
 			depending on Guassian noise in optimal model (left side). Distribution of answers over
-			the items based on the given model (right side).~\cite{niznan2015exploring}.}
+			the items based on the given model (right side)~\cite{niznan2015exploring}.}
 		\label{figure:feedback_by_success}
 	\end{center}
 \end{figure}
+
+Using the ground truth model we declare the practiced set
+optimal, then we use a different model and see how a new practiced set
+differ from the optimal one. In one experiment we gradually add more and more
+noise to the ground truth model and look at the practiced set of items. We
+found out that a relativily small noise leading to a small \emph{root mean
+square error} (RMSE) has a big impact on the practice, see left side of
+figure~\ref{figure:feedback_by_success}. In other experiment we look at the
+distribution of collected data across the items. Using the ground truth model
+we collect more uniform data than for the other models (except one
+corresponding to completely random uniform distribution), see right side of
+figure~\ref{figure:feedback_by_success}. This shows a risk we face when our
+system uses a bad model. We did even more analysis related to the interaction
+loop, for more details see~\cite{niznan2015exploring}.
+
+\chapter{Author's Publications}
 
 \bibliographystyle{plain}
 \bibliography{proposal}
