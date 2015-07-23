@@ -1,4 +1,4 @@
-	\documentclass[table,color]{fithesis3/fithesis3}
+\documentclass[table,color]{fithesis3/fithesis3}
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{tabularx}
@@ -7,13 +7,21 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{numprint}
+\usepackage{bibentry}
+\nobibliography*
 \thesissetup{
 	faculty=fi,
 	title=Computerized Adaptive Practice of Facts Using Multiple-Choice Questions,
 	type=r,
 	author=Jan Papou\v{s}ek,
-	advisor=Radek Pel\'{a}nek
+	advisor=Radek Pel\'{a}nek,
+	keywords={varied prior knowledge, adaptive educational system, intelligent
+		tutotoring system, computerized adaptive practice, factual knowledge, task
+		construction}
 }
+\usepackage[final]{pdfpages}
+\usepackage{tabularx}
+\usepackage[inline]{enumitem}
 
 \begin{document}
 
@@ -528,40 +536,92 @@ interactions with the same item.
 
 \chapter{Aims of the Thesis}
 
-The main aim of the thesis is to design and evaluate several techniques of
-learning of factographical knowledge via practice of multiple choice questions in
-online environment. Although the work is focused on the practice of geography,
-the found results will be easily appliable to other similar domains.
-
-\begin{itemize}
-	\item canary deployment in the context of ITS
-\end{itemize}
-
 \section{Objectives}
 
-\begin{itemize}
-	\item deploy a system used for \url{http://slepemapy.cz} with data for
-		anatomy to get more historical data about one user;
-	\item propose a methodology to evaluate the impact of adaptive practice on
-		student's learning in online environment;
-	\item implement the proposed methodology within a system for adaptive
-		practice of geography and anatomy;
-	\item design and implement a model of forgetting (cooperating with model for
-		estimation of prior knowledge)
-	\item find optimal parameters of adaptive practice with respect to motivation
-		and learning (it can differ for different groups of users)
-		\begin{itemize}
-			\item target difficulty;
-			\item spacing
-			\item choice of distractors
-			\item recall vs. recognition
-		\end{itemize}
-\end{itemize}
+The main aim of the thesis is to design and evaluate several techniques of
+learning of factual knowledge via practice of multiple choice questions in
+online environment. We believe that the proper sequencing of questions and
+adjustment their difficulty to learner's needs can lead to better learning
+efficiency. Although the work is focused on the practice of geography,
+the found results will be easily appliable to other similar domains like
+learning of vocabulary. The particular goals are as follows:
+
+\begin{enumerate}
+	\item Propose a methodology to evaluate the impact of adaptive practice on
+		user's learning in online environment. Implement the designed methodology
+		within a real system for adaptive practice.
+	\item Investigate suitable models predicting learner's performance during
+		learning taking into account spacing effect and forgetting. The considered
+		model should cooperate with existing model for prior knowledge and should be
+		applicable not only offline, but also in an online environment. It will be
+		deployed within a real system for adaptive practice.
+	\item Develop strategies for sequencing and question construction with focus
+		mainly on appropriate difficulty, spacing effect and selection of suitable
+		distractors for multiple-choice questions. We will build on already
+		existing research with in-lab experiments.
+	\item Evaluate proposed strategies for computerized adaptive practice in
+		online environment with respect to learning and time spent within a system.
+	\item Using synthetic data investigate further the interaction loop between
+		the student's model and the algorithm for question construction, mainly a
+		role of the mechanism of difficulty adjustment based on a learner's
+		history.
+\end{enumerate}
 
 \section{Proposed Plan of Work}
 
+\begin{tabularx}{\textwidth}{rX}
+	\rowcolor{white}
+	\textbf{Autumn 2015} &
+		\begin{enumerate*}
+			\item Design and implementation of methodology for evaluation of the impact
+				of adaptive practice on user's learning.
+			\item Evaluation of already existing algorithm for practice control using the
+				developed methodology.
+			\item Deployment of a new version of \url{www.slepemapy.cz}
+				being able to adopt a new student model.
+		\end{enumerate*}\\
+	\rowcolor{white}
+	\textbf{Spring 2016} &
+		\begin{enumerate*}
+			\item Design and implementation of a new student's model of learning of
+				factual knowledge.
+			\item Development of strategies for practice control cooperating with a
+				proposed student's model.
+		\end{enumerate*}\\
+	\rowcolor{white}
+	\textbf{Autumn 2016} &
+		\begin{enumerate*}
+			\item Evaluation of proposed strategies.
+			\item Experiments with synthetic data.
+		\end{enumerate*}\\
+	\rowcolor{white}
+	\textbf{Spring 2017} &
+		\begin{enumerate*}
+			\item Finishing and submitting the thesis.
+		\end{enumerate*}
+\end{tabularx}
+
 \section{Future Publications}
 
+I am currently working on a journal publication:
+
+\begin{itemize}
+	\item \textbf{Learner Modeling and Adaptive Practice of Facts:}\\
+		I am extending an already published analysis~\cite{papousek2015impact}
+		examining the impact of adaptive practice on user's behavior, mainly
+		focused on target difficulty. The paper will be published in \emph{User
+		Modeling and User-Adapted Interaction}.
+\end{itemize}
+
+\noindent
+One journal paper is already in review process of \emph{Journal of Learning
+Analytics}:
+
+\begin{itemize}
+	\item \textbf{Adaptive Geography Practice Data Set:}\\
+		We published the data set collected by \url{www.slepemapy.cz}. The paper
+		describes the data set.
+\end{itemize}
 \chapter{Achieved Results}
 
 \section{System for Adaptive Practice of Geography}
@@ -720,6 +780,27 @@ loop, for more details see~\cite{niznan2015exploring}.
 
 \chapter{Author's Publications}
 
+\textbf{TODO: author's contribution}
+
+\begin{enumerate}
+	\item \bibentry{papousek2015impact}
+	\item \bibentry{niznan2015exploring}
+	\item \bibentry{papousek2015analysis}
+	\item \bibentry{papousek2014adaptive}
+\end{enumerate}
+
 \bibliographystyle{plain}
 \bibliography{proposal}
+
+\appendix
+\chapter{Enclosed Publications}
+\section{Impact of Adaptive Educational System Behaviour on Student Motivation}
+\includepdf[pages=-]{paper/papousek2015impact.pdf}
+\section{Exploring the Role of Small Differences in Predictive Accuracy using  Simulated Data}
+\includepdf[pages=-]{paper/niznan2015exploring.pdf}
+\section{An Analysis of Response Times in Adaptive Practice of Geography Facts}
+\includepdf[pages=-]{paper/papousek2015analysis.pdf}
+\section{Adaptive Practice of Facts in Domains with Varied Prior Knowledge}
+\includepdf[pages=-]{paper/papousek2014adaptive.pdf}
+
 \end{document}
