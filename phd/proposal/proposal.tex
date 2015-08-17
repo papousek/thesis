@@ -8,76 +8,79 @@
 \usepackage{subcaption}
 \usepackage{numprint}
 \usepackage{bibentry}
+\usepackage[inline]{enumitem}
 \nobibliography*
 \thesissetup{
 	faculty=fi,
-	title=Computerized Adaptive Practice of Facts Using Multiple-Choice Questions,
-	type=r,
+	title=Computerized Adaptive Practice of Factual Knowledge,
+	type=p,
 	author=Jan Papou\v{s}ek,
 	advisor=Radek Pel\'{a}nek,
 	keywords={varied prior knowledge, adaptive educational system, intelligent
 		tutotoring system, computerized adaptive practice, factual knowledge, task
-		construction}
+		construction},
+	basePath=./fithesis3
 }
 \usepackage[final]{pdfpages}
 \usepackage{tabularx}
 \usepackage[inline]{enumitem}
+
+\makeatletter\thesis@load\makeatother
+\setcounter{tocdepth}{2}
 
 \begin{document}
 
 \chapter{Introduction}
 
 Using computers and other electronic devices becomes more and mo\-re common in
-every day life, so it is natural to use them also in a domain of education. We
-can look at it with two different viewpoints. In the first case we want to help
+every day life, so it is natural to use them also in a~domain of education. We
+can look at it in two different viewpoints. In the first case we want to help
 a teacher to spend less time doing routine tasks and more time with students,
 to prepare good teaching materials, to effectively find out what students
 know and what they do not know, and so on. In the second case we help
 a student directly. We deal with personalized systems providing adaptive
-content, e.g. guiding students in situations when the they lag behind
+content, e.g.~guiding students in situations when the they lag behind
 or introduce new challenges when they are able to solve them. We assume
 students interact with these systems with minimal assistence of teachers.
 
-\section{Computerized Adaptive Practice}
-
 Although the first viewpoint is important we focus on the second one and we are
-ainly interested in the content where students actively solve presented tasks,
+mainly interested in content where students actively solve presented tasks,
 i.e. \emph{computerized adaptive practice}~\cite{klinkenberg2011computer}.
-According to~\cite{vanlehn2006behavior} the practice conists of two loops. The
-outer loop describes the selection of the task to solve and the inner one
+According to~\cite{vanlehn2006behavior} the practice consists of two loops. The
+outer loop describes selection of a task to solve and the inner one
 describes a process of solution within one complex multi-step task. In the
 following work we deal with memorizing facts, e.g. vocabulary, location of
 countries in geography or terms in anatomy. The tasks can be understood as
 atomic without any intermidiate steps, so the inner loop is not so important
-for us. The practice as we understand it consists of answering of
+for us. The considered method of practice consists of answering of
 multiple-choice and open questions, interleaved with a~feedback on the
 correctness.
 
 Based on the recent research~\cite{bjork2013self} self-testing is a~good
 strategy that may boost student's performance. On the other side people make
-mistakes during the practice, which makes it less effective. They overestimate
-their knowledge and this overconfidence leads to worse choice of tasks for
-practice~\cite{bjork2013self,kornell2008optimising}. The second interseting
-facts is that although the repetition seems to be good for memorizing, it is
-not so common since high performers may not need it and low performers may not
-be motivated to use it~\cite{bjork2013self}. This implies that a well-designed
-systems for computerized adaptive practice can be really helpful in this area.
-Ideally this kind of systems should be online to be available to a large number
-of users.
+a lot of mistakes during the practice, which makes it less effective than it
+could be. They overestimate their knowledge and this overconfidence leads to
+worse choice of tasks for practice~\cite{bjork2013self,kornell2008optimising}.
+The second interseting facts is that although the repetition seems to be good
+for memorizing, it is not so common since high performers may not need it and
+low performers may not be motivated to use it~\cite{bjork2013self}. This
+implies that a well-designed systems for computerized adaptive practice can be
+really helpful in this area. Ideally this kind of systems should be online to
+be available to a large number of users.
 
-In online environment we deal with different categories of users. It is natural
-these systems are used by students from schools, sometimes even at schools for
-fixed amount of time. On the other side they are also open to non-school users
-willing to improve their knowledge in their free time. Having diverse set of
-users means these users have varied background, motivation and prior knowledge.
-Some users may want to learn for the tommorrow exam, some users want to learn
-in long term. This is in the opposite to classical schools where these factors
-do not differ much for different students within one classroom. We have to be
-sure the system providing the practice attract and keep the attention of all
-kinds of users and spend the given amount of time in the most effective way
-with respect to learning.  This can be a bit difficult, because a strategy
-motivating users to stay active may be different from a strategy making the
-practice effective in learning.
+In online environment we deal with a lot of different categories of users. It
+is natural these systems are used by students from schools, sometimes even at
+schools for fixed amount of time. On the other side they are also open to
+non-school users willing to improve their knowledge in their free time. Having
+diverse set of users means these users have varied background, motivation and
+prior knowledge.  Some users may want to learn for the tommorrow exam, some
+users want to learn in long term. This is in the opposite to classical schools
+where these factors do not differ much for different students within one
+classroom. We have to be sure the system providing the practice attract and
+keep the attention of all kinds of users and spend the given amount of time in
+the most effective way with respect to learning.  This can be a bit difficult,
+because a strategy motivating users to stay active may be different from a
+strategy making the practice effective in learning.
 
 To provide adaptivity we need to build a~sufficient model describing user's
 knowledge including prior knowledge, learning, forgetting and other. We also
@@ -93,18 +96,38 @@ The importance of the described topic is also supported by the rise of several
 commercial systems in this area. These systems provide practice of individual
 terms within several domains, like~\url{www.memrise.com} and
 \url{www.cerego.com}, or teach users foreign language in a more complex way,
-like~\url{www.duolingo.com}~\cite{garcia2013learning}, where users practice the foreign language by
-translating sentences (both writing and speaking). Unfortunately, with some
-exceptions~\cite{streeter2015mixture}, it is hard to find any insight how these
-systems work.
+like~\url{www.duolingo.com}~\cite{garcia2013learning}, where users practice the
+foreign language by translating sentences (both writing and speaking).
+Unfortunately, with some exceptions~\cite{streeter2015mixture}, it is hard to
+find any insight how these systems work.
+
+The aim of the thesis is to develop techniques for computerized adaptive
+practice to make learning of factual knowledge more efficient. The techniques
+will be applied and evaluated in online environment. Making this kind of
+systems online means they are available to larger number of people, which leads
+to bigger impact on learning generally. As we mention above the topic is
+interesting from a scientific point of view, because it requires a lot of
+learner's modelling, formulating hypotheses about learning to create better
+strategies for practice and a lot evaluation. And there is clear way how to do
+it. From this reason the state of the art described in chapter
+\ref{chapter:state_of_the_art} is focused on these three main pillars:
+\begin{enumerate*}[label=(\arabic*)]
+	\item models descring learner's knowledge and learning;
+	\item strategies controlling the practice;
+	\item methodologies for evaluation.
+\end{enumerate*}
+Next chapter~\ref{chapter:aims_of_the_thesis} discusses in more detail aims of
+the thesis, its objectives and plan of work.
+Chapter~\ref{chapter:achieved_results} consists of brief description of achieved
+results.
 
 \chapter{State of the Art}
+\label{chapter:state_of_the_art}
 
-Development a fully adaptive system providing a practice of facts requires
-insights from a few from the first viewpoint different areas. This chapter
-describes state of the art in these areas starting from psychology and
-cognitive science to student modelling, controlling the practice itself,
-evaluation and concrete systems.
+Development of a fully adaptive system providing a practice of facts requires
+insights from a few different areas. This chapter describes state of the art in
+these areas starting from psychology and cognitive science to student
+modelling, controlling the practice itself, evaluation and concrete systems.
 
 \section{Memory and Learning of Facts}
 \label{section:models}
@@ -146,9 +169,7 @@ volume of knowledge in short time period.
 			formula $R = e^{-\frac{t}{S}}$, where $R$ stands for the memory retention, $t$
 			for the time and $S$ for the relative strength of memory. Ebbinghaus
 			found realized that when the information is reminded again, it strengthens
-			not only the memory, but also also reduces the forgetting rate. This phenomenon
-			is called \emph{overlearning}.
-			\textbf{TODO}}
+			not only the memory, but also also reduces the forgetting rate.}
 	\end{center}
 \end{figure}
 
@@ -535,6 +556,7 @@ about learning, so our simulated practice does not contain repeated
 interactions with the same item.
 
 \chapter{Aims of the Thesis}
+\label{chapter:aims_of_the_thesis}
 
 \section{Objectives}
 
@@ -623,6 +645,7 @@ Analytics}:
 		describes the data set.
 \end{itemize}
 \chapter{Achieved Results}
+\label{chapter:achieved_results}
 
 \section{System for Adaptive Practice of Geography}
 
