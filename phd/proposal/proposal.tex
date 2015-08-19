@@ -576,34 +576,86 @@ interactions with the same item.
 
 \section{Objectives}
 
-The main aim of the thesis is to design and evaluate several techniques of
-learning of factual knowledge via practice of multiple choice questions in
-online environment. We believe that the proper sequencing of questions and
-adjustment their difficulty to learner's needs can lead to better learning
-efficiency. Although the work is focused on the practice of geography,
-the found results will be easily applicable to other similar domains like
-learning of vocabulary. The particular goals are as follows:
+The main aim of the thesis is to make learning of factual knowledge more
+efficient. We believe we can design strategies for practice of
+multiple choice questions in online environment focused on the proper
+sequencing of questions and adjustment their difficulty to learner's needs,
+both leading to better learning efficiency. Although the strategies will be
+applied and evaluated mainly within an application for practice of geography,
+the found results should be easily applicable to other similar domains like
+learning of vocabulary.
 
+The particular goals are as follows:
+
+\vspace{-.3cm}
+\paragraph*{Model:} As we describe in section~\ref{section:models} the crucial
+part of computerized adaptive practice is a model describing learner's
+knowledge. We will investigate models predicting learner's performance during
+learning taking into account spacing effect and forgetting. These factors are
+really important in case of factual knowledge. The considered model should
+cooperate witch existing model for prior knowledge~\cite{papousek2014adaptive}
+and should be applicable not only offline, byt also in online environment. It
+will be deployed within a real system for adaptive practice.
+
+\vspace{-.3cm}
+\paragraph{Practice Control:} We plan to develop strategies for sequencing and
+question construction with focus on appropriate difficulty, spacing effect and
+suitable distractors for multiple-choice questions. We want to introduce a
+mechanism of variable difficulty of distractors, e.g. in the beginning of the
+practice the distractors will be easy, later they will be more difficult. The
+strategies will highly rely on the predictive model, but we will also build on
+existing research using in-lab experiments.
+
+\vspace{-.3cm}
+\paragraph{Evaluation:} In section~\ref{section:evaluation} we address an issue
+of evaluation in case of intelligent tutoring systems. From this reason a big
+part of the thesis will be dedicated to the methodology of evaluation:
 \begin{enumerate}
-	\item Propose a methodology to evaluate the impact of adaptive practice on
-		user's learning in online environment. Implement the designed methodology
-		within a real system for adaptive practice.
-	\item Investigate suitable models predicting learner's performance during
-		learning taking into account spacing effect and forgetting. The considered
-		model should cooperate with existing model for prior knowledge and should be
-		applicable not only offline, but also in an online environment. It will be
-		deployed within a real system for adaptive practice.
-	\item Develop strategies for sequencing and question construction with focus
-		mainly on appropriate difficulty, spacing effect and selection of suitable
-		distractors for multiple-choice questions. We will build on already
-		existing research with in-lab experiments.
-	\item Evaluate proposed strategies for computerized adaptive practice in
-		online environment with respect to learning and time spent within a system.
-	\item Using synthetic data investigate further the interaction loop between
-		the student's model and the algorithm for question construction, mainly a
-		role of the mechanism of difficulty adjustment based on a learner's
+	\item We will propose a methodology to evaluate the impact of adaptive
+		practice on user's learning in online environment. We want to cover both
+		learning efficiency and learner's willingness to use the tutoring system.
+		We will apply the designed methodology to evaulate real system for adaptive
+		practice.
+	\item Using synthetic data we will investigate further the interaction loop
+		between the student's model and the algorithm for question construction,
+		mainly a role of the mechanism of difficulty adjustment based on a learner's
 		history.
 \end{enumerate}
+
+\section{Expected Outputs}
+\begin{enumerate}
+	\item The text of the thesis presenting both theoretical and experimental
+		results.
+	\item Publicaly available system for computerized adaptive practice
+		implementing developed algorithms for practice control and student's
+		model.
+	\item Reviewed publications on relevant international conferences and in
+		journals.
+\end{enumerate}
+
+\noindent
+I am currently working on a journal publication:
+
+\begin{itemize}
+	\item \textbf{Learner Modeling and Adaptive Practice of Facts:}\\
+		I am extending an already published analysis~\cite{papousek2015impact}
+		examining the impact of adaptive practice on user's behavior, mainly
+		focused on target difficulty. The paper will be published in \emph{User
+		Modeling and User-Adapted Interaction}.
+\end{itemize}
+
+One journal paper is already in review process of \emph{Journal of Learning
+Analytics}:
+
+\begin{itemize}
+	\item \textbf{Adaptive Geography Practice Data Set:}\\
+		We published the data set collected by \url{www.slepemapy.cz}. The paper
+		describes the data set.
+\end{itemize}
+
+In the future I plan to write publications about the impact of computerized
+adaptive practice on learning with contrast to its impact on willingness of
+users to stay in the tutoring system and self-reported perception.
 
 \section{Proposed Plan of Work}
 
@@ -639,27 +691,6 @@ learning of vocabulary. The particular goals are as follows:
 		\end{enumerate*}
 \end{tabularx}
 
-\section{Future Publications}
-
-I am currently working on a journal publication:
-
-\begin{itemize}
-	\item \textbf{Learner Modeling and Adaptive Practice of Facts:}\\
-		I am extending an already published analysis~\cite{papousek2015impact}
-		examining the impact of adaptive practice on user's behavior, mainly
-		focused on target difficulty. The paper will be published in \emph{User
-		Modeling and User-Adapted Interaction}.
-\end{itemize}
-
-\noindent
-One journal paper is already in review process of \emph{Journal of Learning
-Analytics}:
-
-\begin{itemize}
-	\item \textbf{Adaptive Geography Practice Data Set:}\\
-		We published the data set collected by \url{www.slepemapy.cz}. The paper
-		describes the data set.
-\end{itemize}
 \chapter{Achieved Results}
 \label{chapter:achieved_results}
 
