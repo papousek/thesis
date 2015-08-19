@@ -17,7 +17,7 @@
 	author=Jan Papou\v{s}ek,
 	advisor=Radek Pel\'{a}nek,
 	keywords={varied prior knowledge, adaptive educational system, intelligent
-		tutotoring system, computerized adaptive practice, factual knowledge, task
+		tutoring system, computerized adaptive practice, factual knowledge, task
 		construction},
 	basePath=./fithesis3
 }
@@ -41,7 +41,7 @@ know and what they do not know, and so on. In the second case we help
 a student directly. We deal with personalized systems providing adaptive
 content, e.g.~guiding students in situations when the they lag behind
 or introduce new challenges when they are able to solve them. We assume
-students interact with these systems with minimal assistence of teachers.
+students interact with these systems with minimal assistance of teachers.
 
 Although the first viewpoint is important we focus on the second one and we are
 mainly interested in content where students actively solve presented tasks,
@@ -51,7 +51,7 @@ outer loop describes selection of a task to solve and the inner one
 describes a process of solution within one complex multi-step task. In the
 following work we deal with memorizing facts, e.g. vocabulary, location of
 countries in geography or terms in anatomy. The tasks can be understood as
-atomic without any intermidiate steps, so the inner loop is not so important
+atomic without any intermediate steps, so the inner loop is not so important
 for us. The considered method of practice consists of answering of
 multiple-choice and open questions, interleaved with a~feedback on the
 correctness.
@@ -61,7 +61,7 @@ strategy that may boost student's performance. On the other side people make
 a lot of mistakes during the practice, which makes it less effective than it
 could be. They overestimate their knowledge and this overconfidence leads to
 worse choice of tasks for practice~\cite{bjork2013self,kornell2008optimising}.
-The second interseting facts is that although the repetition seems to be good
+The second interesting facts is that although the repetition seems to be good
 for memorizing, it is not so common since high performers may not need it and
 low performers may not be motivated to use it~\cite{bjork2013self}. This
 implies that a well-designed systems for computerized adaptive practice can be
@@ -73,7 +73,7 @@ is natural these systems are used by students from schools, sometimes even at
 schools for fixed amount of time. On the other side they are also open to
 non-school users willing to improve their knowledge in their free time. Having
 diverse set of users means these users have varied background, motivation and
-prior knowledge.  Some users may want to learn for the tommorrow exam, some
+prior knowledge.  Some users may want to learn for the tomorrow exam, some
 users want to learn in long term. This is in the opposite to classical schools
 where these factors do not differ much for different students within one
 classroom. We have to be sure the system providing the practice attract and
@@ -88,7 +88,7 @@ need to design good strategy for practicing, which may differ for different
 types of users. Since there is no obvious technique for practicing in online
 environment, we need to be able to collect data about user's activity and
 evaluate it. We can not design a~good strategy for practice when we are not
-able to measure its impact on user's motivation and its effectivenes in
+able to measure its impact on user's motivation and its effectiveness in
 learning. This turns out to be a big methodological issues in online
 environment.
 
@@ -107,12 +107,12 @@ will be applied and evaluated in online environment. Making this kind of
 systems online means they are available to larger number of people, which leads
 to bigger impact on learning generally. As we mention above the topic is
 interesting from a scientific point of view, because it requires a lot of
-learner's modelling, formulating hypotheses about learning to create better
+learner's modeling, formulating hypotheses about learning to create better
 strategies for practice and a lot evaluation. And there is clear way how to do
 it. From this reason state of the art described in chapter
 \ref{chapter:state_of_the_art} is focused on these three main pillars:
 \begin{enumerate*}[label=(\arabic*)]
-	\item models descring learner's knowledge and learning;
+	\item models describing learner's knowledge and learning;
 	\item strategies controlling the practice;
 	\item methodologies for evaluation.
 \end{enumerate*}
@@ -127,7 +127,7 @@ results.
 Development of a fully adaptive system providing a practice of facts requires
 insights from a few different areas. This chapter describes state of the art in
 these areas starting from psychology and cognitive science to student
-modelling, controlling the practice itself, evaluation and concrete systems.
+modeling, controlling the practice itself, evaluation and concrete systems.
 
 \section{Memory and Learning of Factual Knowledge}
 \label{section:models}
@@ -178,7 +178,7 @@ effect from two different points of view. In the first case we want to control
 it within one session. Here we have full control over it and we work with
 seconds, minutes or hours (maximally). With a fixed number of items for
 practice we regulate the spacing by modifying the sequence of practiced items,
-e.g. more blocking or iterleaving version of
+e.g. more blocking or interleaving version of
 practice~\cite{ostrow2015blocking}, with variable set of items we can also
 decide which items do not have to be practiced
 anymore~\cite{kornell2008optimising} or which new items can be included.
@@ -194,7 +194,7 @@ session starts and when it ends. Of course this decision is made by a user,
 not by a system. We can only motivate users to practice regularly, e.g. every
 day similarly how it is done by Duolingo (a system for learning
 languages)~\cite{garcia2013learning}. This regularity allows us to strengthen
-knowledge of already learned items and itroduce new ones.
+knowledge of already learned items and introduce new ones.
 
 \subsection{Models Overview}
 
@@ -228,7 +228,7 @@ or unlearned). The model has four parameters: probability the given is
 initially learned, probability of learning based on one step, probability of
 a wrong answer when the skill is learned (slip), and probability of a correct
 answer when the skill is not learned (guess). Skill estimation is updated using
-a Bayes rule using observed answer.  Several extensionis of this model can be
+a Bayes rule using observed answer.  Several extensions of this model can be
 found, e.g.  forgetting~\cite{qiu2010does}.
 
 \paragraph*{Performance Factor Analysis} is a logistic model, but in contrast
@@ -269,7 +269,7 @@ with varied prior knowledge, e.g. vocabulary or geography. The system needs to
 quickly assess what a learner knows to be able to adaptively provide appropriate
 content. This feature is often missing in several systems and the user is
 forced to go through a lot of useless content. Our recent
-work~\cite{papousek2014adaptive} simlarly to~\cite{khajah2014integrating}
+work~\cite{papousek2014adaptive} similarly to~\cite{khajah2014integrating}
 combines a model assuming a constant skill with another one for learning to
 handle this phenomenon.  But this should go even further and models should also
 provide different learning~\cite{pelanek2015modeling} and forgetting rate for
@@ -277,10 +277,10 @@ different items.  A model using a mixture of individual learning curves
 implemented within Duolingo~\cite{streeter2015mixture} already covers some of
 these aspects, but they do not give much attention to prior knowledge and
 ignore spacing effect.  On the other side studies dealing with spacing effect
-are usually based on observations in laboratory with artifical conditions, e.g.
-people learn generally uknown terms to prevent prior
+are usually based on observations in laboratory with artificial conditions, e.g.
+people learn generally unknown terms to prevent prior
 knowledge~\cite{kang2014retrieval} or there is no corrective-feedback given
-during retriaval practice~\cite{landauer1978optimum}~(as cited
+during retrieval practice~\cite{landauer1978optimum}~(as cited
 in~\cite{kang2014retrieval}) and it is questionable how all their insights will
 work within an online system.
 
@@ -301,18 +301,18 @@ section~\ref{section:spacing_effect}.
 
 \subsection{Sequencing}
 
-By seqencing the items presented to a user for practice we balance between two
+By sequencing the items presented to a user for practice we balance between two
 states: \emph{over-practice} and \emph{under-practice}. In the first case we
 practice an already learned item and we waste user's time. In the second one we
 stop practicing an item which is not learned yet and we will not give her a
 chance learn it completely. When a system tries to avoid over-practiced
 attempts, there is high chance that under-practice increases and vice versa.
-How this phenomenon is importent is presented in a study~\cite{cen2007over}
-where its authors reported that analysing historical data they detected more
+How this phenomenon is important is presented in a study~\cite{cen2007over}
+where its authors reported that analyzing historical data they detected more
 than $50\%$ out of practice attempts as over-practiced.
 
 In a lot of used systems a general approach for sequencing the items for
-practice is based on labelling from an expert. The experts defines knowledge
+practice is based on labeling from an expert. The experts defines knowledge
 components for the given domain and prerequisites among them. There are
 techniques helping the ex\-perts~\cite{niznan2014using} or completely replace
 them by a computer~\cite{boros2013automatic}. However, these techniques are
@@ -340,7 +340,7 @@ the user is unable to master it.
 Similar approach is presented in~\cite{lopes2015multi}. It relies
 on~\emph{multi-armed bandits}, a technique generally being able to explore
 space of different parameters or strategies with respect to a given scoring
-function. The authors define a structure of activites and pre-conditions
+function. The authors define a structure of activities and pre-conditions
 analogical to knowledge components and prerequisites and introduce two
 algorithms optimizing user's learning. The first one is independent on any
 model estimating user's performance, the second one uses it. Both of them take
@@ -377,7 +377,7 @@ arbitrarily, e.g.  75\% chance of correct
 answer~\cite{klinkenberg2011computer}.
 
 As we present in section~\ref{section:spacing_effect}, learning of facts highly
-releates to time and spacing effect. From this point of view the  schedule of
+relates to time and spacing effect. From this point of view the  schedule of
 practice was already studied~\cite{pavlik2008schedule}, but in different
 context, which is in laboratory with low number of items and without any prior
 knowledge. Figure~\ref{figure:practice_progress} shows how the spacing effect
@@ -404,7 +404,7 @@ relates to the content of practice and number of practiced items.
 
 \subsection{Questions}
 
-Assume we have already picked an item for practice which correspons to a
+Assume we have already picked an item for practice which corresponds to a
 flashcard with two sides $A$ and $B$. We must specify a direction of the final
 question (whether we ask for the side $A$ or $B$), e.g. in case of vocabulary
 the first direction leads to an ability of understanding to foreign language
@@ -431,7 +431,7 @@ we should use.
 
 The next issue is how exactly should be the options themselves be chosen. We
 assume too easy options made the guess probability so high, a user wouldn't be
-motivated to learn anything. The impact of competitivness of options has been
+motivated to learn anything. The impact of competitiveness of options has been
 studied in~\cite{little2015optimizing}. The study contains two experiments
 where the first one does not include feedback about the correctness of user's
 answer, so its results can be hardly applied within an application where the
@@ -439,7 +439,7 @@ feedback is present. And based on the second experiment where the feedback was
 included, competitive options seem to be the better choice. However the
 experiment was very limited, so this phenomenon is worth further investigation.
 
-The second aspect related to the competitivness of the options is repeating the
+The second aspect related to the competitiveness of the options is repeating the
 same mistakes. Authors in~\cite{marsh2007memorial} describe experiments where
 wrong answer in the final test are correlated to wrong answers within a
 preparation phase where multiple-choice question were used. These observation
@@ -459,12 +459,12 @@ ensure user's willingness to use the system. How these things can relate to each
 other is studied in~\cite{lomas2013optimizing}.
 
 Since a lot of systems collect data about user's performance and their
-behaviour is based on models predicting the performance, its natural to
+behavior is based on models predicting the performance, its natural to
 evaluate new models using the historical data with respect to accuracy. We can
-also try to find whether the bahaviour of the system would change, if it used a
+also try to find whether the behavior of the system would change, if it used a
 different model. The second possibility is to deploy a new feature, collect new
 data and then see what has changed. This way is really expensive, because we
-spend user's time for testing of our system instaed of learning something. We
+spend user's time for testing of our system instead of learning something. We
 also risk negative impact on users. The last way how to examine our ideas is to
 use synthetic data. Generating synthetic data is cheap, there is no risk, but
 we must work with a lot of assumptions which can limit us.
@@ -500,12 +500,12 @@ helpful.
 \subsection{New Data}
 
 Classical approach to examine the impact of the given system on the user's
-behaviour is to follow the \emph{pre-test} $\rightarrow$ \emph{intervention}
+behavior is to follow the \emph{pre-test} $\rightarrow$ \emph{intervention}
 $\rightarrow$ \emph{post-test} experimental design~\cite{dimitrov2003pretest}.
 Usually the researchers has a full control over the participants, often in
 laboratory, but also in online environment where the participants are motivated
 to finish the whole experiment by money, e.g. in~\cite{maass2015how}. In test
-phases they are assesed with respect to a measured property and the
+phases they are assessed with respect to a measured property and the
 intervention phase they use the system for the given amount of time. Although
 this approach is very helpful and brings a lot of interesting observations, it
 does not scale.
@@ -562,7 +562,7 @@ the optimal practice is given by a set of practiced items using a model with an
 access to the ground truth and we compare practiced items with other models to
 this one. Authors in~\cite{lopes2015multi} also use simulated learners before
 the experiments with real people and state the practice should be personalized
-which leads to varied practice sequencies. More diversity is in data, better
+which leads to varied practice sequences. More diversity is in data, better
 system is.
 
 Experiments with synthetic data are limited by the assumptions we have for the
@@ -581,7 +581,7 @@ learning of factual knowledge via practice of multiple choice questions in
 online environment. We believe that the proper sequencing of questions and
 adjustment their difficulty to learner's needs can lead to better learning
 efficiency. Although the work is focused on the practice of geography,
-the found results will be easily appliable to other similar domains like
+the found results will be easily applicable to other similar domains like
 learning of vocabulary. The particular goals are as follows:
 
 \begin{enumerate}
@@ -714,7 +714,7 @@ The system is available for free without any need of registration. However we
 offer possibility of signing up to help our system with tracking user's
 history. However we do not collect any information about the identity of users
 (e.g. sex or age). So far we collected more than \numprint{11000000} answers
-from more than \numprint{100000} (mostly czech) users. Monthly we collect $\pm$
+from more than \numprint{100000} (mostly Czech) users. Monthly we collect $\pm$
 \numprint{1000000} answers from \numprint{10000} users. The traffic is lower at
 weekends and during holidays, which indicates the system is used by students
 from schools. This hypothesis is also supported by the traffic analysis during
@@ -734,11 +734,11 @@ used to improve a model for current knowledge.
 \section{Impact of Adaptivity}
 
 In~\cite{papousek2015impact} we analyze the impact of adaptivity of our system
-on user's behaviour. We mainly focus on the time spent in the system expressed
-by the number of answers per user. We performed online AB experiment to eximine
+on user's behavior. We mainly focus on the time spent in the system expressed
+by the number of answers per user. We performed online AB experiment to examine
 the role of the designed algorithm for question construction and its
 parameters. As we describe in section~\ref{section:practice_control} for the
-question constuction we firstly need to select an appropriate item and secondly
+question construction we firstly need to select an appropriate item and secondly
 we choose number of options and options themselves.
 
 In the first experiment we compare our approach to algorithms where at least
@@ -747,7 +747,7 @@ are important. Using random version of the first or the second part leads to
 the similar results as in case of the completely random algorithm.
 
 Since the selection of an appropriate item for practice is based on the target
-difficulty, we performed the second exmperiment to find the optimal value for
+difficulty, we performed the second experiment to find the optimal value for
 this parameter. Unfortunately we were not able to find any significant
 difference for different values of target difficulty with respect to the number
 of answers per user. This is probably caused by the fact that users can choose
@@ -797,7 +797,7 @@ student at most once.
 	\begin{center}
 		\includegraphics[width=\textwidth]{figure/noise_vs_intersection_number_of_answers}
 		\caption{Size of the intersection with the optimal practiced set of items and RMSE
-			depending on Guassian noise in optimal model (left side). Distribution of answers over
+			depending on Gaussian noise in optimal model (left side). Distribution of answers over
 			the items based on the given model (right side)~\cite{niznan2015exploring}.}
 		\label{figure:feedback_by_success}
 	\end{center}
@@ -807,7 +807,7 @@ Using the ground truth model we declare the practiced set
 optimal, then we use a different model and see how a new practiced set
 differ from the optimal one. In one experiment we gradually add more and more
 noise to the ground truth model and look at the practiced set of items. We
-found out that a relativily small noise leading to a small \emph{root mean
+found out that a relatively small noise leading to a small \emph{root mean
 square error} (RMSE) has a big impact on the practice, see left side of
 figure~\ref{figure:feedback_by_success}. In other experiment we look at the
 distribution of collected data across the items. Using the ground truth model
