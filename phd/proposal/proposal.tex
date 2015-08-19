@@ -109,7 +109,7 @@ to bigger impact on learning generally. As we mention above the topic is
 interesting from a scientific point of view, because it requires a lot of
 learner's modelling, formulating hypotheses about learning to create better
 strategies for practice and a lot evaluation. And there is clear way how to do
-it. From this reason the state of the art described in chapter
+it. From this reason state of the art described in chapter
 \ref{chapter:state_of_the_art} is focused on these three main pillars:
 \begin{enumerate*}[label=(\arabic*)]
 	\item models descring learner's knowledge and learning;
@@ -129,7 +129,7 @@ insights from a few different areas. This chapter describes state of the art in
 these areas starting from psychology and cognitive science to student
 modelling, controlling the practice itself, evaluation and concrete systems.
 
-\section{Memory and Learning of Facts}
+\section{Memory and Learning of Factual Knowledge}
 \label{section:models}
 
 The common way to learn facts whether online or offline is using
@@ -151,12 +151,12 @@ correct. This really simple setup has a few parameters needed to be considered:
 
 \subsection{Spacing Effect}
 \label{section:spacing_effect}
-ll of the mentioned questions relate to the \emph{spacing
+All of the mentioned questions relate to the \emph{spacing
 effect} and \emph{forgetting curves} originally discovered by Hermann
 Ebbinghaus~\cite{ebbinghaus1885spacing}~(as cited
 in~\cite{pavlik2005practice}). When the terms are practiced with more time
-space between individual presentations, it reduces our performance during the
-practice itself, but in long term it has a positive impact on our
+space between individual presentations, it reduces learner's performance during the
+practice itself, but in long term it has a positive impact on
 learning~\cite{maass2015how, kornell2009optimising}. This is in the opposite of
 usual preparation of students before exams when they prefer \emph{massed
 repetition} (also known as \emph{cramming}), intensive work to absorb large
@@ -198,8 +198,12 @@ knowledge of already learned items and itroduce new ones.
 
 \subsection{Models Overview}
 
+To provide appropriate content the given system must be able to model learners,
+especially their knowledge. In the following section we provide brief overview
+of so far available models.
+
 \paragraph*{Rasch Model} is known as the one-parameter logistic model in item
-response theory (\textbf{TODO: CITE}). It assumes the student's knowledge about
+response theory~\cite{de2008theory}. It assumes the student's knowledge about
 an item is constant and can be expressed as a skill parameters $\theta$. Also
 each item is assigned by a difficulty parameter $b$. Having these parameters
 the probability of correct answer is given by the logistic function:
@@ -212,27 +216,25 @@ Parameters of this model are usually estimated from data using the joint
 maximum likelihood estimation~\cite{de2008theory}. In online environment it is
 useful to update the parameters on the fly. For this purpose we can inspire by
 Elo rating system~\cite{elo1978rating} originally devised for chess rating and
-look at a student's answer on an item as match between the student and
+look at a student's answer on an item as a match between the student and
 the item~\cite{papousek2014adaptive}. If our estimation is based only on the
 first interactions between students and items, the algorithm works for constant
 skills and difficulties, although the original Elo system assumes learning (changing skill).
 
 \paragraph*{Bayesian Knowledge Tracing} is usually used model for
-learning~\cite{van2013properties}. It models student's knowledge in a hidden
-Markov model as a binary latent variable (either learned or unlearned). The model
-has four parameters: probability the given is initially learned, probability of
-learning based on one step, probability of wrong answer when the skill is
-learned (slip), and probability of correct answer when the skill is not learned
-(guess). Skill estimation is updated using a Bayes rule using observed answer.
-Several extensionis of this model can be found, e.g.
-forgetting~\cite{qiu2010does} or slightly different point of view using mixture
-of learning curves~\cite{streeter2015mixture}.
+learning of procedural knowledge~\cite{van2013properties}. It models student's
+knowledge in a hidden Markov model as a binary latent variable (either learned
+or unlearned). The model has four parameters: probability the given is
+initially learned, probability of learning based on one step, probability of
+a wrong answer when the skill is learned (slip), and probability of a correct
+answer when the skill is not learned (guess). Skill estimation is updated using
+a Bayes rule using observed answer.  Several extensionis of this model can be
+found, e.g.  forgetting~\cite{qiu2010does}.
 
-\paragraph*{Performance Factor Analysis} is another logistic
-model~\cite{pavlik2009performance}, but in contrast with the Rasch model it
-handles learning. The skill is represented as a linear combination of the
-item's difficulty ($\beta$) and the number of past success ($s$) and failures
-($f$) of the given student.
+\paragraph*{Performance Factor Analysis} is a logistic model, but in contrast
+with the Rasch model it handles learning~\cite{pavlik2009performance}. The
+skill is represented as a linear combination of the item's difficulty ($\beta$)
+and the number of past success ($s$) and failures ($f$) of the given student.
 
 \begin{align}
 P(correct|\beta,s, f) = \frac{1}{1 + e^{-(\beta + \gamma s + \delta f)}}
@@ -241,41 +243,60 @@ P(correct|\beta,s, f) = \frac{1}{1 + e^{-(\beta + \gamma s + \delta f)}}
 where $\gamma$ stands for the change of the skill associated with correct
 answer and $\delta$ stands for the same in case of incorrect answer.
 
+\paragraph*{Adaptive Character of Thought-Rational} is another logistic model
+handling learning and forgetting~\cite{pavlik2005practice}. For each
+presentation $i$ of the given item we track amount of time $t_i$ elapsed since
+it. The activation $m$ of the given item is a function of these times:
+
+\begin{align}
+m_n(t_1, \ldots, t_n) = ln\left(\sum_{i=1}^n t_i^{-d}\right)
+\end{align}
+
+Parameter $d$ represents decay in time. To get probability a learner recalls
+the given item correctly, we process the activation using logistic function,
+$P(correct|m) = \frac{1}{1 + e^{m}}$.\footnote{The original model contains more
+parameters and the mentioned equation is simplified. For more detail
+see~\cite{pavlik2005practice}.} The model can be extended to cover also spacing
+effect when we make the decay parameter dynamic, e.g. dependent directly on
+spacing or the previous activation level~\cite{anderson1991reflections} (as
+cited in~\cite{pavlik2005practice}).
+
 \bigskip
 
 \noindent
-In many areas of learning of facts people enter the tutoring system with varied
-prior knowledge, e.g. vocabulary or geography. A system needs to quickly assess
-what a user knows to be able to adaptively provide appropriate content. This
-feature is often missing in several systems and the user is forced to go through
-a lot of useless content. Our recent work~\cite{papousek2014adaptive} simlarly
-to~\cite{khajah2014integrating} combines a model assuming a constant skill with
-another one for learning to handle this phenomenon.  But this should go even
-further and models should also provide different
-learning~\cite{pelanek2015modeling} and forgetting rate for different items.
-A model using a mixture of individual learning curves implememted within
-Duolingo~\cite{streeter2015mixture} already covers some of these aspects, but
-they do not give much attention to prior knowledge and ignore spacing effect.
-On the other side studies dealing with spacing effect are usually based on
-observations in laboratory with artifical conditions, e.g.  people learn
-generally uknown terms to prevent prior knowledge~\cite{kang2014retrieval} or
-there is no corrective-feedback given during retriaval
-practice~\cite{landauer1978optimum}~(as cited in~\cite{kang2014retrieval}) and
-it is questionable how all their insights will work within an online system.
+In many areas of learning of factual knowledge people enter a tutoring system
+with varied prior knowledge, e.g. vocabulary or geography. The system needs to
+quickly assess what a learner knows to be able to adaptively provide appropriate
+content. This feature is often missing in several systems and the user is
+forced to go through a lot of useless content. Our recent
+work~\cite{papousek2014adaptive} simlarly to~\cite{khajah2014integrating}
+combines a model assuming a constant skill with another one for learning to
+handle this phenomenon.  But this should go even further and models should also
+provide different learning~\cite{pelanek2015modeling} and forgetting rate for
+different items.  A model using a mixture of individual learning curves
+implemented within Duolingo~\cite{streeter2015mixture} already covers some of
+these aspects, but they do not give much attention to prior knowledge and
+ignore spacing effect.  On the other side studies dealing with spacing effect
+are usually based on observations in laboratory with artifical conditions, e.g.
+people learn generally uknown terms to prevent prior
+knowledge~\cite{kang2014retrieval} or there is no corrective-feedback given
+during retriaval practice~\cite{landauer1978optimum}~(as cited
+in~\cite{kang2014retrieval}) and it is questionable how all their insights will
+work within an online system.
 
 \section{Practice Control}
 \label{section:practice_control}
 
 As we already presented in the previous sections we focus on \emph{outer loop}
 of user's practice~\cite{vanlehn2006behavior}, mainly within one session, that
-is sequencing of items presented to a user. The considered area of learning
+is sequencing of items presented to the user. The considered area of learning
 of facts doesn't provide sufficiently complex tasks to deal with \emph{inner
 loop} (e.g. hints)~\cite{vanlehn2006behavior} and we think it is enough. The
 practice itself consists of a sequence of multiple-choice and open
 questions and we have to decide not only which item should be practiced, but
 also whether and how many options the question should have and in case of
 multiple-choice questions which items should be used as distractors. Sequencing
-should also take into account spacing effect described in
+should also take into account spacing effect and forgetting described in
 section~\ref{section:spacing_effect}.
 
 \subsection{Sequencing}
@@ -308,7 +329,7 @@ usually set to~$95\%$. Mastery threshold can be viewed as parameter controlling
 the relative frequency of under-practiced and over-practiced
 attempts~\cite{fancsali2013optimal}. Since our model needs data about a user
 to make estimation, there is some low acceptable number of attempts after the
-enowledge is acquired. This \emph{lag} studied in more detail
+knowledge is acquired. This \emph{lag} studied in more details
 in~\cite{fancsali2013optimal}, but the study is limited for \emph{Bayesian
 knowledge tracing} only. Another \emph{when-to-stop} policy is based on the
 expected improvement~\cite{rollinson2015predictive}. When the system expects
@@ -324,18 +345,12 @@ analogical to knowledge components and prerequisites and introduce two
 algorithms optimizing user's learning. The first one is independent on any
 model estimating user's performance, the second one uses it. Both of them take
 information from experts and measure user's learning online based on progress
-of the user's performance. The exact measure is defined as:
-
-\begin{align}
-	r = \sum^{t}_{k = t - \frac{d}{2}} \frac{C_k}{\frac{d}{2}} - \sum^{t - \frac{d}{2}}_{k = t - d} \frac{C_k}{d - \frac{d}{2}}
-\end{align}
-
-where $C_k = 1$ if the exercise at time $k$ was solved correctly. At time $t$,
-the measure compares the success of the last $\frac{d}{2}$ samples with the
-$\frac{d}{2}$ previous samples. Learning can estimated by this way thanks to
-the fact, the system measures and improves the user's performance at the same
-time. We show in section~\ref{section:evaluation} this is not always true in
-some kind of systems.
+of the user's performance. At time $t$, the measure compares the success of the
+last $\frac{d}{2}$ samples with the $\frac{d}{2}$ previous samples. Learning
+can estimated by this way thanks to the fact, the system measures and improves
+the user's performance at the same time. We show in
+section~\ref{section:evaluation} this is not always true in some kind of
+systems.
 
 In some cases the approach using a graph of prerequisites makes sense, e.g.
 in algebra we have a strong structure of prerequisites among the knowledge
@@ -394,7 +409,7 @@ flashcard with two sides $A$ and $B$. We must specify a direction of the final
 question (whether we ask for the side $A$ or $B$), e.g. in case of vocabulary
 the first direction leads to an ability of understanding to foreign language
 and the second one to an ability of expressing of ideas in it. In both ways we
-want to achieve so-called \emph{cued recall}~(\textbf{TODO: cite}).
+want to achieve so-called \emph{cued recall}~\cite{carpenter2006types}.
 
 Once we select a direction we must decide whether the question will be
 open or how many options it will have. Using the options we allow a user
@@ -486,13 +501,14 @@ helpful.
 
 Classical approach to examine the impact of the given system on the user's
 behaviour is to follow the \emph{pre-test} $\rightarrow$ \emph{intervention}
-$\rightarrow$ \emph{post-test} experiment design~(\textbf{TODO: cite}). Usually
-the researchers has a full control over the participants, often in laboratory,
-but also in online envrinment where the participants are motivated to finish
-the whole experiment by money, e.g. in~\cite{maass2015how}. In test phases they
-are assesed with respect to a measured property and the intervention phase they
-use the system for the given amount of time. Although this approach is very
-helpful and brings a lot of interesting observations, it does not scale.
+$\rightarrow$ \emph{post-test} experimental design~\cite{dimitrov2003pretest}.
+Usually the researchers has a full control over the participants, often in
+laboratory, but also in online environment where the participants are motivated
+to finish the whole experiment by money, e.g. in~\cite{maass2015how}. In test
+phases they are assesed with respect to a measured property and the
+intervention phase they use the system for the given amount of time. Although
+this approach is very helpful and brings a lot of interesting observations, it
+does not scale.
 
 In online environment we need to periodically deploy new features and
 test them only on a subset of users, before we publish them
@@ -807,9 +823,26 @@ loop, for more details see~\cite{niznan2015exploring}.
 
 \begin{enumerate}
 	\item \bibentry{papousek2015impact}
+
+		\textit{I performed online experiments examining the algorithm for practice
+			control with respect to the user's motivation and then analyzed the collected
+			data.}
 	\item \bibentry{niznan2015exploring}
+
+		\textit{I did an analysis of feedback loop between a model describing
+			user's knowledge and an algorithm for practice control collecting the
+			data. I also examined the impact of the model and its precision on data
+			collection.}
 	\item \bibentry{papousek2015analysis}
+
+		\textit{I analyzed the relation of response time spent  and correctness of answers.}
+
 	\item \bibentry{papousek2014adaptive}
+
+		\textit{I implemented the predictive model and the algorithm for practice
+			control within an application providing practice of geography. I designed
+			the mechanism of difficulty adjustment and selection of distractors in case of
+			multiple-choice questions.}
 \end{enumerate}
 
 \bibliographystyle{plain}
