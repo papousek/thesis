@@ -586,10 +586,10 @@ the same item.
 \section{Objectives}
 
 The main aim of the thesis is to make learning of facts more
-efficient. We plan to design strategies of practicing using multiple
-choice questions in an online environment. We will focus on proper sequencing
-of questions and adjusting their difficulty to a learner's needs, both leading
-to better learning efficiency. Although the strategies will be applied and
+efficient. We plan to design strategies of practicing using multiple-choice
+questions in an online environment. We will focus on proper sequencing of
+questions and adjusting their difficulty to a learner's needs, both leading to
+better learning efficiency. Although the strategies will be applied and
 evaluated mainly within an application for practicing geography, the results
 should be easily applicable to other similar domains like the learning of
 vocabulary.
@@ -705,16 +705,16 @@ part of the thesis will be dedicated to the evaluation methodology:
 
 \section{System for Adaptive Practice of Geography}
 
-We have implemented an adaptive system providing adaptive practice of geography
-facts available at~\url{www.slepemapy.cz}~\cite{papousek2014adaptive}. It
-estimates user's and based on the estimation it asks questions of suitable
-difficulty. These questions are open or multiple-choice with from 2 to 6
-options, they are of 2 different directions ("Where is Germany?" or "What is
-the name of the highlighted country"), see
-figure~\ref{figure:example_question}. The questions are then answered using
-"outline map". After a sequence of 10 answers the system shows to user a
-feedback on her success.  Users can also access a visualization of their
-knowledge using an open learner model.
+We have implemented a system providing adaptive practice of geographical
+facts. It is available at~\url{www.slepemapy.cz}~\cite{papousek2014adaptive}. This system
+estimates users' knowledge and based on the estimation it asks questions of
+suitable difficulty. These questions are open or multiple-choice with from 2 to
+6 options. They are of 2 different directions ("Where is Germany?" or "What is
+the name of the highlighted country?"), see
+figure~\ref{figure:example_question}. The questions are then answered using the
+"outline map". After a sequence of 10 answers the system shows a user feedback
+on her success. Users can also access a visualization of their knowledge using
+an open learner model.
 
 \begin{figure}[h]
 	\begin{center}
@@ -731,129 +731,132 @@ in~\cite{papousek2014adaptive, papousek2015impact}.
 \begin{enumerate}
 	\item \emph{Estimation of prior knowledge}. The system tries to estimate the
 		probability a user $u$ knows an item $i$ before the first question
-		about this item. The estimate is based on previous answers of the user $u$
-		and on answers of other users about the item $i$.
+		about this item is asked. The estimate is based on previous answers of the
+		user $u$ related to other items and on answers of other users about the
+		item $i$.
 	\item \emph{Estimation of current knowledge}. In this case the system
 		estimates the probability a user $u$ knows an item $i$ based on the
 		estimation of prior knowledge and a sequence of previous answers of the
 		user $u$ about the item $i$.
-	\item \emph{Question construction}. Based on the estimation of user's
-		knowledge and other additional information the system constructs suitable
-		question for the given user.
+	\item \emph{Question construction}. Based on the estimation of a user's
+		knowledge and other additional information the system constructs a suitable
+		question for the user.
 \end{enumerate}
 
 \begin{figure}[h]
 	\begin{center}
 		\includegraphics[width=\textwidth]{figure/response_time}
-		\caption{Response times and probability that the (next) answer is correct~\cite{papousek2015analysis}.}
+		\caption{Response time and probability that the (next) answer is correct~\cite{papousek2015analysis}.}
 		\label{figure:response_time}
 	\end{center}
 \end{figure}
 
 The system is available for free without any need of registration. However, we
-offer possibility of signing up to help our system with tracking user's
+offer a possibility of signing up to help our system with tracking a user's
 history. However, we do not collect any information about the identity of users
 (e.g. sex or age). So far we collected more than \numprint{11000000} answers
 from more than \numprint{100000} (mostly Czech) users. Monthly we collect $\pm$
 \numprint{1000000} answers from \numprint{10000} users. The traffic is lower at
-weekends and during holidays, which indicates the system is used by students
-from schools. This hypothesis is also supported by the traffic analysis during
-one day~\cite{stanislav2015factual}. There are peaks in traffic corresponding
-to lessons at schools in Czech Republic.
+weekends and during holidays, which indicates the system is used at schools.
+This hypothesis is also supported by the traffic analysis during one
+day~\cite{stanislav2015factual}. There are peaks in the traffic corresponding to
+lessons at schools in the Czech Republic.
 
 The collected data set serves as an interesting input for further research
-within Adaptive Learning Group\footnote{\url{www.fi.muni.cz/adaptivelearning}},
+within the Adaptive Learning Group\footnote{\url{www.fi.muni.cz/adaptivelearning}},
 e.g.~\cite{pelanek2015modeling} modeling students' memory or
 \cite{niznan2015student} modeling prior knowledge.
-Figure~\ref{figure:response_time} shows the relationship of response time and
-correctness of an answer, e.g. in case of the wrong answer longer response time
-leads to higher probability the next answer will be correct. On the other side
-in case of correct answers, it is exactly the opposite. This observation could be
-used to improve a model for current knowledge.
+Figure~\ref{figure:response_time} shows the relation between response time and
+correctness of an answer. For instance, it shows that in case of a wrong answer
+longer response time leads to a higher probability the next answer will be
+correct. On the other side in case of correct answers, it is exactly the
+opposite. This observation could be used to improve a model for current
+knowledge.
 
 \section{Impact of Adaptivity}
 
 In~\cite{papousek2015impact} we analyze the impact of adaptivity of our system
-on user's behavior. We mainly focus on the time spent in the system expressed
-by the number of answers per user. We performed online AB experiment to examine
-the role of the designed algorithm for question construction and its
-parameters. As we describe in section~\ref{section:practice_control} for the
+on a user's behavior. We focus mainly on the time spent in the system expressed
+by the number of answers per user. We performed online A/B experiments to examine
+the role of the designed algorithm for question construction and some of its
+parameters. As we describe in Section~\ref{section:practice_control} for the
 question construction we firstly need to select an appropriate item and secondly
-we choose number of options and options themselves.
+we need to choose the number of options and options themselves.
 
-In the first experiment we compare our approach to algorithms where at least
+In the first experiment we comparedd our approach to algorithms where at least
 one of these two steps is random. We found out that both parts of the algorithm
 are important. Using random version of the first or the second part leads to
-the similar results as in case of the completely random algorithm.
+the similar results as in the case of a completely random algorithm.
 
-Since the selection of an appropriate item for practice is based on the target
+Since the selection of an appropriate item for practice is based on target
 difficulty, we performed the second experiment to find the optimal value for
 this parameter. Unfortunately we were not able to find any significant
-difference for different values of target difficulty with respect to the number
+difference between various values of target difficulty with respect to the number
 of answers per user. This is probably caused by the fact that users can choose
 different practice contexts (maps) and for different contexts our system
 behaves differently, e.g in case of European countries the system can not
 provide sufficiently difficult practice for some users and on the other side
 for African countries there is sometimes a problem to pick sufficiently easy
-questions. Based on this we look not on the target difficulty with respect to
-the number of answers, but on the real difficulty with respect to self-reported
+questions. Based on this we do not look on the target difficulty with respect to
+the number of answers, but on the real difficulty with respect to user-reported
 perception\footnote{We ask users to evaluate the practice after $30$, $70$,
-$120$ and $200$ answers, whether it is "Too difficult", "Appropriate" or "Too
-easy".}. Using heuristics based on IP address we also detect in-school users
-and compare them to out-of-school users. For analysis we divide users according
-to their success to buckets and for each bucket we compute the percentage of
-"Too difficult", "Appropriate" and "Too easy" records, see
-figure~\ref{figure:feedback_by_success}.
+$120$ and $200$ answers. Specifically we ask them to express whether it was "Too
+difficult", "Appropriate" or "Too easy".}. Using heuristics based on an IP address
+we also detect in-school users and compare them to out-of-school users. For an
+analysis we divide users according to their success to buckets and for each
+bucket we compute the percentage of "Too difficult", "Appropriate" and "Too
+easy" records, see Figure~\ref{figure:feedback_by_success}.
 
 \begin{figure}[h]
 	\begin{center}
 		\includegraphics[width=\textwidth]{figure/feedback_by_success_overview}
-		\caption{Explicit feedback given by students according to their previous
-			real success rate. ~\cite{papousek2015impact}.}
+		\caption{Explicit feedback given by students divided according to their
+			previous real success rate~\cite{papousek2015impact}.}
 		\label{figure:feedback_by_success}
 	\end{center}
 \end{figure}
 
-The target difficulty is not constant in our system, we adjust it based on the
+The target difficulty is not constant in our system, we adjust it based on a
 user's history. For successful users we make the practice more difficult, for
-less successful the practice will be easier. This adjustment would make the
+less successful ones the practice will be easier. This adjustment would make the
 choice of the target difficulty less important, so we were interested whether
 it has a positive impact on users. The last experiment shows that the group
-having the adjustment enabled answers more questions than the group without it.
+having the adjustment enabled answers more questions than the group having it
+disabled.
 
 \section{Interaction Loop}
 
-Since we adaptively collect the data, we analyze it and then we try to improve
-the system using the acquired insights, we have to take into account the
-interaction shown on figure~\ref{figure:interaction_loop}.
-In~\cite{niznan2015exploring} we investigate this interaction loop and a role of
+Since we adaptively collect data, we analyze it and then we try to improve
+the system using acquired insights, we have to take into account the
+interaction shown on Figure~\ref{figure:interaction_loop}.
+In~\cite{niznan2015exploring} we investigate this interaction loop and the role of
 small differences in predictive accuracy using synthetic data. We generate data
-using the ground truth model simulating usage of simplified question
+using the ground truth model simulating usage of a simplified question
 construction algorithm. There are 200 items and 5000 students available in the
-system and each student practices 50 items. Each item is practiced by the given
+system and each student practices 50 items. Each item is practiced by the
 student at most once.
 
 \begin{figure}[h]
 	\begin{center}
 		\includegraphics[width=\textwidth]{figure/noise_vs_intersection_number_of_answers}
 		\caption{Size of the intersection with the optimal practiced set of items and RMSE
-			depending on Gaussian noise in optimal model (left side). Distribution of answers over
+			depending on Gaussian noise in the optimal model (left side). Distribution of answers over
 			the items based on the given model (right side)~\cite{niznan2015exploring}.}
 		\label{figure:feedback_by_success}
 	\end{center}
 \end{figure}
 
 Using the ground truth model we declare the practiced set
-optimal, then we use a different model and see how a new practiced set
+optimal and then we use different models and see how new practiced sets
 differ from the optimal one. In one experiment we gradually add more and more
 noise to the ground truth model and look at the practiced set of items. We
 found out that a relatively small noise leading to a small \emph{root mean
 square error} (RMSE) has a big impact on the practice, see left side of
-figure~\ref{figure:feedback_by_success}. In other experiment we look at the
+Figure~\ref{figure:feedback_by_success}. In other experiment we look at the
 distribution of collected data across the items. Using the ground truth model
-we collect more uniform data than for the other models (except one
-corresponding to completely random uniform distribution), see right side of
-figure~\ref{figure:feedback_by_success}. This shows a risk we face when our
+we collect more uniform data than when using other models (except one
+corresponding to the completely random uniform distribution), see right side of
+Figure~\ref{figure:feedback_by_success}. This shows a risk we face when our
 system uses a bad model. We did even more analysis related to the interaction
 loop, for more details see~\cite{niznan2015exploring}.
 
@@ -863,22 +866,22 @@ loop, for more details see~\cite{niznan2015exploring}.
 	\item \bibentry{papousek2015impact}
 
 		\textit{I performed online experiments examining the algorithm for practice
-			control with respect to the user's motivation and then analyzed the collected
+			control with respect to a user's motivation and then analyzed the collected
 			data.}
 	\item \bibentry{niznan2015exploring}
 
 		\textit{I did an analysis of feedback loop between a model describing
-			user's knowledge and an algorithm for practice control collecting the
+			a user's knowledge and an algorithm for practice control collecting the
 			data. I also examined the impact of the model and its precision on data
 			collection.}
 	\item \bibentry{papousek2015analysis}
 
-		\textit{I analyzed the relation of response time spent  and correctness of answers.}
+		\textit{I analyzed the relation of response time and correctness of answers.}
 
 	\item \bibentry{papousek2014adaptive}
 
 		\textit{I implemented the predictive model and the algorithm for practice
-			control within an application providing practice of geography. I designed
+			control within an application providing the practice of geography. I designed
 			the mechanism of difficulty adjustment and selection of distractors in case of
 			multiple-choice questions.}
 \end{enumerate}
