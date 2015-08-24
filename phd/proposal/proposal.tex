@@ -78,7 +78,7 @@ categories of users. It is natural these systems are used by students,
 sometimes even at schools for a fixed amount of time. On the other side they
 are also open to non-school users willing to improve their knowledge in their
 free time. Having diverse set of users means these users have varied
-background, motivation and prior knowledge. Whereas some users may want to
+background, different motivation and prior knowledge. Whereas some users may want to
 learn for a tomorrow exam, others may be more interested in using their
 knowledge in the long term. This contrasts with classical educational
 environments, i.e. schools, where learners and their motivation do not differ
@@ -90,7 +90,7 @@ different from a strategy making the practice efficient with respect to
 learning.
 
 To provide adaptivity we need to build an adequate model describing user's
-knowledge. The model should take into account e.g. prior knowledge, learning or
+knowledge. The model should take into account, for instance, prior knowledge, learning or
 forgetting. We also need to design a good strategy for practicing, which may
 differ for different types of users. We can not design a~good strategy for
 practicing when we are not able to measure its impact on a user's motivation and
@@ -172,8 +172,8 @@ to absorb large volume of knowledge in short time period.
 \begin{figure}
 	\begin{center}
 		\includegraphics[width=.6\textwidth]{figure/forgetting_curves}
-		\caption{Forgetting curve introduced by Ebbinghaus is given by a
-			formula $R = e^{-\frac{t}{S}}$, where $R$ stands for the memory retention, $t$
+		\caption{Forgetting curve introduced by Ebbinghaus is given by a~formula $R
+			= e^{-\frac{t}{S}}$, where $R$ stands for the memory retention, $t$
 			for the time and $S$ for the relative strength of memory. Ebbinghaus
 			realized that when the information is reminded of again, it strengthens not
 			only the memory retention, but also also reduces the forgetting rate.}
@@ -183,7 +183,7 @@ to absorb large volume of knowledge in short time period.
 In the context of computerized adaptive practice we may look at the spacing
 effect from two different points of view. In the first case we want to control
 it within one session. Here we have full control over it and we work with
-seconds, minutes or hours (maximally). With a fixed number of items for
+seconds, minutes or hours (maximally). With a~fixed number of items for
 practice we regulate the spacing by modifying the sequence of practiced items,
 e.g. we use more blocking or interleaving version of
 practice~\cite{ostrow2015blocking}. With variable set of items we can also
@@ -234,21 +234,21 @@ acquiring procedural knowledge~\cite{van2013properties}. It models a student's
 knowledge using a hidden Markov model as a binary latent variable (either learned
 or unlearned). The model has four parameters: probability the given skill is
 initially learned, probability of learning the skill in one step, probability of
-a wrong answer when the skill is learned (slip), and probability of a correct
+a wrong answer when the skill is learned (slip), and probability of a~correct
 answer when the skill is not learned (guess). Skill estimation is updated using
 a Bayes rule based on observed answers. Several extensions of this model can be
 found, e.g. one including forgetting~\cite{qiu2011does}.
 
 \paragraph*{Performance Factor Analysis} is a logistic model, but in contrast
 to the Rasch model it handles learning~\cite{pavlik2009performance}. The
-skill is represented as a linear combination of an item's difficulty ($\beta$)
+skill is represented as a~linear combination of an item's difficulty ($\beta$)
 and the number of past successes ($s$) and failures ($f$) of a student.
 
 \begin{align}
 P(correct|\beta,s, f) = \frac{1}{1 + e^{-(\beta + \gamma s + \delta f)}}
 \end{align}
 
-Parameter $\gamma$ stands for the change of the skill associated with a correct
+Parameter $\gamma$ stands for the change of the skill associated with a~correct
 answer and $\delta$ stands for the same in case of an incorrect answer.
 
 \paragraph*{Adaptive Character of Thought-Rational} is another logistic model
@@ -260,8 +260,8 @@ it. The activation $m$ of the item is a function of these times:
 m_n(t_1, \ldots, t_n) = ln\left(\sum_{i=1}^n t_i^{-d}\right)
 \end{align}
 
-Parameter $d$ represents decay in time. To get probability that a learner recalls
-the item correctly, we apply the logistic function, $P(correct|m) = \frac{1}{1
+Parameter $d$ represents decay in time. To get probability a~learner recalls
+the item correctly, we apply the logistic function, defined as $P(correct|m) = \frac{1}{1
 + e^{m}}$.\footnote{The equation is simplified. The original model contains more parameters. For more details see~\cite{pavlik2005practice}.} The model can be extended to cover also the spacing
 effect once we make the decay parameter dynamic, e.g. dependent directly on
 spacing or the previous activation level~\cite{anderson1991reflections} (as
@@ -276,7 +276,7 @@ system needs to quickly assess what a learner knows to be able to adaptively
 provide appropriate content. This feature is often missing in systems
 and users are forced to go through a lot of useless content. Our recent
 work~\cite{papousek2014adaptive} similarly to~\cite{khajah2014integrating}
-combines a model assuming a constant skill with another one covering learning
+combines a model assuming a~constant skill with another one covering learning
 to handle this phenomenon. But this should go even further and models should
 also provide different learning~\cite{pelanek2015modeling} and forgetting rates
 for different items. A model using a mixture of individual learning curves
@@ -295,7 +295,7 @@ contribute to improvement of real educational systems.
 \label{section:practice_control}
 
 As we present in the introduction we focus on the \emph{outer loop}
-of a user's practice~\cite{vanlehn2006behavior}, mainly within one session, that
+of a~user's practice~\cite{vanlehn2006behavior}, mainly within one session, that
 is on sequencing of items presented to the user. The reason is that the
 considered area of learning of facts does not provide sufficiently complex
 tasks to deal with the \emph{inner loop} (e.g.
@@ -360,15 +360,15 @@ improves users' performance at the same time. We show in
 Section~\ref{section:evaluation} this can not be done in some systems.
 
 In some cases the approach using a graph of prerequisites makes sense, e.g.
-in algebra we have a strong structure of prerequisites among the knowledge
-components (addition and multiplication) and the choice of an item (exercise)
-from the knowledge component is not so important, if we know that all
-prerequisites for the given component are mastered. On the other hand in case
-of a system for learning of vocabulary, individual items are independent, so there is
-one item per knowledge component. Of course we can build a structure of
-categories and prerequisites, but they represent a recommended study plan
-rather than the necessary learning path. When a user enters the system, she can
-theoretically start practicing anything.
+in algebra we have a strong structure of knowledge
+components and their prerequisites (addition and multiplication). The choice
+of an item (exercise) from the knowledge component is not so important, if we
+know that all prerequisites for the given component are mastered. On the other
+hand in case of a system for learning of vocabulary, individual items are
+independent, so there is one item per knowledge component. Of course we can
+build a structure of categories and prerequisites, but they represent a
+recommended study plan rather than the necessary learning path. When a user
+enters the system, she can theoretically start practicing anything.
 
 In~\cite{papousek2014adaptive} and~\cite{papousek2015impact} we present an
 approach mainly based on target difficulty. We assume we already have an
@@ -412,8 +412,8 @@ relates to the content of practice and the number of practiced items.
 \subsection{Questions}
 
 Assume we have already picked an item for practice which corresponds to a
-flashcard with two sides $A$ and $B$. We need to specify a direction of the
-question (whether we ask for the side $A$ or $B$), e.g. in case of
+flashcard with two sides $A$ and $B$. We need to specify a~direction of the
+question (whether we ask for the side $A$ or $B$), e.g.~in case of
 vocabulary the first direction leads to an ability of understanding a foreign
 language and the second one to an ability of expressing ideas in it. In both
 ways we want to achieve so-called \emph{cued recall}~\cite{carpenter2006types}.
@@ -488,9 +488,9 @@ is a set of more or less appropriate metrics depending on the fact whether an
 absolute or relative value of a prediction is important. This is more deeply
 described in~\cite{pelanek2014brief}. From a practical point of view
 accuracy is not the only important aspect of the predictive
-model~\cite{huang2015framework}. Another important aspect is that a model can
+model~\cite{huang2015framework}. Another important aspect is that a~model can
 give us deeper insight into a domain. Regarding this it is useful that the
-model holds some of the key assumptions, e.g. that a user's knowledge increases with
+model holds some of the key assumptions, e.g. that a~user's knowledge increases with
 each exercise or that while fitting its parameters converge to similar values
 regardless division of the data.
 
@@ -498,7 +498,7 @@ A similar area to adaptive systems for practice is the are of recommender
 systems, e.g. for books or movies. These systems also work with predictive
 models to serve appropriate content to their users. There are
 studies~\cite{cremonesi2010performance} how accuracy of a model relates to
-behavior of a recommender system as a whole. These studies rely only on
+behavior of a~recommender system as a whole. These studies rely only on
 historical data. It would be nice to have the same studies in the area of
 educational systems. Something similar is presented
 in~\cite{yudelson2015small} where the authors quantify saved users' time to get
@@ -524,13 +524,13 @@ In an online environment we need to periodically deploy new features and
 test them only on a subset of users, before we publish them
 completely~\footnote{This process is also known as \emph{canary deployment}.} .
 Doing this kind of online A/B testing opens new possibilities to
-us~\cite{stamper2012rise}. We can collect a large volume of data and make a
-cycle of hypothesis testing faster. Unfortunately users in an online environment
-enter and quit a system any time, so we can hardly adopt a method of
-pre/post-testing. For this reason many studies are focused only on measuring
+us~\cite{stamper2012rise}. We can collect a large volume of data and make
+a~cycle of hypothesis testing faster. Unfortunately users in an online
+environment enter and quit a system any time, so we can hardly adopt a~method
+of pre/post-testing. For this reason many studies are focused only on measuring
 time a user spends in a system or number of her
-interactions~\cite{papousek2015impact,monterrat2015player}
-rather than improvement in her performance.
+interactions~\cite{papousek2015impact,monterrat2015player} rather than
+improvement in her performance.
 
 \begin{figure}[h]
 	\begin{center}
@@ -642,15 +642,15 @@ part of the thesis will be dedicated to the evaluation methodology:
 		journals.
 		\begin{itemize}
 			\item I am currently working on a journal publication
-				\textbf{Learner Modeling and Adaptive Practice of Facts}. In this paper I
-				am extending an already published analysis~\cite{papousek2015impact}
-				examining the impact of adaptive practice on a user's behavior. I am
+				\textbf{Learner Modeling and Adaptive Practice of Facts}. In this paper
+				I~am extending an already published analysis~\cite{papousek2015impact}
+				examining the impact of adaptive practice on a user's behavior. I~am
 				focusing mainly on the impact of target difficulty. The paper will be
 				published in the journal \emph{User Modeling and User-Adapted Interaction}.
 			\item The journal paper \textbf{Adaptive Geography Practice Data Set} is
 				already in review process of the \emph{Journal of Learning Analytics}.
 				We publish the data set collected by a system providing
-				the practice of geography running on \url{www.slepemapy.cz}.
+				the practice of geography (\url{www.slepemapy.cz}).
 				The paper describes the data set.
 			\item In the near future I plan to write publications on the impact of computerized
 				adaptive practice on learning compared to its impact on willingness of
@@ -739,7 +739,7 @@ in~\cite{papousek2014adaptive, papousek2015impact}.
 		estimation of prior knowledge and a sequence of previous answers of the
 		user $u$ about the item $i$.
 	\item \emph{Question construction}. Based on the estimation of a user's
-		knowledge and other additional information the system constructs a suitable
+		knowledge and other additional information the system constructs a~suitable
 		question for the user.
 \end{enumerate}
 
@@ -872,7 +872,7 @@ loop, for more details see~\cite{niznan2015exploring}.
 
 		\textit{I did an analysis of feedback loop between a model describing
 			a user's knowledge and an algorithm for practice control collecting the
-			data. I also examined the impact of the model and its precision on data
+			data. I~also examined the impact of the model and its precision on data
 			collection.}
 	\item \bibentry{papousek2015analysis}
 
