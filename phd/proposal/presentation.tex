@@ -1,14 +1,42 @@
 \documentclass[xcolor=svgnames]{beamer}
-\usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage{hyperref}
 \usepackage{numprint}
 \usepackage{booktabs}
-\usepackage{bibentry}
-\nobibliography*
+\usepackage[backend=bibtex, style=authoryear-comp, maxcitenames=2, natibib=true]{biblatex}
 \usetheme{Proso}
 \usepackage{tabularx}
 
+\preto\fullcite{\AtNextCite{\defcounter{maxnames}{99}}}
+
+% ---- BEGIN: BOLD NAMES
+\usepackage{xpatch}% or use http://tex.stackexchange.com/a/40705
+
+\newbibmacro*{name:bold}[2]{%
+  \def\do##1{\ifstrequal{#1, #2}{##1}{\bfseries\listbreak}{}}%
+  \dolistloop{\boldnames}}
+\newcommand*{\boldnames}{}
+
+\xpretobibmacro{name:last}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:first-last}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:last-first}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:delim}{\begingroup\normalfont}{}{}
+
+\xapptobibmacro{name:last}{\endgroup}{}{}
+\xapptobibmacro{name:first-last}{\endgroup}{}{}
+\xapptobibmacro{name:last-first}{\endgroup}{}{}
+\xapptobibmacro{name:delim}{\endgroup}{}{}
+
+\forcsvlist{\listadd\boldnames}{{Papou\v{s}ek, Jan}, {Papou{\v{s}}ek, Jan}}
+% ---- END: BOLD NAMES
+
+\bibliography{proposal.bib}
+\hypersetup{colorlinks=false}
 \def\bysame{\leavevmode\hbox to3em{\hrulefill}\thinspace}
+
+\DeclareBibliographyCategory{fullcited}
+\renewcommand{\footcite}[1]{\footfullcite{#1}\addtocategory{fullcited}{#1}}
+\renewcommand{\cite}[1]{{\small\parencite{#1}}}
 
 \title{Computerized Adaptive Practice of Factual Knowledge}
 \author{Jan Papou\v{s}ek}
@@ -21,7 +49,31 @@
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
+	in Czech Republic\footcite{OECDcomputeratschool}:
 	\begin{itemize}
+		\item $83\%$ students use computer at schools in
+		\item $62\%$ students brows the Internet for their schoolwork outside of school
+	\end{itemize}
+
+	\medskip
+	\medskip
+	\medskip
+	\pause
+	\begin{center}
+	investment in computers, touch devices and interactive boards
+
+	\medskip
+	\medskip
+	\medskip
+	{\Large What is the quality of the software? Is it beneficial?}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Computerized Adaptive Practice of Facts}
+	\begin{itemize}
+		\item multiple-choice and open questions
 		\item efficient way of memorizing facts
 		\item no or minimal assistance of teacher
 		\item at the same time:
@@ -35,7 +87,16 @@
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Outline}
+	\frametitle{slepemapy.cz / outlinemaps.org}
+	\begin{center}
+		\only<1>{\includegraphics[width=1\textwidth]{figure/slepemapy_spain_highlighted.png}}
+		\only<2>{\includegraphics[width=1\textwidth]{figure/slepemapy_spain.png}}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{What is needed?}
 	\begin{itemize}
 		\item models estimating learners' performance and knowledge
 		\item practice control (instructional policy)
@@ -45,183 +106,119 @@
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Models}
-	\begin{itemize}
-		\item items are independent to each other
-		\item forgetting
-		\item repetition and spacing effect
-		\item varied prior knowledge
-		\item often relative difficulty of items is the same for all learners
-	\end{itemize}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Models: forgetting and spacing effect}
+	\frametitle{Procedural vs Declarative Knowledge}
 	\begin{center}
-		\includegraphics[width=0.7\textwidth]{figure/forgetting_curves.pdf}
+		\includegraphics[width=1\textwidth]{figure/concept_mapping}
 	\end{center}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Models: overview}
-	(data) community focuses on procedural knowledge (math, programming)
+	\frametitle{Models}
+	\textbf{(data) community focuses on procedural knowledge}
 	\begin{itemize}
-		\item Bayesian Knowledge Tracing and its extensions
+		\item Bayesian Knowledge Tracing and its extensions\\\cite{van2013properties, qiu2011does}
+		\item Performance Factor Analysis~\cite{pavlik2009performance}
 	\end{itemize}
 
-	\bigskip
-	estimation of prior knowledge can be inspired by IRT
+	\medskip
+	\textbf{estimation of prior knowledge can be inspired from testing}
 	\begin{itemize}
-		\item Rasch, Elo rating system (chess)
+		\item Item Reseponse Theory~\cite{rasch1993probabilistic,de2008theory}
+		\item rating system for chess~\cite{elo1978rating}
 	\end{itemize}
 
-	\bigskip
-	learning of factual knowledge:
+	\medskip
+	\textbf{learning of factual knowledge}
 	\begin{itemize}
-		\item PFA (too simple)
-		\item ACT-R (not tested online with larger dataset)
+		\item forgetting curves~\cite{ebbinghaus1885spacing}
+		\item Adaptive Character of Thought-Rational\\\cite{pavlik2005practice}
+		\item mixture modeling~\cite{streeter2015mixture}
 	\end{itemize}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Practice Control}
+	\textbf{sequencing}
 	\begin{itemize}
-		\item inner vs. outer loop
-		\item sequencing
-			\begin{itemize}
-				\item balance between over-practice and under-practice
-				\item zone of proximal development
-			\end{itemize}
-		\item questions
-			\begin{itemize}
-				\item number of options
-				\item competitiveness of options
-			\end{itemize}
+		\item balance between over-practice and under-practice\\\cite{cen2007over}
+		\item often based on expert's knowledge~\cite{lopes2015multi}
+		\item spacing effect~\cite{ebbinghaus1885spacing}
+	\end{itemize}
+	\textbf{questions}
+	\begin{itemize}
+		\item distractors~\cite{little2015optimizing}
 	\end{itemize}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Practice Control: sequencing}
-	\begin{columns}[2]
-		\column{.5\textwidth}
-			\begin{center}
-				\includegraphics[width=0.9\textwidth]{figure/practice_progress_a}
-			\end{center}
-		\column{.5\textwidth}
-			\begin{center}
-				\includegraphics[width=0.9\textwidth]{figure/practice_progress_b}
-			\end{center}
-	\end{columns}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Practice Control: options}
-	\begin{center}
-		\includegraphics[width=0.7\textwidth]{figure/options_vs_spacing}
-	\end{center}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
 	\frametitle{Evaluation}
-	learning and learners' willingness to use the system
+	\textbf{historical data}
 	\begin{itemize}
-		\item new data (A/B experiments, multi-armed bandits, \ldots)
-		\item historical data (performance of predicitve models, \ldots)
-		\item synthetic data
+		\item performance of predictive models\\\cite{pelanek2014brief, huang2015framework}
+	\end{itemize}
+	\textbf{new data}
+	\begin{itemize}
+		\item learning and learners' willingness to use the system
+		\item offline randomized controlled trials~\cite{dimitrov2003pretest}
+		\item online A/B experiments~\cite{stamper2012rise}
+		\item multi-armed bandints~\cite{liu2014trading}
+	\end{itemize}
+	\textbf{synthetic data}
+	\begin{itemize}
+		\item simulated learners~\cite{fancsali2013optimal}
+	\end{itemize}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Achieved Results}
+	\textbf{slepemapy.cz / outlinemaps.org}
+	\begin{itemize}
+		\item source of data: almost \numprint{17000000} answers in total
+		\item platform for A/B experiments: \numprint{1000000} answers per month
+	\end{itemize}
+	\textbf{models and practice control}
+	\begin{itemize}
+		\item combination of Elo rating system and PFA
+		\item practice provided with respect to target difficulty\\\cite{papousek2014adaptive}
+	\end{itemize}
+	\textbf{evaluation}
+	\begin{itemize}
+		\item impact on engagement~\cite{papousek2015impact}
+		\item impact on learning~\cite{papousek2016evaluation}
+		\item interaction loop~\cite{niznan2015exploring, pelanek2016impact}
 	\end{itemize}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Aims of the Thesis}
-	\begin{itemize}
-		\item model estimating leaners' knowledge
+	\begin{columns}[onlytextwidth]
+		\begin{column}{0.4\textwidth}
+			\includegraphics[width=1\textwidth]{figure/options_vs_spacing}
+		\end{column}
+		\begin{column}{0.55\textwidth}
+			\textbf{models}
 			\begin{itemize}
 				\item prior knowledge
-				\item forgetting
-				\item spacing effect
+				\item forgetting (spacing effect)
+				\item applicable online
 			\end{itemize}
-		\item strategies for practice control
+			\textbf{practice control}
 			\begin{itemize}
-				\item appropriate difficulty
+				\item difficulty vs. spacing
+				\item distractors
 			\end{itemize}
-		\item evaluation
+			\textbf{evaluation}
 			\begin{itemize}
-				\item online experiments: learning, motivation
-				\item synthetic data: model vs. practice control
+				\item online (learning, engagement)
+				\item synthetic (interaction loop)
 			\end{itemize}
-	\end{itemize}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Achieved Results: slepemapy.cz}
-	\begin{center}
-		\includegraphics[width=0.9\textwidth]{figure/slepemapy_spain_highlighted.png}
-	\end{center}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Achieved Results: slepemapy.cz}
-	\begin{itemize}
-		\item $\geq$ \numprint{14000000} answers in total
-		\item per month:
-			\begin{itemize}
-				\item \numprint{1000000} answers
-				\item \numprint{10000} users
-			\end{itemize}
-	\end{itemize}
-
-	\medskip
-	\begin{itemize}
-		\item source of data
-		\item platform for online experiments
-	\end{itemize}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Achieved Results: publications}
-	\begin{itemize}
-		\item \bibentry{papousek2015impact}
-		\begin{itemize}
-			\item best student paper award
-		\end{itemize}
-		\item \bibentry{papousek2015analysis}
-		\item \bibentry{papousek2014adaptive}
-	\end{itemize}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Achieved Results: publications}
-	\begin{itemize}
-		\item \bibentry{niznan2015exploring}
-	\end{itemize}
-	\textbf{forthcoming}
-	\begin{itemize}
-		\item \bibentry{pelanek2016learner}
-		\item \bibentry{papousek2015dataset}
-	\end{itemize}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Achieved Results: publications}
-	\textbf{submitted}
-	\begin{itemize}
-		\item \bibentry{papousek2016evaluation}
-		\item \bibentry{pelanek2016impact}
-	\end{itemize}
-	\bibliographystyle{amsplain}
-	\nobibliography{proposal}
+		\end{column}
+	\end{columns}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
@@ -267,4 +264,89 @@
 \end{tabularx}
 \end{frame}
 % ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Publications}
+	\small
+	\fullcite{papousek2015impact}
+	\vspace{-0.1cm}
+	\begin{itemize}
+		\item best student paper award
+	\end{itemize}
+	\fullcite{papousek2014adaptive}
+
+	\medskip
+	\fullcite{papousek2015analysis}
+
+	\medskip
+	\fullcite{niznan2015exploring}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Publications: Forthcoming}
+	\small
+	\fullcite{pelanek2016learner}
+
+	\bigskip
+	\fullcite{papousek2016evaluation}
+
+	\bigskip
+	\fullcite{pelanek2016impact}
+
+	\bigskip
+	\fullcite{papousek2015dataset}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Existing tools}
+	mainly for vocabulary, e.g.:
+	\begin{itemize}
+		\item \href{http://duolingo.com}{Duolingo}, \href{http://memrise.com}{Memrise}, \href{http://vocabulary.com}{Vocabulary}
+	\end{itemize}
+	some general, e.g.
+	\begin{itemize}
+		\item \href{http://cerego.com}{Cerego}
+	\end{itemize}
+
+	\bigskip
+	\hrule
+
+	\bigskip
+	\begin{itemize}
+		\item algorithms often not available
+		\item often based on experts' knowledge
+	\end{itemize}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{anatom.cz / practiceanatomy.com}
+	\only<1>{\includegraphics[width=1\textwidth]{figure/anatomy_practice.png}}
+	\only<2>{\includegraphics[width=1\textwidth]{figure/anatomy_view.png}}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Model}
+	the proposed model should meet the following criteria
+	\begin{itemize}
+		\item prior knowledge in case of heterogeneous population
+		\item learning
+		\item forgetting + spacing effect
+		\item applicable online
+	\end{itemize}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}[t,allowframebreaks]
+	\frametitle{References}
+	\printbibliography[notcategory=fullcited]
+\end{frame}
+% --------------------------- SLIDE --------------------------------------------
 \end{document}
