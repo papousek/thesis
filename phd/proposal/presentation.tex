@@ -49,59 +49,42 @@
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	in Czech Republic\footcite{OECDcomputeratschool}:
-	\begin{itemize}
-		\item $83\%$ students use computer at schools
-		\item $62\%$ students brows the Internet for their schoolwork outside of school
-	\end{itemize}
-
-	\medskip
-	\medskip
-	\medskip
-	\pause
-	\begin{center}
-	investment in computers, touch devices and interactive boards
-
-	\medskip
-	\medskip
-	\medskip
-	{\Large What is the quality of the software? Is it beneficial?}
-	\end{center}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Computerized Adaptive Practice of Facts}
-	\begin{itemize}
-		\item multiple-choice and open questions
-		\item efficient way of memorizing facts
-		\item no or minimal assistance of teacher
-		\item online (available to large number of learners)
-	\end{itemize}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
 	\frametitle{slepemapy.cz / outlinemaps.org}
 	\begin{center}
-		\only<1>{\includegraphics[width=1\textwidth]{figure/slepemapy_spain_highlighted.png}}
-		\only<2>{\includegraphics[width=1\textwidth]{figure/slepemapy_spain.png}}
+		\only<1>{\includegraphics[width=.9\textwidth]{figure/slepemapy_africa_highlighted.png}}
+		\only<2>{\includegraphics[width=.9\textwidth]{figure/slepemapy_africa.png}}
 	\end{center}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{What is needed?}
+	\frametitle{anatom.cz / practiceanatomy.com}
+	\only<1>{\includegraphics[width=1\textwidth]{figure/anatomy_practice.png}}
+	\only<2>{\includegraphics[width=1\textwidth]{figure/anatomy_view.png}}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
+	\frametitle{Research Questions}
 	\begin{itemize}
-		\item models estimating learners' performance and knowledge
-		\item practice control (instructional policy)
-		\item evaluation
+		\item \textbf{models}
+			\begin{itemize}
+				\item How to predict learners' performance based on historical data?
+			\end{itemize}
+		\item \textbf{practice control}
+			\begin{itemize}
+				\item How to provide efficient practice with respect to learning and engagement?
+			\end{itemize}
+		\item \textbf{evaluation}
+			\begin{itemize}
+				\item How to evaluate proposed approach?
+			\end{itemize}
 	\end{itemize}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Models}
+	\frametitle{State of the Art: Models}
 	\textbf{(data) community focuses on procedural knowledge}
 	\begin{itemize}
 		\item Bayesian Knowledge Tracing and its extensions\\\cite{van2013properties, qiu2011does}
@@ -111,7 +94,7 @@
 	\medskip
 	\textbf{estimation of prior knowledge can be inspired from testing}
 	\begin{itemize}
-		\item Item Reseponse Theory~\cite{rasch1993probabilistic,de2008theory}
+		\item Item Response Theory~\cite{rasch1993probabilistic,de2008theory}
 		\item rating system for chess~\cite{elo1978rating}
 	\end{itemize}
 
@@ -126,32 +109,35 @@
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Practice Control}
-	\textbf{sequencing}
-	\begin{itemize}
-		\item balance between over-practice and under-practice\\\cite{cen2007over}
-		\item often based on expert's knowledge~\cite{lopes2015multi}
-		\item spacing effect~\cite{ebbinghaus1885spacing}
-	\end{itemize}
-	\textbf{questions}
-	\begin{itemize}
-		\item distractors~\cite{little2015optimizing}
-	\end{itemize}
+	\frametitle{State of the Art: Practice Control}
+	\begin{columns}[onlytextwidth]
+		\begin{column}{0.4\textwidth}
+			\includegraphics[width=1\textwidth]{figure/forgetting_curves}
+		\end{column}
+		\begin{column}{0.55\textwidth}
+			\begin{itemize}
+				\item over-practice vs under-practice\\\cite{cen2007over}
+				\item often based on expert's knowledge~\cite{lopes2015multi}
+				\item spacing effect~\cite{ebbinghaus1885spacing}
+				\item distractors~\cite{little2015optimizing}
+			\end{itemize}
+		\end{column}
+	\end{columns}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
-	\frametitle{Evaluation}
+	\frametitle{State of the Art: Evaluation}
 	\textbf{historical data}
 	\begin{itemize}
 		\item performance of predictive models\\\cite{pelanek2014brief, huang2015framework}
 	\end{itemize}
 	\textbf{new data}
 	\begin{itemize}
-		\item learning and learners' willingness to use the system
+		\item learning and engagement
 		\item offline randomized controlled trials~\cite{dimitrov2003pretest}
 		\item online A/B experiments~\cite{stamper2012rise}
-		\item multi-armed bandints~\cite{liu2014trading}
+		\item multi-armed bandits~\cite{liu2014trading}
 	\end{itemize}
 	\textbf{synthetic data}
 	\begin{itemize}
@@ -182,64 +168,56 @@
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
+	\frametitle{Achieved Results: Evaluation}
+	\begin{center}
+		\only<1>{\includegraphics[width=\textwidth]{figure/feedback}}
+		\only<2>{\includegraphics[width=\textwidth]{figure/survivor_curve}}
+		\only<3>{\includegraphics[width=\textwidth]{figure/learning_curve_all_fit}}
+	\end{center}
+\end{frame}
+% ------------------------------------------------------------------------------
+% --------------------------- SLIDE --------------------------------------------
+\begin{frame}
 	\frametitle{Aims of the Thesis}
-	\begin{columns}[onlytextwidth]
-		\begin{column}{0.4\textwidth}
-			\includegraphics[width=1\textwidth]{figure/options_vs_spacing}
-		\end{column}
-		\begin{column}{0.55\textwidth}
-			\textbf{models}
-			\begin{itemize}
-				\item prior knowledge
-				\item forgetting (spacing effect)
-				\item applicable online
-			\end{itemize}
-			\textbf{practice control}
-			\begin{itemize}
-				\item difficulty vs. spacing
-				\item distractors
-			\end{itemize}
-			\textbf{evaluation}
-			\begin{itemize}
-				\item online (learning, engagement)
-				\item synthetic (feedback loop)
-			\end{itemize}
-		\end{column}
-	\end{columns}
+		\small
+		\textbf{models}
+		\begin{itemize}
+			\item How to efficiently model varied prior knowledge and forgetting?
+		\end{itemize}
+		\textbf{practice control}
+		\begin{itemize}
+			\item How to adjust difficulty of practice (spacing vs. number of options)?
+			\item Which difficulty is optimal?
+			\item How to construct distractors?
+		\end{itemize}
+		\textbf{evaluation}
+		\begin{itemize}
+			\item How to measure learning in online environment? (biased data)
+			\item What is the effect of feedback loop (model vs. practice control)?
+		\end{itemize}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
 \begin{frame}
 	\frametitle{Publications}
-	\small
-	\fullcite{papousek2015impact}
-	\vspace{-0.1cm}
+	\tiny
+	{\small \textbf{published}}
 	\begin{itemize}
-		\item best student paper award
+		\item \fullcite{papousek2015impact} (\textbf{best student award})
+		\item \fullcite{papousek2014adaptive}
+		\item \fullcite{papousek2015analysis}
+		\item \fullcite{niznan2015exploring}
 	\end{itemize}
-	\fullcite{papousek2014adaptive}
-
-	\medskip
-	\fullcite{papousek2015analysis}
-
-	\medskip
-	\fullcite{niznan2015exploring}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{Publications: Forthcoming}
-	\small
-	\fullcite{pelanek2016learner}
-
-	\bigskip
-	\fullcite{papousek2016evaluation}
-
-	\bigskip
-	\fullcite{pelanek2016impact}
-
-	\bigskip
-	\fullcite{papousek2015dataset}
+	{\small \textbf{accepted}}
+	\begin{itemize}
+		\item \fullcite{papousek2016evaluation}
+		\item \fullcite{pelanek2016impact}
+		\item \fullcite{papousek2015dataset}
+	\end{itemize}
+	{\small \textbf{submitted}}
+	\begin{itemize}
+		\item \fullcite{pelanek2016learner}
+	\end{itemize}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
@@ -266,13 +244,6 @@
 		\item algorithms often not available
 		\item often based on experts' knowledge
 	\end{itemize}
-\end{frame}
-% ------------------------------------------------------------------------------
-% --------------------------- SLIDE --------------------------------------------
-\begin{frame}
-	\frametitle{anatom.cz / practiceanatomy.com}
-	\only<1>{\includegraphics[width=1\textwidth]{figure/anatomy_practice.png}}
-	\only<2>{\includegraphics[width=1\textwidth]{figure/anatomy_view.png}}
 \end{frame}
 % ------------------------------------------------------------------------------
 % --------------------------- SLIDE --------------------------------------------
