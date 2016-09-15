@@ -22,7 +22,9 @@
 
 # Model (?)
 
-- 0 %
+- 30 %
+- basic idea to compute forgetting curve on the fly (no evaluation)
+- it would be also useful to deal with multiple flashcards for one term
 
 # Instructional Policy
 
@@ -31,7 +33,7 @@
 - its phases and parameters;
     - describe an idea of probabilistic selection of distractors based on their
       competivness (or modified)
-- natural extensions;
+- natural extensions - importance of items, adaptive competivness of distractors
 
 ## Impact on Data Collection
 
@@ -51,12 +53,14 @@
     - users' feedback
     - survival curves
     - percentage of returning users
+    - time vs. number of interactions - it is not clear what is better for our
+      needs, but there can be difference
 - learning:
     - learning curves (several variants)
 - attrition bias
     - users quits the practice any time
     - different users tend to practice contexts in different order
-    - **solution (?)**
+    - Propensity score matching - basic experiments, no big difference
 - high aggregation
     - contexts have different characteristics, which leads to different
       behavior of users and algorithm
@@ -67,7 +71,7 @@
 - randomization of item selection and selection of distractors (outlinemaps)
 - target difficulty (outlinemaps, practiceanatomy)
 - competivness of distractors, number of distractors (outlinemaps, probably not positive results)
-- **comparing of dump predictive model to ours (?, 0%)**
+- ~~comparing of dump predictive model to ours (?, 0%)~~
 
 
 # Conclusions
